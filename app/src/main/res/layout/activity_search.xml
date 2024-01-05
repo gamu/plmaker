@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/indentBase"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/indentBase"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/arrowleft"
+            android:paddingEnd="@dimen/indentBase"
+            tools:ignore="ContentDescription" />
+        <TextView style="@style/TextViewHeadStyle"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/searchLabel" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/tbSearch"
+            android:layout_width="0dp"
+            android:hint="@string/searchLabel"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:drawableStart="@drawable/search"
+            android:drawablePadding="10dp"
+            android:lines="1"/>
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
