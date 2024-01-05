@@ -38,8 +38,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:drawableStart="@drawable/search"
+            android:padding="10dp"
             android:drawablePadding="10dp"
-            android:lines="1"/>
+            android:background="@drawable/edit_with_roundedcorner"
+            android:lines="1"
+            app:cornerRadius="50dp"/>
 
         <ImageView
             android:id="@+id/clearIcon"
