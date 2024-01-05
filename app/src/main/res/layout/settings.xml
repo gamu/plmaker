@@ -34,6 +34,7 @@
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/shareLabel" />
         <ImageView style="@style/SettingsImageViewStyle"
+            android:id="@+id/btnShare"
             android:src="@drawable/share"
             tools:ignore="ContentDescription" />
     </LinearLayout>
@@ -41,6 +42,7 @@
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/supportLabel" />
         <ImageView style="@style/SettingsImageViewStyle"
+            android:id="@+id/btnSupport"
             android:src="@drawable/support"
             tools:ignore="ContentDescription" />
     </LinearLayout>
@@ -48,6 +50,7 @@
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/agreementLabel"  />
         <ImageView style="@style/SettingsImageViewStyle"
+            android:id="@+id/btnBrowser"
             android:src="@drawable/agreement"
             tools:ignore="ContentDescription" />
     </LinearLayout>
