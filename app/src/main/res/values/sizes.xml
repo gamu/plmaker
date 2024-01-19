@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="indentBase">16dp</dimen>
+    <dimen name="cornerRadius">16dp</dimen>
+    <dimen name="ypMedium22">22sp</dimen>
+    <dimen name="ypMedium26">26sp</dimen>
+    <dimen name="ypRegular16">16sp</dimen>
+    <dimen name="settingsRowSize">61dp</dimen>
+    <dimen name="iconSize">24dp</dimen>
+</resources>
