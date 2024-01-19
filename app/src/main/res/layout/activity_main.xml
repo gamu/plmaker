@@ -8,6 +8,7 @@
     <TextView style="@style/TextViewHeadStyle"
         android:gravity="start"
         android:text="@string/appLabel"
+        android:paddingStart="12dp"
         android:textColor="@color/ypWhite"/>
     <Button style="@style/ButtonStyle"
         android:id="@+id/btnSearch"
