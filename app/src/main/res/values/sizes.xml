@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="indentBase">16dp</dimen>
+    <dimen name="indentBase">4dp</dimen>
+    <dimen name="marginBig">12dp</dimen>
     <dimen name="cornerRadius">16dp</dimen>
     <dimen name="ypMedium22">22sp</dimen>
     <dimen name="ypMedium26">26sp</dimen>
