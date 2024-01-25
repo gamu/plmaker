@@ -33,18 +33,14 @@ class SettingsActivity: AppCompatActivity() {
             intent.data = Uri.parse("mailto:${mailTo}")
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailTheme))
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mailBody))
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            }
+            startActivity(intent)
         }
 
         val btnBrowser = findViewById<ImageView>(R.id.btnBrowser)
         btnBrowser.setOnClickListener {
             val uri = Uri.parse(getString(R.string.agreementUrl))
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            }
+            startActivity(intent)
         }
     }
 }
