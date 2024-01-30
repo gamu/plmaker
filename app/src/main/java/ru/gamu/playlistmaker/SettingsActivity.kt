@@ -14,8 +14,7 @@ class SettingsActivity: AppCompatActivity() {
 
         val btnBack = findViewById<ImageView>(R.id.btnBack)
         btnBack.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         val btnShare = findViewById<ImageView>(R.id.btnShare)
@@ -43,23 +42,5 @@ class SettingsActivity: AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val editText = findViewById<EditText>(R.id.tbSearch)
-        val text = editText.text.toString()
-        outState.putString(SEARCH_KEY, text)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        val editText = findViewById<EditText>(R.id.tbSearch)
-        val text = savedInstanceState.getString(SEARCH_KEY, "")
-        editText.setText(text)
-    }
-
-    companion object {
-        val SEARCH_KEY = "searchToken"
     }
 }

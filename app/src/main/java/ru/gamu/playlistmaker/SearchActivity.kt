@@ -15,10 +15,10 @@ import android.widget.ImageView
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        val SEARCH_TOKEN: String = "SEARCH_TOKEN"
+        private val SEARCH_TOKEN: String = "SEARCH_TOKEN"
     }
 
-    var searchToken: String = "";
+    private var searchToken: String = "";
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -51,16 +51,24 @@ class SearchActivity : AppCompatActivity() {
 
         val btnBack = findViewById<ImageView>(R.id.btnBack)
         btnBack.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState.putString(SEARCH_TOKEN, searchToken)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val editText = findViewById<EditText>(R.id.tbSearch)
+        val text = editText.text.toString()
+        outState.putString(SEARCH_TOKEN, text)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val editText = findViewById<EditText>(R.id.tbSearch)
+        val text = savedInstanceState.getString(SEARCH_TOKEN, "")
+        editText.setText(text)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
