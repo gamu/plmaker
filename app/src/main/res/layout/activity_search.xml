@@ -24,7 +24,7 @@
             android:gravity="center_vertical"
             android:text="@string/searchLabel" />
     </LinearLayout>
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,10 +33,9 @@
 
         <EditText
             android:id="@+id/tbSearch"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:hint="@string/searchLabel"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
             android:drawableStart="@drawable/search"
             android:padding="10dp"
             android:drawablePadding="10dp"
@@ -47,9 +46,9 @@
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:visibility="gone" />
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>
