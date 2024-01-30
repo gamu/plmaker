@@ -3,6 +3,7 @@ package ru.gamu.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -42,5 +43,23 @@ class SettingsActivity: AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val editText = findViewById<EditText>(R.id.tbSearch)
+        val text = editText.text.toString()
+        outState.putString(SEARCH_KEY, text)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val editText = findViewById<EditText>(R.id.tbSearch)
+        val text = savedInstanceState.getString(SEARCH_KEY, "")
+        editText.setText(text)
+    }
+
+    companion object {
+        val SEARCH_KEY = "searchToken"
     }
 }
