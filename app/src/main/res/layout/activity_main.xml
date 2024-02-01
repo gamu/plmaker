@@ -6,14 +6,14 @@
     android:padding="@dimen/indentBase"
     android:orientation="vertical"
     android:theme="@style/Base.Theme.PlaylistMaker">
-    <TextView style="@style/TextViewHeadStyle"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="@string/appLabel"
-        android:paddingStart="@dimen/marginBig"
-        android:paddingBottom="@dimen/indentBase"
-        android:layout_marginBottom="24dp"
-        android:textColor="@color/ypWhite"/>
+    <LinearLayout
+        style="@style/LayoutHeaderFrameStyle"
+        android:layout_marginBottom="24dp">
+        <TextView style="@style/TextViewHeadStyle"
+            android:gravity="start"
+            android:text="@string/appLabel"
+            android:textColor="@color/ypWhite"/>
+    </LinearLayout>
     <Button style="@style/ButtonStyle"
         android:id="@+id/btnSearch"
         android:text="@string/searchLabel"
