@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_margin">@dimen/marginBig</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">3</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:background">@drawable/rounded_corner</item>
+        <item name="android:layout_marginTop">@dimen/indentBase</item>
+        <item name="android:textColor">@color/ypBlack</item>
+        <item name="backgroundTint">@color/ypWhite</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">@color/ypBlack</item>
+    </style>
+    <style name="TextViewHeadStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/ypMedium26</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingStart">@dimen/marginBig</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+    <style name="SettingsRowStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settingsRowSize</item>
+        <item name="android:layout_marginTop">@dimen/indentBase</item>
+        <item name="android:paddingStart">@dimen/marginBig</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:textColor">@color/ypBlack</item>
+    </style>
+    <style name="SettingsTextViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:textSize">@dimen/ypRegular16</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+    <style name="SettingsImageViewStyle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">@dimen/iconSize</item>
+        <item name="android:layout_height">@dimen/iconSize</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    <style name="LayoutHeaderFrameStyle">
+        <item name="android:layout_marginTop">@dimen/indentBase</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginStart">@dimen/marginBig</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+</resources>
