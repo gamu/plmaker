@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/indentBase"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Base.Theme.PlaylistMaker">
     <LinearLayout
         style="@style/LayoutHeaderFrameStyle"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        tools:ignore="UseCompoundDrawables">
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
@@ -16,7 +18,7 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/arrowleft"
             android:paddingEnd="@dimen/indentBase"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,RtlSymmetry" />
         <TextView style="@style/TextViewHeadStyle"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -29,6 +31,7 @@
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig"
+        android:layout_marginBottom="@dimen/marginBig"
         tools:context=".MainActivity">
         <EditText
             android:id="@+id/tbSearch"
@@ -37,25 +40,30 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/search"
             android:padding="10dp"
+            android:layout_marginTop="@dimen/size8"
+            android:layout_marginBottom="@dimen/size8"
             android:drawablePadding="10dp"
             android:background="@drawable/edit_with_roundedcorner"
             android:lines="1"
-            app:cornerRadius="50dp"/>
+            app:cornerRadius="50dp"
+            tools:ignore="Autofill,TextFields" />
 
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:paddingEnd="12dp"
+            android:paddingEnd="@dimen/size12"
             android:src="@drawable/clear"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="ContentDescription,RtlSymmetry" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/marginBig" />
+        android:layout_marginStart="@dimen/marginBig"
+        android:layout_marginEnd="@dimen/marginBig" />
 
 </LinearLayout>

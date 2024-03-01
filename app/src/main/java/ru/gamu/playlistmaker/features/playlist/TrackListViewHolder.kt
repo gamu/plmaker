@@ -1,11 +1,11 @@
 package ru.gamu.playlistmaker.features.playlist
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -23,6 +23,7 @@ class TrackListViewHolder(val parentView: View) : RecyclerView.ViewHolder(parent
         this.Information = parentView.findViewById(R.id.tbInformation)
     }
 
+    @SuppressLint("SetTextI18n")
     fun bind(track: Track) {
         this.Title.text = track.trackName
         this.Information.text = "${ track.artistName } \u25CF ${ track.trackTime }"
@@ -30,6 +31,7 @@ class TrackListViewHolder(val parentView: View) : RecyclerView.ViewHolder(parent
         requestOptions = requestOptions.transforms(CenterInside(), RoundedCorners(16))
         Glide.with(this.parentView)
             .load(track.artworkUrl)
+            .placeholder(R.drawable.placeholder)
             .apply(requestOptions).into(this.Thumbinal)
     }
 }

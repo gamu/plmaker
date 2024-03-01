@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:padding="@dimen/indentBase"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Base.Theme.PlaylistMaker">
     <LinearLayout
         style="@style/LayoutHeaderFrameStyle"
         android:layout_marginBottom="24dp">
@@ -27,10 +28,10 @@
         android:layout_height="@dimen/settingsRowSize"
         android:textSize="@dimen/ypRegular16"
         android:text="@string/themeLabel"
-        android:textColor="@color/ypBlack"
         android:layout_marginTop="@dimen/indentBase"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
-    <LinearLayout style="@style/SettingsRowStyle">
+        tools:ignore="RtlSymmetry,UseSwitchCompatOrMaterialXml" />
+    <LinearLayout style="@style/SettingsRowStyle"
+        tools:ignore="UseCompoundDrawables">
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/shareLabel" />
         <ImageView style="@style/SettingsImageViewStyle"
@@ -38,7 +39,8 @@
             android:src="@drawable/share"
             tools:ignore="ContentDescription" />
     </LinearLayout>
-    <LinearLayout style="@style/SettingsRowStyle">
+    <LinearLayout style="@style/SettingsRowStyle"
+        tools:ignore="UseCompoundDrawables">
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/supportLabel" />
         <ImageView style="@style/SettingsImageViewStyle"
@@ -46,7 +48,8 @@
             android:src="@drawable/support"
             tools:ignore="ContentDescription" />
     </LinearLayout>
-    <LinearLayout style="@style/SettingsRowStyle">
+    <LinearLayout style="@style/SettingsRowStyle"
+        tools:ignore="UseCompoundDrawables">
         <TextView style="@style/SettingsTextViewStyle"
             android:text="@string/agreementLabel"  />
         <ImageView style="@style/SettingsImageViewStyle"
