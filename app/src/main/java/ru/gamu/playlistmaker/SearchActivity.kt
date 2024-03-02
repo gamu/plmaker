@@ -11,6 +11,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ru.gamu.playlistmaker.features.playlist.TrackListAdapter
+import ru.gamu.playlistmaker.features.playlist.TrackQuery
 
 class SearchActivity : AppCompatActivity() {
 
@@ -55,6 +59,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
+        val recycler = findViewById<RecyclerView>(R.id.trackList)
+
+        val tracks = TrackQuery()
+
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.adapter = TrackListAdapter(tracks)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
