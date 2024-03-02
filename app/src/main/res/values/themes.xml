@@ -1,12 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:background">@color/ypBlue</item>
+        <item name="android:fillColor">@color/ypBlack</item>
+        <item name="svgColor">@color/ypBlack</item>
     </style>
-    <style name="Shevrone">
-        <item name="android:fillColor">@color/shevronGray</item>
+    <style name="MainBackground">
+        <item name="android:background">@color/ypBlue</item>
     </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 </resources>
