@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.features.playlist
+package ru.gamu.playlistmaker.features.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

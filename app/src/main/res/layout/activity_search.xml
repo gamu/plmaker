@@ -31,7 +31,6 @@
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig"
-        android:layout_marginBottom="@dimen/marginBig"
         tools:context=".MainActivity">
         <EditText
             android:id="@+id/tbSearch"
@@ -39,13 +38,14 @@
             android:hint="@string/searchLabel"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/search"
-            android:padding="10dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:padding="@dimen/size10"
             android:layout_marginTop="@dimen/size8"
-            android:layout_marginBottom="@dimen/size8"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/size10"
             android:background="@drawable/edit_with_roundedcorner"
             android:lines="1"
-            app:cornerRadius="50dp"
+            app:cornerRadius="@dimen/radius50"
             tools:ignore="Autofill,TextFields" />
 
         <ImageView
@@ -54,15 +54,27 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:paddingEnd="@dimen/size12"
+            android:paddingTop="@dimen/size10"
             android:src="@drawable/clear"
             android:visibility="gone"
             tools:ignore="ContentDescription,RtlSymmetry" />
     </FrameLayout>
 
+    <include
+        android:id="@+id/emptyDataset"
+        android:visibility="gone"
+        layout="@layout/search_empty_dataset"/>
+
+    <include
+        android:id="@+id/noConnection"
+        android:visibility="gone"
+        layout="@layout/search_no_connection"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/marginBig"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig" />
 
