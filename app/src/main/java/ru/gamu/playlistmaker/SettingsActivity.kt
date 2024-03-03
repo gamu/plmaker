@@ -3,13 +3,16 @@ package ru.gamu.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.EditText
+import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import ru.gamu.playlistmaker.features.settings.PersistentStorage
 
 class SettingsActivity: AppCompatActivity() {
+    private lateinit var persistentStorage:PersistentStorage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        persistentStorage = PersistentStorage(this.applicationContext)
         setContentView(R.layout.settings)
 
         val btnBack = findViewById<ImageView>(R.id.btnBack)
@@ -41,6 +44,12 @@ class SettingsActivity: AppCompatActivity() {
             val uri = Uri.parse(getString(R.string.agreementUrl))
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
+        }
+
+        val themeSwitch = findViewById<CompoundButton>(R.id.swtTheme)
+        themeSwitch.setOnCheckedChangeListener { switcher, checked ->
+            persistentStorage.useDarkTheme = checked
+            (applicationContext as App).switchTheme(checked)
         }
     }
 }
