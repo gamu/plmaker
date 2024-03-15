@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.features.search
+package ru.gamu.plmaker.core
 
 data class Track(val trackName: String,
                  val artistName: String,

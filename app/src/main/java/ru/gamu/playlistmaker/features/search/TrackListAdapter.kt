@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.gamu.playlistmaker.R
+import ru.gamu.plmaker.core.Track
 
 class TrackListAdapter(private val tracks: List<Track>): RecyclerView.Adapter<TrackListViewHolder> () {
 

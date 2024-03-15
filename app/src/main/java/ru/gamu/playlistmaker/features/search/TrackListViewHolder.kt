@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import ru.gamu.playlistmaker.R
+import ru.gamu.plmaker.core.Track
 
 
 class TrackListViewHolder(val parentView: View) : RecyclerView.ViewHolder(parentView) {

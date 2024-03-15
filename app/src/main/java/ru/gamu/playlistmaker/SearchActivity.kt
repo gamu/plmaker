@@ -13,9 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.gamu.playlistmaker.features.search.Track
 import ru.gamu.playlistmaker.features.search.TrackListAdapter
-import ru.gamu.playlistmaker.features.search.network.SearchRequest
+import ru.gamu.playlistmaker.features.search.network.ItunesDataQueryAsync
+import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksCommandHandler
+import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksQueryHandler
+import ru.gamu.plmaker.core.Track
+import ru.gamu.plmaker.core.TrackList
 
 class SearchActivity : AppCompatActivity() {
 
@@ -24,9 +27,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var searchToken: String = ""
-    private val searchTracks = SearchRequest()
     private lateinit var recycler: RecyclerView
+    private lateinit var tracksService: TrackList
     private var tracks: MutableList<Track> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -36,6 +40,14 @@ class SearchActivity : AppCompatActivity() {
         recycler = findViewById(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = TrackListAdapter(tracks)
+
+        //TODO: Вынести в DI контейнер
+        val searchReader = ItunesDataQueryAsync(this.applicationContext)
+        val historyWriter = VisitedTracksCommandHandler(this.applicationContext)
+        val historyReader = VisitedTracksQueryHandler(this.applicationContext)
+
+        tracksService = TrackList(searchReader, historyWriter, historyReader)
+
 
         if(savedInstanceState != null){
             inputEditText.setText(savedInstanceState.getString(SEARCH_TOKEN))
@@ -97,17 +109,16 @@ class SearchActivity : AppCompatActivity() {
         findViewById<View>(R.id.noConnection)?.visibility = noConnectionVisibility
     }
     private fun search(){
-        searchTracks.makeCall(searchToken){
-            if(it == null){
-                visibilityWrapper(View.GONE, View.VISIBLE)
-                updateTracksAndNotify()
-            } else if(it.isEmpty()) {
-                visibilityWrapper(View.VISIBLE, View.GONE)
-                updateTracksAndNotify()
-            } else {
-                visibilityWrapper(View.GONE, View.GONE)
-                updateTracksAndNotify(it)
-            }
+        val searchResult = tracksService.searchItems(searchToken)
+        if(searchResult == null){
+            visibilityWrapper(View.GONE, View.VISIBLE)
+            updateTracksAndNotify()
+        } else if(searchResult.isEmpty()) {
+            visibilityWrapper(View.VISIBLE, View.GONE)
+            updateTracksAndNotify()
+        } else {
+            visibilityWrapper(View.GONE, View.GONE)
+            updateTracksAndNotify(searchResult)
         }
     }
     override fun onSaveInstanceState(outState: Bundle) {
