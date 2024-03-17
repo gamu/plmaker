@@ -13,19 +13,28 @@ import ru.gamu.playlistmaker.R
 import ru.gamu.plmaker.core.Track
 
 
-class TrackListViewHolder(val parentView: View) : RecyclerView.ViewHolder(parentView) {
+class TrackListViewHolder(val parentView: View,
+                          private val trackViewListener: (Track) -> Unit
+) : RecyclerView.ViewHolder(parentView) {
     private val Title: TextView
     private val Thumbinal: ImageView
     private val Information: TextView
+
+    private lateinit var trackItem: Track
 
     init {
         this.Title = parentView.findViewById(R.id.tbTitle)
         this.Thumbinal = parentView.findViewById(R.id.imgThumb)
         this.Information = parentView.findViewById(R.id.tbInformation)
+
+        parentView.setOnClickListener {
+            trackViewListener(trackItem)
+        }
     }
 
     @SuppressLint("SetTextI18n")
     fun bind(track: Track) {
+        this.trackItem = track
         this.Title.text = track.trackName
         this.Information.text = "${ track.artistName } \u25CF ${ track.trackTime }"
         var requestOptions = RequestOptions()

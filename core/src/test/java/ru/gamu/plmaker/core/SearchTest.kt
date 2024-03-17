@@ -65,4 +65,11 @@ class SearchTest {
         val firstTrack = trackHistorySlot.captured.first()
         Assert.assertEquals("t10", firstTrack.trackName)
     }
+
+    @Test
+    fun new_track_is_first(){
+        search.addTrackToHistory(Track("tN", "aN", "", ""))
+        val firstTrack = trackHistorySlot.captured.first()
+        Assert.assertEquals("tN", firstTrack.trackName)
+    }
 }

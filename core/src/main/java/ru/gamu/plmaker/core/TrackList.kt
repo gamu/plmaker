@@ -23,15 +23,12 @@ class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
         if(tracksHistory.count() < MAX_HISTORY_COUNT){
             if(tracksHistory.contains(track)){
                 tracksHistory.remove(track)
-                val newHistory = mutableSetOf(track)
-                newHistory.addAll(tracksHistory)
-                tracksHistory.clear()
-                tracksHistory.addAll(newHistory)
-                trackPersistentCommand.Execute(tracksHistory)
-            }else {
-                tracksHistory.add(track)
-                trackPersistentCommand.Execute(tracksHistory)
             }
+            val newHistory = mutableSetOf(track)
+            newHistory.addAll(tracksHistory)
+            tracksHistory.clear()
+            tracksHistory.addAll(newHistory)
+            trackPersistentCommand.Execute(tracksHistory)
         }
     }
 

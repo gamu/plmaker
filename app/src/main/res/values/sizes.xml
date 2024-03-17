@@ -17,6 +17,7 @@
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>
     <dimen name="size10">10dp</dimen>
+    <dimen name="size20">20dp</dimen>
     <dimen name="size54">54dp</dimen>
     <dimen name="radius50">50dp</dimen>
 </resources>

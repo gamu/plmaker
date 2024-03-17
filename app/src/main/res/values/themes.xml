@@ -9,5 +9,8 @@
     <style name="MainBackground">
         <item name="android:background">@color/ypBlue</item>
     </style>
+    <style name="SearchBoxStyle">
+        <item name="android:textColor">@color/ypBlack</item>
+    </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 </resources>

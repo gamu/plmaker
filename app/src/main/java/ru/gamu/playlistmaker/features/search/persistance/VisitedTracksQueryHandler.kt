@@ -18,8 +18,8 @@ class VisitedTracksQueryHandler(val context: Context): IQueryHandler<Set<Track>,
             AppCompatActivity.MODE_PRIVATE)
     }
     override fun getData(spec: Unit): Set<Track> {
-        val itemsString = persistentStorage.getStringSet(ViewHistoryItems, setOf())
-        val tracks = itemsString!!.map{ gson.fromJson(it, Track::class.java) }.toSet()
+        val itemsString = persistentStorage.getStringSet(ViewHistoryItems, mutableSetOf())
+        val tracks = itemsString!!.map{ gson.fromJson(it, Track::class.java) }.toMutableSet()
         return tracks
     }
 }

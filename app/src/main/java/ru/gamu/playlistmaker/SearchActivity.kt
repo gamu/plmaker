@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.gamu.playlistmaker.features.search.TrackListAdapter
@@ -19,6 +20,7 @@ import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksCommandHan
 import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksQueryHandler
 import ru.gamu.plmaker.core.Track
 import ru.gamu.plmaker.core.TrackList
+import com.google.android.material.button.MaterialButton
 
 class SearchActivity : AppCompatActivity() {
 
@@ -27,19 +29,32 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var searchToken: String = ""
-    private lateinit var recycler: RecyclerView
+
     private lateinit var tracksService: TrackList
+
+    private val recycler: RecyclerView by lazy { findViewById(R.id.trackListRecycler) }
+    private val inputEditText: EditText by lazy { findViewById(R.id.tbSearch) }
+    private val clearButton: ImageView by lazy { findViewById(R.id.clearIcon) }
+
     private var tracks: MutableList<Track> = mutableListOf()
+
+    private var isShowedHistoryRresults = false
+        set(value) {
+            val button = findViewById<MaterialButton>(R.id.btnClearHistori)
+            val searchedText = findViewById<TextView>(R.id.txtSearched)
+            if(value){
+                searchedText.visibility = View.VISIBLE
+                button.visibility = View.VISIBLE
+            }else{
+                searchedText.visibility = View.GONE
+                button.visibility = View.GONE
+            }
+            field = value
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        val inputEditText = findViewById<EditText>(R.id.tbSearch)
-
-        recycler = findViewById(R.id.trackList)
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = TrackListAdapter(tracks)
 
         //TODO: Вынести в DI контейнер
         val searchReader = ItunesDataQueryAsync(this.applicationContext)
@@ -48,17 +63,19 @@ class SearchActivity : AppCompatActivity() {
 
         tracksService = TrackList(searchReader, historyWriter, historyReader)
 
+        if(!tracksService.TracksHistory.isEmpty()){
+            isShowedHistoryRresults = true
+            tracks = tracksService.TracksHistory.toMutableList()
+        }
+
+        val trackAdapter = TrackListAdapter(tracks)
+        trackAdapter.onClickTrack = ::trackSelectHandler
+
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.adapter = trackAdapter
 
         if(savedInstanceState != null){
             inputEditText.setText(savedInstanceState.getString(SEARCH_TOKEN))
-        }
-
-        clearButton.setOnClickListener {
-            inputEditText.setText("")
-            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(clearButton.windowToken, 0)
-            visibilityWrapper(View.GONE, View.GONE)
-            updateTracksAndNotify()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -73,11 +90,6 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 searchToken = s.toString()
             }
-        }
-
-        val btnBack = findViewById<ImageView>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            finish()
         }
 
         inputEditText.addTextChangedListener(simpleTextWatcher)
@@ -96,11 +108,39 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    fun backButtonClick(view: View){
+        finish()
+    }
+
+    fun clearHistoryClick(view: View){
+        isShowedHistoryRresults = false
+        tracksService.clearHistory()
+        updateTracksAndNotify()
+    }
+
+    fun clearSearchBox(view: View){
+        inputEditText.setText("")
+        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(clearButton.windowToken, 0)
+        visibilityWrapper(View.GONE, View.GONE)
+        updateTracksAndNotify()
+    }
+
+    private fun trackSelectHandler(track: Track){
+        if(!isShowedHistoryRresults){
+            tracksService.addTrackToHistory(track)
+        }
+    }
+
     private fun updateTracksAndNotify(newTracks: List<Track> = listOf()){
         with(tracks){
             clear()
-            addAll(newTracks)
-            recycler.adapter?.notifyItemRangeChanged(0, size)
+            if(newTracks.isEmpty()){
+                recycler.adapter?.notifyDataSetChanged()
+            }else {
+                addAll(newTracks)
+                recycler.adapter?.notifyItemRangeChanged(0, size)
+            }
         }
     }
 
@@ -109,6 +149,7 @@ class SearchActivity : AppCompatActivity() {
         findViewById<View>(R.id.noConnection)?.visibility = noConnectionVisibility
     }
     private fun search(){
+        isShowedHistoryRresults = false
         val searchResult = tracksService.searchItems(searchToken)
         if(searchResult == null){
             visibilityWrapper(View.GONE, View.VISIBLE)
@@ -120,6 +161,7 @@ class SearchActivity : AppCompatActivity() {
             visibilityWrapper(View.GONE, View.GONE)
             updateTracksAndNotify(searchResult)
         }
+        isShowedHistoryRresults = false
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -142,5 +184,4 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
 }

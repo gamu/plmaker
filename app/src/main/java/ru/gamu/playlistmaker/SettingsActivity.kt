@@ -1,15 +1,17 @@
 package ru.gamu.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.CompoundButton
 import android.widget.ImageView
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import ru.gamu.playlistmaker.features.settings.PersistentStorage
 
 class SettingsActivity: AppCompatActivity() {
     private lateinit var persistentStorage:PersistentStorage
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         persistentStorage = PersistentStorage(this.applicationContext)
@@ -46,7 +48,8 @@ class SettingsActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
-        val themeSwitch = findViewById<CompoundButton>(R.id.swtTheme)
+        val themeSwitch = findViewById<Switch>(R.id.swtTheme)
+        themeSwitch.isChecked = persistentStorage.useDarkTheme
         themeSwitch.setOnCheckedChangeListener { switcher, checked ->
             persistentStorage.useDarkTheme = checked
             (applicationContext as App).switchTheme(checked)

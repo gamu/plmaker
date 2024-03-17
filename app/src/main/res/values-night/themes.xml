@@ -10,4 +10,7 @@
     <style name="MainBackground">
         <item name="android:background">@color/ypBlack</item>
     </style>
+    <style name="SearchBoxStyle">
+        <item name="android:textColor">@color/ypBlack</item>
+    </style>
 </resources>
