@@ -36,7 +36,7 @@ class TrackListViewHolder(val parentView: View,
     fun bind(track: Track) {
         this.trackItem = track
         this.Title.text = track.trackName
-        this.Information.text = "${ track.artistName } \u25CF ${ track.trackTime }"
+        this.Information.text = "${ track.artistName } \u2022 ${ track.trackTime }"
         var requestOptions = RequestOptions()
         requestOptions = requestOptions.transforms(CenterInside(), RoundedCorners(16))
         Glide.with(this.parentView)
