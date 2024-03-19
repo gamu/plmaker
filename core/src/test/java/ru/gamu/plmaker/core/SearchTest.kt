@@ -24,7 +24,7 @@ class SearchTest {
             Track("t4", "a4", "2:30", ""),
             Track("t5", "a5", "2:30", ""))
 
-        var tracksCahe = setOf(Track("t1", "a1", "2:30", ""),
+        val tracksCahe = setOf(Track("t1", "a1", "2:30", ""),
             Track("t10", "a10", "2:30", ""),
             Track("t9", "a9", "2:30", ""))
 
@@ -45,9 +45,10 @@ class SearchTest {
         search.clearHistory()
     }
     @Test
-    fun can_return_search_result_with_cache(){
+    fun can_return_search_result_with_joined_similar_tracks_from__cache(){
         val results = search.searchItems("")
-        Assert.assertEquals(8, results?.count())
+        Assert.assertEquals(6, results?.count())
+        Assert.assertEquals("t1", results?.first()?.trackName)
     }
     @Test
     fun can_add_only_10_tracks_to_history(){
@@ -59,11 +60,10 @@ class SearchTest {
     }
     @Test
     fun bubbling_similar_track(){
-        (9..12)
-            .map { Track("t${it}", "a${it}", "2:30", "") }
-            .forEach { search.addTrackToHistory(it) }
+        search.addTrackToHistory(Track("t9", "a9", "2:30", ""))
         val firstTrack = trackHistorySlot.captured.first()
-        Assert.assertEquals("t10", firstTrack.trackName)
+        Assert.assertEquals("t9", firstTrack.trackName)
+        Assert.assertEquals(3, trackHistorySlot.captured.size)
     }
 
     @Test

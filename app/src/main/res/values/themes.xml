@@ -12,5 +12,11 @@
     <style name="SearchBoxStyle">
         <item name="android:textColor">@color/ypBlack</item>
     </style>
+    <style name="ButtonOnSearchView">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">@dimen/size8</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">@color/ypBlack</item>
+    </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 </resources>

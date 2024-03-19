@@ -18,6 +18,6 @@
     <string name="SearchNoConnection">Проблемы со связью</string>
     <string name="SearchNoConnectionAddition">Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="refreshText">Обновить</string>
-    <string name="searchedText">Вы искали</string>
+    <string name="searchedText">История поиска</string>
     <string name="clearSearchHistoryText">Очистить историю</string>
 </resources>

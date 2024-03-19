@@ -1,5 +1,6 @@
 package ru.gamu.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -123,7 +124,9 @@ class SearchActivity : AppCompatActivity() {
         val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(clearButton.windowToken, 0)
         visibilityWrapper(View.GONE, View.GONE)
-        updateTracksAndNotify()
+        val items = tracksService.TracksHistory.toList()
+        isShowedHistoryRresults = true
+        updateTracksAndNotify(items)
     }
 
     private fun trackSelectHandler(track: Track){
@@ -132,6 +135,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateTracksAndNotify(newTracks: List<Track> = listOf()){
         with(tracks){
             clear()
@@ -139,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
                 recycler.adapter?.notifyDataSetChanged()
             }else {
                 addAll(newTracks)
-                recycler.adapter?.notifyItemRangeChanged(0, size)
+                recycler.adapter?.notifyDataSetChanged()
             }
         }
     }

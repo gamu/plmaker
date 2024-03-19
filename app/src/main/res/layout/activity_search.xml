@@ -42,7 +42,6 @@
             android:drawableStart="@drawable/search"
             android:imeOptions="actionDone"
             android:singleLine="true"
-            android:onClick="clearSearchBox"
             android:padding="@dimen/size10"
             android:layout_marginTop="@dimen/size8"
             android:drawablePadding="@dimen/size10"
@@ -58,6 +57,7 @@
             android:layout_gravity="end"
             android:paddingEnd="@dimen/size12"
             android:layout_marginTop="@dimen/size20"
+            android:onClick="clearSearchBox"
             android:src="@drawable/clear"
             android:backgroundTint="@color/ypGray"
             android:visibility="gone"
@@ -89,7 +89,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackListRecycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="4"
         android:layout_marginTop="@dimen/marginBig"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig" />

@@ -9,27 +9,37 @@ class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
                 private val trackPersistentQuery: IQueryHandler<Set<Track>, Unit>) {
 
     private val tracksHistory = trackPersistentQuery.getData(Unit) as MutableSet
+
     fun searchItems(searchToken: String): List<Track>? {
         val result = searchQuery.getData(searchToken)
-        if(result !== null && result.count() > 0) {
+        if(result == null){
+            return null
+        }else if(result.isNotEmpty()) {
             val trackViewHistory = trackPersistentQuery.getData(Unit)
-            val sumSet = trackViewHistory + result
-            return sumSet.toList()
+            val diff = result - trackViewHistory
+            val intersect = trackViewHistory.intersect(result)
+            return intersect.toList() + diff.toList()
         }
-        return null;
+        return listOf()
     }
 
     fun addTrackToHistory(track: Track) {
-        if(tracksHistory.count() < MAX_HISTORY_COUNT){
-            if(tracksHistory.contains(track)){
-                tracksHistory.remove(track)
-            }
-            val newHistory = mutableSetOf(track)
-            newHistory.addAll(tracksHistory)
-            tracksHistory.clear()
-            tracksHistory.addAll(newHistory)
-            trackPersistentCommand.Execute(tracksHistory)
+        var newHistory = tracksHistory.toMutableList()
+        if(newHistory.contains(track)){
+            newHistory.remove(track)
+            newHistory.add(0, track)
+        } else if(tracksHistory.count() >= MAX_HISTORY_COUNT){
+            val sliced = newHistory.slice(0..8)
+                .toMutableList()
+            sliced.add(0, track)
+            newHistory = sliced
+        } else {
+            newHistory.add(0, track)
+            newHistory.addAll(newHistory)
         }
+        tracksHistory.clear()
+        tracksHistory.addAll(newHistory)
+        trackPersistentCommand.Execute(tracksHistory)
     }
 
     fun clearHistory(){

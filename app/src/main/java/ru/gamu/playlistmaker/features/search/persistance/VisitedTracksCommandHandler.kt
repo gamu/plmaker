@@ -8,17 +8,17 @@ import ru.gamu.playlistmaker.R
 import ru.gamu.plmaker.core.Track
 import ru.gamu.plmaker.core.cq.ICommandHandler
 
-class VisitedTracksCommandHandler(val context: Context): ICommandHandler<Set<Track>> {
+class VisitedTracksCommandHandler(context: Context): ICommandHandler<Set<Track>> {
     private val ViewHistory: String = context.getString(R.string.viewHistory)
     private val ViewHistoryItems: String = context.getString(R.string.viewHistoryItems)
     private val persistentStorage: SharedPreferences
-    private val gson = Gson()
     init{
         persistentStorage = context.getSharedPreferences(ViewHistory,
             AppCompatActivity.MODE_PRIVATE)
     }
     override fun Execute(command: Set<Track>) {
-        val stringify = command.map { gson.toJson(it) }.toSet()
-        persistentStorage.edit().putStringSet(ViewHistoryItems, stringify).apply()
+        val gson = Gson()
+        val stringify = gson.toJson(command)
+        persistentStorage.edit().putString(ViewHistoryItems, stringify).apply()
     }
 }
