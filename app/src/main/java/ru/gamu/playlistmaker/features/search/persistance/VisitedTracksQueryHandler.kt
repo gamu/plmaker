@@ -26,6 +26,6 @@ class VisitedTracksQueryHandler(context: Context): IQueryHandler<Set<Track>, Uni
             val tracks = gson.fromJson<Set<Track>>(itemsString)
             return tracks
         }
-        return setOf<Track>()
+        return mutableSetOf()
     }
 }
