@@ -124,9 +124,13 @@ class SearchActivity : AppCompatActivity() {
         val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(clearButton.windowToken, 0)
         visibilityWrapper(View.GONE, View.GONE)
-        val items = tracksService.TracksHistory.toList()
-        isShowedHistoryRresults = true
-        updateTracksAndNotify(items)
+        if(tracksService.HistoryIsNotEmpty){
+            val items = tracksService.TracksHistory.toList()
+            isShowedHistoryRresults = tracksService.HistoryIsNotEmpty
+            updateTracksAndNotify(items)
+        }else{
+            updateTracksAndNotify()
+        }
     }
 
     private fun trackSelectHandler(track: Track){

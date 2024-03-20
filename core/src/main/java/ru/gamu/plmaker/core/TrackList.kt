@@ -10,6 +10,10 @@ class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
 
     private val tracksHistory = trackPersistentQuery.getData(Unit) as MutableSet
 
+    val HistoryIsNotEmpty: Boolean
+        get() = tracksHistory.isNotEmpty()
+
+
     fun searchItems(searchToken: String): List<Track>? {
         val result = searchQuery.getData(searchToken)
         if(result == null){

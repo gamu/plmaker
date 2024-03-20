@@ -17,8 +17,12 @@ class VisitedTracksCommandHandler(context: Context): ICommandHandler<Set<Track>>
             AppCompatActivity.MODE_PRIVATE)
     }
     override fun Execute(command: Set<Track>) {
-        val gson = Gson()
-        val stringify = gson.toJson(command)
-        persistentStorage.edit().putString(ViewHistoryItems, stringify).apply()
+        if(command.isEmpty()){
+            persistentStorage.edit().remove(ViewHistoryItems).apply()
+        }else{
+            val gson = Gson()
+            val stringify = gson.toJson(command)
+            persistentStorage.edit().putString(ViewHistoryItems, stringify).apply()
+        }
     }
 }
