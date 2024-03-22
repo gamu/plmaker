@@ -19,10 +19,7 @@ class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
         if(result == null){
             return null
         }else if(result.isNotEmpty()) {
-            val trackViewHistory = trackPersistentQuery.getData(Unit)
-            val diff = result - trackViewHistory
-            val intersect = trackViewHistory.intersect(result)
-            return intersect.toList() + diff.toList()
+            return result
         }
         return listOf()
     }

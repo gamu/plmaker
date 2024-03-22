@@ -22,6 +22,7 @@ import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksQueryHandl
 import ru.gamu.plmaker.core.Track
 import ru.gamu.plmaker.core.TrackList
 import com.google.android.material.button.MaterialButton
+import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity() {
 
@@ -29,9 +30,13 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_TOKEN: String = "SEARCH_TOKEN"
     }
 
-    private var searchToken: String = ""
-
     private lateinit var tracksService: TrackList
+
+    private var searchToken: String by Delegates.observable(""){ prop, oldValue, newValue ->
+        if(newValue.isEmpty()){
+            updateTracksAndNotify()
+        }
+    }
 
     private val recycler: RecyclerView by lazy { findViewById(R.id.trackListRecycler) }
     private val inputEditText: EditText by lazy { findViewById(R.id.tbSearch) }
