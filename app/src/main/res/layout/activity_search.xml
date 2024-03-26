@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:src="@drawable/arrowleft"
+            android:onClick="backButtonClick"
             android:paddingEnd="@dimen/indentBase"
             tools:ignore="ContentDescription,RtlSymmetry" />
         <TextView style="@style/TextViewHeadStyle"
@@ -31,39 +32,77 @@
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig"
-        android:layout_marginBottom="@dimen/marginBig"
         tools:context=".MainActivity">
         <EditText
+            style="@style/SearchBoxStyle"
             android:id="@+id/tbSearch"
             android:layout_width="match_parent"
             android:hint="@string/searchLabel"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/search"
-            android:padding="10dp"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:padding="@dimen/size10"
             android:layout_marginTop="@dimen/size8"
-            android:layout_marginBottom="@dimen/size8"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/size10"
             android:background="@drawable/edit_with_roundedcorner"
             android:lines="1"
-            app:cornerRadius="50dp"
+            app:cornerRadius="@dimen/radius50"
             tools:ignore="Autofill,TextFields" />
 
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="25dp"
             android:layout_gravity="end"
             android:paddingEnd="@dimen/size12"
+            android:layout_marginTop="@dimen/size20"
+            android:onClick="clearSearchBox"
             android:src="@drawable/clear"
+            android:backgroundTint="@color/ypGray"
             android:visibility="gone"
             tools:ignore="ContentDescription,RtlSymmetry" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackList"
+    <include
+        android:id="@+id/emptyDataset"
+        android:visibility="gone"
+        layout="@layout/search_empty_dataset"/>
+
+    <include
+        android:id="@+id/noConnection"
+        android:visibility="gone"
+        layout="@layout/search_no_connection"/>
+
+    <TextView
+        style="@style/SearchPlaceholderStyle"
+        android:id="@+id/txtSearched"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/marginBig"
+        android:layout_marginStart="@dimen/marginBig"
+        android:layout_marginEnd="@dimen/marginBig"
+        android:padding="0dp"
+        android:text="@string/searchedText" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trackListRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:layout_marginTop="@dimen/marginBig"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/ButtonOnSearchView"
+        android:id="@+id/btnClearHistori"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clearHistoryClick"
+        android:visibility="gone"
+        app:cornerRadius="@dimen/cornerRadius"
+        android:text="@string/clearSearchHistoryText" />
 
 </LinearLayout>

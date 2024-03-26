@@ -8,6 +8,7 @@
     <dimen name="ypMedium22">22sp</dimen>
     <dimen name="ypMedium26">26sp</dimen>
     <dimen name="ypRegular16">16sp</dimen>
+    <dimen name="ypRegular19">19sp</dimen>
     <dimen name="settingsRowSize">61dp</dimen>
     <dimen name="iconSize">24dp</dimen>
     <dimen name="topMargin">24dp</dimen>
@@ -15,4 +16,8 @@
     <dimen name="size61">61dp</dimen>
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>
+    <dimen name="size10">10dp</dimen>
+    <dimen name="size20">20dp</dimen>
+    <dimen name="size54">54dp</dimen>
+    <dimen name="radius50">50dp</dimen>
 </resources>

@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Playlist Maker"
 include(":app")
- 
+include(":core")
