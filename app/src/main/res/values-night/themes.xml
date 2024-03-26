@@ -7,6 +7,7 @@
         <item name="android:background">@color/ypBlack</item>
         <item name="android:textColor">@color/ypWhite</item>
         <item name="svgColor">@color/ypWhite</item>
+        <item name="searchIconColor">@color/ypBlack</item>
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypBlack</item>
@@ -20,6 +21,7 @@
     </style>
     <style name="SearchBoxStyle">
         <item name="android:textColor">@color/ypBlack</item>
+        <item name="android:textColorHint">@color/ypBlack</item>
     </style>
     <style name="InformationPropertyStyle">
         <item name="android:textColor">@color/shevronGray</item>

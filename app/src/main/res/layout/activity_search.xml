@@ -86,23 +86,34 @@
         android:padding="0dp"
         android:text="@string/searchedText" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/trackListRecycler"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:layout_marginTop="@dimen/marginBig"
-        android:layout_marginStart="@dimen/marginBig"
-        android:layout_marginEnd="@dimen/marginBig" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/ButtonOnSearchView"
-        android:id="@+id/btnClearHistori"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="clearHistoryClick"
-        android:visibility="gone"
-        app:cornerRadius="@dimen/cornerRadius"
-        android:text="@string/clearSearchHistoryText" />
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trackListRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/marginBig"
+            android:layout_marginStart="@dimen/marginBig"
+            android:layout_marginEnd="@dimen/marginBig" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonOnSearchView"
+            android:id="@+id/btnClearHistori"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size24"
+            android:onClick="clearHistoryClick"
+            android:visibility="gone"
+            app:cornerRadius="@dimen/cornerRadius"
+            android:text="@string/clearSearchHistoryText" />
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

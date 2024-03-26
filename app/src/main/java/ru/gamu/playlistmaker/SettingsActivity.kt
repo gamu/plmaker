@@ -33,12 +33,14 @@ class SettingsActivity: AppCompatActivity() {
 
         val btnSupport = findViewById<ImageView>(R.id.btnSupport)
         btnSupport.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            val mailTo = getString(R.string.mailTo)
-            intent.data = Uri.parse("mailto:${mailTo}")
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mailTo)))
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailTheme))
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mailBody))
-            startActivity(intent)
+            intent.setType("message/rfc822");
+
+            startActivity(Intent.createChooser(intent, "Клиент для отправки:"));
+
         }
 
         val btnBrowser = findViewById<ImageView>(R.id.btnBrowser)
