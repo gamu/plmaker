@@ -3,6 +3,7 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:fillColor">@color/ypBlack</item>
         <item name="svgColor">@color/ypBlack</item>
     </style>
@@ -17,6 +18,12 @@
         <item name="android:padding">@dimen/size8</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:backgroundTint">@color/ypBlack</item>
+    </style>
+    <style name="InformationPropertyStyle">
+        <item name="android:textColor">@color/ypGray</item>
+    </style>
+    <style name="ValuePropertyStyle">
+        <item name="android:textColor">@color/ypBlack</item>
     </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
 </resources>

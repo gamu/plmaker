@@ -2,7 +2,7 @@ package ru.gamu.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,16 +13,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 import ru.gamu.playlistmaker.features.search.TrackListAdapter
 import ru.gamu.playlistmaker.features.search.network.ItunesDataQueryAsync
 import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksCommandHandler
 import ru.gamu.playlistmaker.features.search.persistance.VisitedTracksQueryHandler
 import ru.gamu.plmaker.core.Track
 import ru.gamu.plmaker.core.TrackList
-import com.google.android.material.button.MaterialButton
 import kotlin.properties.Delegates
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -142,6 +145,13 @@ class SearchActivity : AppCompatActivity() {
         if(!isShowedHistoryRresults){
             tracksService.addTrackToHistory(track)
         }
+        val gson = Gson()
+        val intent = Intent(this, PlayerActivity::class.java)
+        val bundle = Bundle()
+        val serializedTrack = gson.toJson(track)
+        bundle.putString("TRACK", serializedTrack)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     @SuppressLint("NotifyDataSetChanged")

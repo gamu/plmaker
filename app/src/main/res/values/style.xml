@@ -60,4 +60,24 @@
         <item name="android:padding">@dimen/topMargin</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
+    <style name="ImageCoverStyle">
+        <item name="android:padding">@dimen/size12</item>
+        <item name="android:layout_width">@dimen/emptySize</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/placeholder_big</item>
+    </style>
+    <style name="TrackNameStyle">
+        <item name="android:textSize">@dimen/ypMedium22</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:layout_marginTop">@dimen/size24</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="ArtistNameStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/ypMedium14</item>
+        <item name="android:fontFamily" >@font/ys_display_medium</item>
+    </style>
 </resources>
