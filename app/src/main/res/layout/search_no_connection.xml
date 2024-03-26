@@ -29,14 +29,11 @@
             android:text="@string/SearchNoConnectionAddition" />
 
         <com.google.android.material.button.MaterialButton
+            style="@style/ButtonOnSearchView"
             android:id="@+id/btnRefresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="@dimen/size8"
-            android:textAllCaps="false"
             app:cornerRadius="@dimen/cornerRadius"
-            android:backgroundTint="@color/ypBlack"
             android:text="@string/refreshText" />
 
     </LinearLayout>

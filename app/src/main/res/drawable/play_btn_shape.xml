@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="84dp"
+        android:drawable="@drawable/pause" />
+    <item android:height="84dp"
+        android:width="84dp"  >
+        <shape android:shape="oval">
+        </shape>
+    </item>
+</layer-list>

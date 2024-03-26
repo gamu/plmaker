@@ -10,3 +10,8 @@ interface ISearchService {
     @GET("/search")
     fun search(@Query("term") name: String ): Call<ResponseRoot>
 }
+
+interface ISearchServiceAsync {
+    @GET("/search")
+    suspend fun search(@Query("term") name: String ): ResponseRoot
+}

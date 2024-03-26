@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:weightSum="3"
+    android:orientation="horizontal" >
+    <TextView android:id="@+id/lblDisplayName"
+        style="@style/InformationPropertyStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/size8"
+        android:layout_weight="2"
+        android:textSize="13sp"
+        android:textColor="@color/labelGray"
+        tools:text="Длительность" />
+
+    <TextView android:id="@+id/lblValue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusableInTouchMode="true"
+        android:paddingTop="@dimen/size8"
+        android:textSize="13sp"
+        android:layout_weight="1"
+        android:textAlignment="textEnd"
+        tools:text="Длительность" />
+</LinearLayout>

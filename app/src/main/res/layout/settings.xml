@@ -23,6 +23,7 @@
             android:text="@string/settingsLabel" />
     </LinearLayout>
     <Switch
+        android:id="@+id/swtTheme"
         android:layout_width="match_parent"
         android:paddingStart="@dimen/marginBig"
         android:layout_height="@dimen/settingsRowSize"
