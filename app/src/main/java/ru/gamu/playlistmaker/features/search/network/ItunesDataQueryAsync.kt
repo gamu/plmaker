@@ -31,7 +31,7 @@ private fun formatYear(dateString: String): String{
         return formattedDatesString
     }
     override fun getData(spec: String) = runBlocking {
-        val formatter = SimpleDateFormat("mm:ss", Locale.getDefault()).format(293000L)
+        val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
         val response = async(Dispatchers.IO) {
             try {
                 searchService.search(spec)

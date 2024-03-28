@@ -16,17 +16,14 @@ import ru.gamu.plmaker.core.Track
 class TrackListViewHolder(val parentView: View,
                           private val trackViewListener: (Track) -> Unit
 ) : RecyclerView.ViewHolder(parentView) {
-    private val Title: TextView
-    private val Thumbinal: ImageView
-    private val Information: TextView
+    private val Title: TextView by lazy { parentView.findViewById(R.id.tbTitle) }
+    private val Thumbinal: ImageView by lazy { parentView.findViewById(R.id.imgThumb) }
+    private val Information: TextView by lazy { parentView.findViewById(R.id.tbInformation) }
+    private val Timing: TextView by lazy { parentView.findViewById(R.id.tbTiming) }
 
     private lateinit var trackItem: Track
 
     init {
-        this.Title = parentView.findViewById(R.id.tbTitle)
-        this.Thumbinal = parentView.findViewById(R.id.imgThumb)
-        this.Information = parentView.findViewById(R.id.tbInformation)
-
         parentView.setOnClickListener {
             trackViewListener(trackItem)
         }
@@ -36,7 +33,9 @@ class TrackListViewHolder(val parentView: View,
     fun bind(track: Track) {
         this.trackItem = track
         this.Title.text = track.trackName
-        this.Information.text = "${ track.artistName } \u2022 ${ track.trackTime }"
+        this.Information.text = track.artistName
+        this.Information.hint = track.artistName
+        this.Timing.text = track.trackTime
         var requestOptions = RequestOptions()
         requestOptions = requestOptions.transforms(CenterInside(), RoundedCorners(16))
         Glide.with(this.parentView)

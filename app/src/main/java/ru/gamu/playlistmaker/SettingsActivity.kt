@@ -33,14 +33,20 @@ class SettingsActivity: AppCompatActivity() {
 
         val btnSupport = findViewById<ImageView>(R.id.btnSupport)
         btnSupport.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mailTo)))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailTheme))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mailBody))
-            intent.setType("message/rfc822");
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:") // Only email apps handle this.
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mailTo)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailTheme))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.mailBody))
+            }
+            startActivity(intent)
+            //val intent = Intent(Intent.ACTION_SENDTO)
+            //intent.putExtra(Intent.EXTRA_EMAIL, "mailto:" + arrayOf(getString(R.string.mailTo)))
+            //intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mailTheme))
+            //intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mailBody))
+            //intent.setType("message/rfc822");
 
-            startActivity(Intent.createChooser(intent, "Клиент для отправки:"));
-
+            //startActivity(Intent.createChooser(intent, getString(R.string.optionsMessage)));
         }
 
         val btnBrowser = findViewById<ImageView>(R.id.btnBrowser)
