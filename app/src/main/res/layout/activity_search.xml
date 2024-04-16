@@ -74,6 +74,20 @@
         android:visibility="gone"
         layout="@layout/search_no_connection"/>
 
+    <LinearLayout android:id="@+id/searchProgress"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:gravity="center_vertical">
+
+        <ProgressBar android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
     <TextView
         style="@style/SearchPlaceholderStyle"
         android:id="@+id/txtSearched"

@@ -13,5 +13,6 @@ data class SearchItem(
     val trackTimeMillis: Long?,
     val copyright: String?,
     val contentAdvisoryRating: String?,
-    val shortDescription: String?
+    val shortDescription: String?,
+    val previewUrl: String?
 )

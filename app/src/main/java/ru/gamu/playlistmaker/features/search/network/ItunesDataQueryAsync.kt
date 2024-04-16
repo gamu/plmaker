@@ -56,7 +56,9 @@ private fun formatYear(dateString: String): String{
                             releaseDate = formatYear(item.releaseDate),
                             trackCensoredName = item.trackCensoredName,
                             trackName = item.trackName,
-                            trackTime = formatter.format(item.trackTimeMillis))
+                            trackTimeMs = item.trackTimeMillis,
+                            trackPreview = item.previewUrl,
+                            trackTime = formatter.format(item.trackTimeMillis)),
                         )
                     }
                 }

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,9 +34,8 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private val SEARCH_TOKEN: String = "SEARCH_TOKEN"
+        private val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
     }
-
-    private lateinit var tracksService: TrackList
 
     private var searchToken: String by Delegates.observable(""){ prop, oldValue, newValue ->
         if(newValue.isEmpty()){
@@ -41,11 +43,26 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    @get:Synchronized
+    @set:Synchronized
+    private var searchTimeStamp: Long = System.currentTimeMillis()
+    private var searchThread: Thread? = null
+
+    private lateinit var tracksService: TrackList
+
+    @get:Synchronized
+    @set:Synchronized
+    private var allowSearch: Boolean = false
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var tracks: MutableList<Track> = mutableListOf()
+
     private val recycler: RecyclerView by lazy { findViewById(R.id.trackListRecycler) }
     private val inputEditText: EditText by lazy { findViewById(R.id.tbSearch) }
     private val clearButton: ImageView by lazy { findViewById(R.id.clearIcon) }
 
-    private var tracks: MutableList<Track> = mutableListOf()
+    @get:Synchronized
+    private val searchProgressBar: LinearLayout by lazy { findViewById(R.id.searchProgress) }
 
     private var isShowedHistoryRresults = false
         set(value) {
@@ -97,7 +114,13 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                searchTimeStamp = System.currentTimeMillis()
                 searchToken = s.toString()
+                handler.postDelayed({
+                    if(searchTimeStamp + SEARCH_DEBOUNCE_TIMEOUT_MS <= System.currentTimeMillis()){
+                        search()
+                    }}, SEARCH_DEBOUNCE_TIMEOUT_MS)
+                allowSearch = false
             }
         }
 
@@ -115,6 +138,11 @@ class SearchActivity : AppCompatActivity() {
             findViewById<View>(R.id.noConnection)?.visibility = View.GONE
             search()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        searchThread?.interrupt()
     }
 
     fun backButtonClick(view: View){
@@ -172,19 +200,30 @@ class SearchActivity : AppCompatActivity() {
         findViewById<View>(R.id.noConnection)?.visibility = noConnectionVisibility
     }
     private fun search(){
-        isShowedHistoryRresults = false
-        val searchResult = tracksService.searchItems(searchToken)
-        if(searchResult == null){
-            visibilityWrapper(View.GONE, View.VISIBLE)
-            updateTracksAndNotify()
-        } else if(searchResult.isEmpty()) {
-            visibilityWrapper(View.VISIBLE, View.GONE)
-            updateTracksAndNotify()
-        } else {
-            visibilityWrapper(View.GONE, View.GONE)
-            updateTracksAndNotify(searchResult)
-        }
-        isShowedHistoryRresults = false
+        val searchHandler = Handler(Looper.getMainLooper())
+        Thread {
+            searchHandler.post{ searchProgressBar.visibility = View.VISIBLE }
+            searchHandler.post{ isShowedHistoryRresults = false}
+            val searchResult = tracksService.searchItems(searchToken)
+            if(searchResult == null){
+                searchHandler.post{
+                    visibilityWrapper(View.GONE, View.VISIBLE)
+                    updateTracksAndNotify()
+                }
+            } else if(searchResult.isEmpty()) {
+                searchHandler.post {
+                    visibilityWrapper(View.VISIBLE, View.GONE)
+                    updateTracksAndNotify()
+                }
+            } else {
+                searchHandler.post {
+                    visibilityWrapper(View.GONE, View.GONE)
+                    updateTracksAndNotify(searchResult)
+                }
+            }
+            searchHandler.post{ searchProgressBar.visibility = View.GONE }
+            searchHandler.post{ isShowedHistoryRresults = false}
+        }.start()
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

@@ -25,6 +25,10 @@ class TrackInfo(){
     @DisplayName("Длительность")
     val trackTime: String? = null
 
+    val trackTimeMs: Long? = null
+
+    val trackPreview: String? = null
+
     fun getProperies(): List<Pair<String, String>> {
         val result = mutableListOf<Pair<String, String>>()
         val properties = this::class.declaredMemberProperties

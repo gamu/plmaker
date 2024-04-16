@@ -20,5 +20,5 @@
     <string name="refreshText">Обновить</string>
     <string name="searchedText">История поиска</string>
     <string name="clearSearchHistoryText">Очистить историю</string>
-    <string name="mockTiming">0:30</string>
+    <string name="mockTiming">0:00</string>
 </resources>

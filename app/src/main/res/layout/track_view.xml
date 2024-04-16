@@ -31,12 +31,12 @@
         android:id="@+id/btnBackToSearch"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:padding="@dimen/size12"
+        android:scaleType="center"
         android:layout_gravity="center_vertical"
         android:onClick="backButtonClick"
         android:src="@drawable/arrowleft"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/left_guideline"
         tools:ignore="ContentDescription,RtlSymmetry" />
 
     <ImageView android:id="@+id/imgCover"
