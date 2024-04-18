@@ -4,7 +4,7 @@ import ru.gamu.plmaker.core.cq.ICommandHandler
 import ru.gamu.plmaker.core.cq.IQueryHandler
 
 private const val MAX_HISTORY_COUNT = 10
-class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
+class TrackList(private val searchQuery: IQueryHandler<IResponse<List<Track>>, String>,
                 private val trackPersistentCommand: ICommandHandler<Set<Track>>,
                 private val trackPersistentQuery: IQueryHandler<Set<Track>, Unit>) {
 
@@ -14,14 +14,8 @@ class TrackList(private val searchQuery: IQueryHandler<List<Track>?, String>,
         get() = tracksHistory.isNotEmpty()
 
 
-    fun searchItems(searchToken: String): List<Track>? {
-        val result = searchQuery.getData(searchToken)
-        if(result == null){
-            return null
-        }else if(result.isNotEmpty()) {
-            return result
-        }
-        return listOf()
+    fun searchItems(searchToken: String): IResponse<List<Track>> {
+        return searchQuery.getData(searchToken)
     }
 
     fun addTrackToHistory(track: Track) {

@@ -8,13 +8,15 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gamu.playlistmaker.R
+import ru.gamu.playlistmaker.features.search.network.responsModels.Response
+import ru.gamu.playlistmaker.features.search.network.responsModels.ResponseRoot
+import ru.gamu.plmaker.core.IResponse
 import ru.gamu.plmaker.core.Track
 import ru.gamu.plmaker.core.cq.IQueryHandler
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ItunesDataQueryAsync(val context: Context) : IQueryHandler<List<Track>?, String> {
+class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<Track>>, String> {
     private val searchService: ISearchServiceAsync
     init {
         val gson = GsonBuilder().create()
@@ -25,48 +27,43 @@ class ItunesDataQueryAsync(val context: Context) : IQueryHandler<List<Track>?, S
         searchService = retrofit.create(ISearchServiceAsync::class.java)
     }
 
-private fun formatYear(dateString: String): String{
+    private fun formatYear(dateString: String): String{
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateString)
         val formattedDatesString = SimpleDateFormat("yyyy", Locale.getDefault()).format(date!!)
         return formattedDatesString
     }
+
     override fun getData(spec: String) = runBlocking {
         val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
         val response = async(Dispatchers.IO) {
-            try {
+            try{
                 searchService.search(spec)
-            }catch (e: IOException) {
-                null
-            }catch (e: Exception) {
-                null
+            }catch (ex: Exception){
+                ResponseRoot(0, listOf(), true)
             }
         }
         try {
-            val items = response.await()!!.results.let {
-                val mappedResult = mutableListOf<Track>()
-                for (item in it) {
-                    if(item.trackName != null){
-                        mappedResult.add(Track(
-                            artistName = item.artistName,
-                            artworkUrl = item.artworkUrl100,
-                            collectionName = item.collectionName,
-                            country = item.country,
-                            description = item.description,
-                            primaryGenreName = item.primaryGenreName,
-                            releaseDate = formatYear(item.releaseDate),
-                            trackCensoredName = item.trackCensoredName,
-                            trackName = item.trackName,
-                            trackTimeMs = item.trackTimeMillis,
-                            trackPreview = item.previewUrl,
-                            trackTime = formatter.format(item.trackTimeMillis)),
-                        )
-                    }
-                }
-                mappedResult
+            if(response.await().isError)
+                return@runBlocking Response.ERROR
+            val result = response.await().results.map {
+                Track(
+                    artistName = it.artistName,
+                    artworkUrl = it.artworkUrl100,
+                    collectionName = it.collectionName,
+                    country = it.country,
+                    description = it.description,
+                    primaryGenreName = it.primaryGenreName,
+                    releaseDate = formatYear(it.releaseDate),
+                    trackCensoredName = it.trackCensoredName,
+                    trackName = it.trackName,
+                    trackTimeMs = it.trackTimeMillis,
+                    trackPreview = it.previewUrl,
+                    trackTime = formatter.format(it.trackTimeMillis)
+                )
             }
-            return@runBlocking items
+            return@runBlocking Response.SUCCESS.apply { this.setResult(result) }
         }catch (ex: Exception){
-            return@runBlocking null
+            return@runBlocking Response.ERROR
         }
     }
 }

@@ -200,17 +200,19 @@ class SearchActivity : AppCompatActivity() {
         findViewById<View>(R.id.noConnection)?.visibility = noConnectionVisibility
     }
     private fun search(){
+        if(searchToken.isEmpty())
+            return
         val searchHandler = Handler(Looper.getMainLooper())
         Thread {
             searchHandler.post{ searchProgressBar.visibility = View.VISIBLE }
             searchHandler.post{ isShowedHistoryRresults = false}
             val searchResult = tracksService.searchItems(searchToken)
-            if(searchResult == null){
+            if(searchResult.getIsError()){
                 searchHandler.post{
                     visibilityWrapper(View.GONE, View.VISIBLE)
                     updateTracksAndNotify()
                 }
-            } else if(searchResult.isEmpty()) {
+            } else if(searchResult.getCount() == 0) {
                 searchHandler.post {
                     visibilityWrapper(View.VISIBLE, View.GONE)
                     updateTracksAndNotify()
@@ -218,7 +220,7 @@ class SearchActivity : AppCompatActivity() {
             } else {
                 searchHandler.post {
                     visibilityWrapper(View.GONE, View.GONE)
-                    updateTracksAndNotify(searchResult)
+                    updateTracksAndNotify(searchResult.getResult())
                 }
             }
             searchHandler.post{ searchProgressBar.visibility = View.GONE }

@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/search"
             android:imeOptions="actionDone"
+            android:textCursorDrawable="@color/ypBlue"
             android:singleLine="true"
             android:padding="@dimen/size10"
             android:layout_marginTop="@dimen/size8"
@@ -84,7 +85,8 @@
 
         <ProgressBar android:id="@+id/progress_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/ypBlue" />
 
     </LinearLayout>
 

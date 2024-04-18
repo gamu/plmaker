@@ -92,6 +92,7 @@ class PlayerActivity: AppCompatActivity(){
         return gson.fromJson<TrackInfo>(value!!)
     }
 
+    //SimpleDateFormater
     private fun displayDuration(duration: Long) {
         val seconds = duration / 1000 % 60
         val minutes = duration / 1000 / 60

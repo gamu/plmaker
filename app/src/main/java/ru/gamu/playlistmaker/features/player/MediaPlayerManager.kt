@@ -19,6 +19,7 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayer): Thread()
         mediaPlayer.start()
         PlayerState = PlayerStates.STATE_PLAYING
         synchronized(mutex) {
+            currentThread().name
             while(PlayerState.IsPlaying()){
                 sleep(PLAYBACK_SIGNAL_TIMEOUT_MS)
                 if(PlayerState == PlayerStates.STATE_PAUSED){
