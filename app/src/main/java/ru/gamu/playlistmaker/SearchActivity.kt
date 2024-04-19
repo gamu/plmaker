@@ -204,7 +204,10 @@ class SearchActivity : AppCompatActivity() {
             return
         val searchHandler = Handler(Looper.getMainLooper())
         Thread {
-            searchHandler.post{ searchProgressBar.visibility = View.VISIBLE }
+            searchHandler.post{
+                searchProgressBar.visibility = View.VISIBLE
+                visibilityWrapper(View.GONE, View.GONE)
+            }
             searchHandler.post{ isShowedHistoryRresults = false}
             val searchResult = tracksService.searchItems(searchToken)
             if(searchResult.getIsError()){

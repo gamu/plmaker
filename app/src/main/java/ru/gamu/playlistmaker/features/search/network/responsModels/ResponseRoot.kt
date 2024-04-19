@@ -13,6 +13,15 @@ enum class Response: IResponse<List<Track>> {
 
     SUCCESS {
         private var result: List<Track> = listOf()
+        private var error: Exception? =null;
+
+        override fun getError(): Exception? {
+            return error
+        }
+
+        override fun setError(ex: Exception) {
+            error = ex
+        }
 
         override fun getIsError(): Boolean {
             return false;
@@ -33,6 +42,15 @@ enum class Response: IResponse<List<Track>> {
     },
     ERROR {
         private var result: List<Track> = listOf()
+        private var error: Exception? =null;
+
+        override fun getError(): Exception? {
+            return error
+        }
+
+        override fun setError(ex: Exception) {
+            error = ex
+        }
 
         override fun getIsError(): Boolean {
             return true

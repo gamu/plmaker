@@ -28,9 +28,14 @@ class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<
     }
 
     private fun formatYear(dateString: String): String{
-        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateString)
-        val formattedDatesString = SimpleDateFormat("yyyy", Locale.getDefault()).format(date!!)
-        return formattedDatesString
+        try {
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateString)
+            val formattedDatesString = SimpleDateFormat("yyyy", Locale.getDefault()).format(date!!)
+            return formattedDatesString
+        }catch(ex: Exception){
+            return ""
+        }
+
     }
 
     override fun getData(spec: String) = runBlocking {
@@ -58,12 +63,12 @@ class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<
                     trackName = it.trackName,
                     trackTimeMs = it.trackTimeMillis,
                     trackPreview = it.previewUrl,
-                    trackTime = formatter.format(it.trackTimeMillis)
+                    trackTime = if (it.trackTimeMillis != null) formatter.format(it.trackTimeMillis) else ""
                 )
             }
             return@runBlocking Response.SUCCESS.apply { this.setResult(result) }
         }catch (ex: Exception){
-            return@runBlocking Response.ERROR
+            return@runBlocking Response.ERROR.apply { this.setError(ex) }
         }
     }
 }
