@@ -8,7 +8,7 @@
     <string name="shareLabel">Поделиться приложением</string>
     <string name="supportLabel">Написать в поддержку</string>
     <string name="agreementLabel">Пользовательское соглашение</string>
-    <string name="praktikumUrl">https://practicum.yandex.ru/learn/android-developer</string>
+    <string name="praktikumUrl">https://practicum.yandex.ru/android-developer/</string>
     <string name="optionsMessage">Отправить сообщение через:</string>
     <string name="mailTo">gamu@bk.ru</string>
     <string name="mailTheme">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
@@ -18,4 +18,7 @@
     <string name="SearchNoConnection">Проблемы со связью</string>
     <string name="SearchNoConnectionAddition">Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="refreshText">Обновить</string>
+    <string name="searchedText">История поиска</string>
+    <string name="clearSearchHistoryText">Очистить историю</string>
+    <string name="mockTiming">0:00</string>
 </resources>

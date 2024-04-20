@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="iTunesSearchUrl">https://itunes.apple.com</string>
+    <string name="viewHistory">ViewsHistory</string>
+    <string name="viewHistoryItems">Items</string>
+</resources>
