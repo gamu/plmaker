@@ -32,7 +32,7 @@
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/marginBig"
         android:layout_marginEnd="@dimen/marginBig"
-        tools:context=".MainActivity">
+        tools:context=".presentation.MainActivity">
         <EditText
             style="@style/SearchBoxStyle"
             android:id="@+id/tbSearch"
