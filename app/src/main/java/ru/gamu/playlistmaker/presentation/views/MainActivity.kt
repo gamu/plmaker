@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation
+package ru.gamu.playlistmaker.presentation.views
 
 import android.content.Intent
 import android.os.Bundle

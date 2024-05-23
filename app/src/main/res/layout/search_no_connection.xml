@@ -35,6 +35,5 @@
             android:layout_height="wrap_content"
             app:cornerRadius="@dimen/cornerRadius"
             android:text="@string/refreshText" />
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

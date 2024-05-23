@@ -46,7 +46,8 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayer): Thread(), IMedia
         mediaPlayer.setOnCompletionListener {
             PlayerState = PlayerStates.STATE_FINISHED
             synchronized(mutex){
-                if(onPlayerComplete != null){
+                if(onPlayerComplete != null && onCounterSignal != null){
+                    onCounterSignal?.invoke(0)
                     onPlayerComplete?.invoke()
                 }
             }

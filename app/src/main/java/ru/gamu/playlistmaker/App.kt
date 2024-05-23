@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation
+package ru.gamu.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate

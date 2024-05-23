@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation
+package ru.gamu.playlistmaker.presentation.views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

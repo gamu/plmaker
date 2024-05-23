@@ -1,135 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/indentBase"
-    android:orientation="vertical"
-    android:theme="@style/Base.Theme.PlaylistMaker">
-    <LinearLayout
-        style="@style/LayoutHeaderFrameStyle"
-        android:layout_marginBottom="8dp"
-        tools:ignore="UseCompoundDrawables">
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel" />
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="@dimen/indentBase"
+        android:orientation="vertical"
+        android:theme="@style/Base.Theme.PlaylistMaker">
+        <LinearLayout
+            style="@style/LayoutHeaderFrameStyle"
+            android:layout_marginBottom="8dp"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrowleft"
+                android:onClick="backButtonClick"
+                android:paddingEnd="@dimen/indentBase"
+                tools:ignore="ContentDescription,RtlSymmetry" />
+            <TextView style="@style/TextViewHeadStyle"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/searchLabel" />
+        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/marginBig"
+            android:layout_marginEnd="@dimen/marginBig"
+            tools:context=".presentation.views.MainActivity">
+            <EditText
+                style="@style/SearchBoxStyle"
+                android:id="@+id/tbSearch"
+                android:layout_width="match_parent"
+                android:hint="@string/searchLabel"
+                android:text="@={ vm.searchTokenField }"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/search"
+                android:imeOptions="actionDone"
+                android:textCursorDrawable="@color/ypBlue"
+                android:singleLine="true"
+                android:padding="@dimen/size10"
+                android:layout_marginTop="@dimen/size8"
+                android:drawablePadding="@dimen/size10"
+                android:background="@drawable/edit_with_roundedcorner"
+                android:lines="1"
+                app:cornerRadius="@dimen/radius50"
+                tools:ignore="Autofill,TextFields" />
+
+            <ImageView
+                android:id="@+id/clearIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_gravity="end"
+                android:paddingEnd="@dimen/size12"
+                android:layout_marginTop="@dimen/size20"
+                android:onClick="@{ () -> vm.clearSearchBox() }"
+                android:src="@drawable/clear"
+                android:backgroundTint="@color/ypGray"
+                android:visibility="@{ vm.cleanSearchAvailable ? View.VISIBLE : View.GONE }"
+                tools:ignore="ContentDescription,RtlSymmetry" />
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:visibility="@{ vm.searchResultState.showNetworErrorView? View.VISIBLE : View.GONE }">
+            <include
+                android:id="@+id/noConnection"
+                layout="@layout/search_no_connection"/>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{ vm.searchResultState.showEmptyResultView? View.VISIBLE : View.GONE }">
+            <include
+                android:id="@+id/emptyDataset"
+                layout="@layout/search_empty_dataset"/>
+        </FrameLayout>
+
+
+        <LinearLayout android:id="@+id/searchProgress"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/arrowleft"
-            android:onClick="backButtonClick"
-            android:paddingEnd="@dimen/indentBase"
-            tools:ignore="ContentDescription,RtlSymmetry" />
-        <TextView style="@style/TextViewHeadStyle"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/searchLabel" />
-    </LinearLayout>
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/marginBig"
-        android:layout_marginEnd="@dimen/marginBig"
-        tools:context=".presentation.MainActivity">
-        <EditText
-            style="@style/SearchBoxStyle"
-            android:id="@+id/tbSearch"
-            android:layout_width="match_parent"
-            android:hint="@string/searchLabel"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/search"
-            android:imeOptions="actionDone"
-            android:textCursorDrawable="@color/ypBlue"
-            android:singleLine="true"
-            android:padding="@dimen/size10"
-            android:layout_marginTop="@dimen/size8"
-            android:drawablePadding="@dimen/size10"
-            android:background="@drawable/edit_with_roundedcorner"
-            android:lines="1"
-            app:cornerRadius="@dimen/radius50"
-            tools:ignore="Autofill,TextFields" />
+            android:visibility="@{ vm.searchResultState.showDataLoader? View.VISIBLE : View.GONE }"
+            android:gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/clearIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:paddingEnd="@dimen/size12"
-            android:layout_marginTop="@dimen/size20"
-            android:onClick="clearSearchBox"
-            android:src="@drawable/clear"
-            android:backgroundTint="@color/ypGray"
+            <ProgressBar android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/ypBlue" />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/SearchPlaceholderStyle"
+            android:id="@+id/txtSearched"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:ignore="ContentDescription,RtlSymmetry" />
-    </FrameLayout>
-
-    <include
-        android:id="@+id/emptyDataset"
-        android:visibility="gone"
-        layout="@layout/search_empty_dataset"/>
-
-    <include
-        android:id="@+id/noConnection"
-        android:visibility="gone"
-        layout="@layout/search_no_connection"/>
-
-    <LinearLayout android:id="@+id/searchProgress"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone"
-        android:gravity="center_vertical">
-
-        <ProgressBar android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/ypBlue" />
-
-    </LinearLayout>
-
-    <TextView
-        style="@style/SearchPlaceholderStyle"
-        android:id="@+id/txtSearched"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/marginBig"
-        android:layout_marginStart="@dimen/marginBig"
-        android:layout_marginEnd="@dimen/marginBig"
-        android:padding="0dp"
-        android:text="@string/searchedText" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trackListRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/marginBig"
             android:layout_marginStart="@dimen/marginBig"
-            android:layout_marginEnd="@dimen/marginBig" />
+            android:layout_marginEnd="@dimen/marginBig"
+            android:padding="0dp"
+            android:text="@string/searchedText" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/ButtonOnSearchView"
-            android:id="@+id/btnClearHistori"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size24"
-            android:onClick="clearHistoryClick"
-            android:visibility="gone"
-            app:cornerRadius="@dimen/cornerRadius"
-            android:text="@string/clearSearchHistoryText" />
+            android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trackListRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/marginBig"
+                android:layout_marginStart="@dimen/marginBig"
+                android:layout_marginEnd="@dimen/marginBig" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/ButtonOnSearchView"
+                android:id="@+id/btnClearHistori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size24"
+                android:onClick="clearHistoryClick"
+                android:visibility="@{ vm.searchResultState.historyData? View.VISIBLE : View.GONE }"
+                app:cornerRadius="@dimen/cornerRadius"
+                android:text="@string/clearSearchHistoryText" />
+
+        </LinearLayout>
     </LinearLayout>
-
-
-
-
-</LinearLayout>
+</layout>

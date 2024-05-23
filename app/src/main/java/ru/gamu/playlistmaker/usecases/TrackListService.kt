@@ -17,8 +17,9 @@ class TrackListService(private val searchQuery: IQueryHandler<IResponse<List<Tra
         get() = tracksHistory.isNotEmpty()
 
 
-    fun searchItems(searchToken: String): IResponse<List<Track>> {
-        return searchQuery.getData(searchToken)
+    fun searchItems(searchToken: String, block:(IResponse<List<Track>>) -> Unit) {
+        val result = searchQuery.getData(searchToken)
+        block(result)
     }
 
     fun addTrackToHistory(track: Track) {

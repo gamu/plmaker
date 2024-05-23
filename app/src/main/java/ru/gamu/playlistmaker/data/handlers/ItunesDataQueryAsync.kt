@@ -66,6 +66,9 @@ class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<
                     trackTime = if (it.trackTimeMillis != null) formatter.format(it.trackTimeMillis) else ""
                 )
             }
+            if(result.isEmpty()){
+                return@runBlocking Response.EMPTY
+            }
             return@runBlocking Response.SUCCESS.apply { this.setResult(result) }
         }catch (ex: Exception){
             return@runBlocking Response.ERROR.apply { this.setError(ex) }

@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation.viewholder.trackinfo
+package ru.gamu.playlistmaker.presentation.viewmodel.player.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

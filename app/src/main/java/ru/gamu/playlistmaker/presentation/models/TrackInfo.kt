@@ -5,7 +5,7 @@ import kotlin.reflect.full.declaredMemberProperties
 class TrackInfo(){
 
     val artistName: String? = null
-    val artworkUrl: String? = null
+    var artworkUrl: String? = null
 
     @DisplayName("Альбом")
     val collectionName: String? = null
