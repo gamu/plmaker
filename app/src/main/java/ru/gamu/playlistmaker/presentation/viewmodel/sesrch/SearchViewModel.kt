@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.gamu.playlistmaker.App
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
-import ru.gamu.playlistmaker.usecases.TrackListService
+import ru.gamu.playlistmaker.domain.usecases.TrackListService
 import ru.gamu.playlistmaker.utils.createTracklistService
 
 class SearchViewModel(val trackListService: TrackListService, val app: Application): AndroidViewModel(app)

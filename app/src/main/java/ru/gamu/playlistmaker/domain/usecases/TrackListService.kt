@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.usecases
+package ru.gamu.playlistmaker.domain.usecases
 
 import ru.gamu.playlistmaker.data.dto.IResponse
 import ru.gamu.playlistmaker.data.handlers.ICommandHandler

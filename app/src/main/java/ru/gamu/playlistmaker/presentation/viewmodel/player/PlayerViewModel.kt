@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.gamu.playlistmaker.App
 import ru.gamu.playlistmaker.presentation.models.TrackInfo
-import ru.gamu.playlistmaker.usecases.MediaPlayerManager
+import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

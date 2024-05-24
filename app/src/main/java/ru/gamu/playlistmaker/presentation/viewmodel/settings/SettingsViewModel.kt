@@ -13,11 +13,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.gamu.playlistmaker.App
 import ru.gamu.playlistmaker.R
-import ru.gamu.playlistmaker.usecases.CurrentThemeInteractor
-import ru.gamu.playlistmaker.usecases.DarkThemeInteractor
+import ru.gamu.playlistmaker.domain.usecases.CurrentThemeInteractor
+import ru.gamu.playlistmaker.domain.usecases.DarkThemeInteractor
 
 class SettingsViewModel(val darkThemeInteractor: DarkThemeInteractor,
-    val currentThemeInteractor: CurrentThemeInteractor,
+                        val currentThemeInteractor: CurrentThemeInteractor,
                         val app: Application) : AndroidViewModel(app) {
 
     private val darkThemeLiveData = MutableLiveData<Boolean>()

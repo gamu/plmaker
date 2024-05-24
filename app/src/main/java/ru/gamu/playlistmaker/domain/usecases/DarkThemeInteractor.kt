@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.usecases
+package ru.gamu.playlistmaker.domain.usecases
 
 import android.content.Context
 import ru.gamu.playlistmaker.data.repositories.SettingsPersistentStorageRepository

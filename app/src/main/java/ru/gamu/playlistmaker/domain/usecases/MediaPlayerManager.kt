@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.usecases
+package ru.gamu.playlistmaker.domain.usecases
 
 import android.media.MediaPlayer
 import ru.gamu.playlistmaker.domain.IMediaPlayerManager
