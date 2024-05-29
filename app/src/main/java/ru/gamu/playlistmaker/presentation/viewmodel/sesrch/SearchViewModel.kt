@@ -1,26 +1,21 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.sesrch
 
-import android.app.Application
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Looper
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import ru.gamu.playlistmaker.App
+import androidx.lifecycle.ViewModel
+import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
-import ru.gamu.playlistmaker.utils.createTracklistService
 
-class SearchViewModel(val trackListService: TrackListService, val app: Application): AndroidViewModel(app)
+class SearchViewModel(): ViewModel()
 {
+    val trackListService: TrackListService by inject(TrackListService::class.java)
     val searchResultState = MutableLiveData<SearchState>(SearchState.InitialState())
-    var handler: Handler? = null
+    val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
     val trackListMediator = TrackListMediator()
     var searchTokenField = ObservableField<String>()
     var cleanSearchAvailable = MutableLiveData(false)
@@ -34,7 +29,7 @@ class SearchViewModel(val trackListService: TrackListService, val app: Applicati
                 val searchToken = searchTokenField.get() ?: ""
                 if(searchToken.isNotEmpty()){
                     cleanSearchAvailable.value = true
-                    handler?.postDelayed(Runnable {
+                    handler.postDelayed(Runnable {
                         val newSearchToken = searchTokenField.get()
                         if(searchToken == newSearchToken){
                             search{ thread -> thread.start() }
@@ -70,7 +65,7 @@ class SearchViewModel(val trackListService: TrackListService, val app: Applicati
     private fun search(block: (searchThread: Thread) -> Unit){
         searchTokenField.get()?.let{ searchToken ->
             val thread = Thread {
-                handler?.post{ searchResultState.value = SearchState.DataLoading() }
+                handler.post{ searchResultState.value = SearchState.DataLoading() }
                 trackListService.searchItems(searchToken){
                     when(it){
                         Response.EMPTY -> handler?.post{ searchResultState.value = SearchState.EmptyResult() }
@@ -87,28 +82,5 @@ class SearchViewModel(val trackListService: TrackListService, val app: Applicati
     }
     companion object {
         private val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-
-            initializer {
-                val appCtx = (this[APPLICATION_KEY] as App)
-                val service = createTracklistService(appCtx)
-                SearchViewModel(service, appCtx)
-            }
-        }
-
-        inline fun searchVm(activity: AppCompatActivity, block: Builder.() -> Unit) =
-            Builder(activity)
-                .apply(block)
-                .build()
-    }
-
-    class Builder(val activity: AppCompatActivity){
-        var dslHandler: Handler? = null
-        fun build(): SearchViewModel {
-            var vm = ViewModelProvider(activity, getViewModelFactory()).get(SearchViewModel::class.java)
-            return vm.apply {
-                        handler = dslHandler
-                    }
-        }
     }
 }

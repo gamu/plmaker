@@ -1,14 +1,15 @@
 package ru.gamu.playlistmaker.domain.usecases
 
 import ru.gamu.playlistmaker.data.dto.IResponse
-import ru.gamu.playlistmaker.data.handlers.ICommandHandler
-import ru.gamu.playlistmaker.data.handlers.IQueryHandler
+import ru.gamu.playlistmaker.data.handlers.ItunesDataQueryAsync
+import ru.gamu.playlistmaker.data.handlers.VisitedTracksCommandHandler
+import ru.gamu.playlistmaker.data.handlers.VisitedTracksQueryHandler
 import ru.gamu.playlistmaker.domain.models.Track
 
 private const val MAX_HISTORY_COUNT = 10
-class TrackListService(private val searchQuery: IQueryHandler<IResponse<List<Track>>, String>,
-                       private val trackPersistentCommand: ICommandHandler<Set<Track>>,
-                       private val trackPersistentQuery: IQueryHandler<Set<Track>, Unit>
+class TrackListService(private val searchQuery: ItunesDataQueryAsync,
+                       private val trackPersistentCommand: VisitedTracksCommandHandler,
+                       private val trackPersistentQuery: VisitedTracksQueryHandler
 ) {
 
     private val tracksHistory = trackPersistentQuery.getData(Unit) as MutableSet

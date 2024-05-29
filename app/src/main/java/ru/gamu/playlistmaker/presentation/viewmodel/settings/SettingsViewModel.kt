@@ -1,16 +1,12 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.settings
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import ru.gamu.playlistmaker.App
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.domain.usecases.CurrentThemeInteractor
@@ -18,7 +14,7 @@ import ru.gamu.playlistmaker.domain.usecases.DarkThemeInteractor
 
 class SettingsViewModel(val darkThemeInteractor: DarkThemeInteractor,
                         val currentThemeInteractor: CurrentThemeInteractor,
-                        val app: Application) : AndroidViewModel(app) {
+                        val app: Context) : ViewModel() {
 
     private val darkThemeLiveData = MutableLiveData<Boolean>()
 
@@ -67,17 +63,5 @@ class SettingsViewModel(val darkThemeInteractor: DarkThemeInteractor,
             putExtra(Intent.EXTRA_TEXT, app.getString(R.string.mailBody))
         }
         action(intent)
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-
-            initializer {
-                val appCtx = (this[APPLICATION_KEY] as App)
-                val darkThemeInteractor = DarkThemeInteractor(appCtx.applicationContext)
-                val currentThemeInteractor = CurrentThemeInteractor(appCtx.applicationContext)
-                SettingsViewModel(darkThemeInteractor, currentThemeInteractor, appCtx)
-            }
-        }
     }
 }
