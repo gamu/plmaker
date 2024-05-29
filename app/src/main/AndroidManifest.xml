@@ -14,13 +14,13 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".SearchActivity"
+            android:name=".presentation.views.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".StubActivity"
+            android:name=".presentation.views.StubActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,8 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity" android:exported="true" />
-        <activity android:name=".PlayerActivity" android:exported="true" />
+        <activity android:name=".presentation.views.SettingsActivity" android:exported="true" />
+        <activity android:name=".presentation.views.PlayerActivity" android:exported="true" />
     </application>
 
 </manifest>

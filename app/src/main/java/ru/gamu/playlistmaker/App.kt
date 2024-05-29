@@ -2,14 +2,14 @@ package ru.gamu.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import ru.gamu.playlistmaker.features.settings.PersistentStorage
+import ru.gamu.playlistmaker.data.repositories.SettingsPersistentStorageRepository
 
 class App : Application() {
     var darkTheme = false
-    private lateinit var persistentStorage:PersistentStorage
+    private lateinit var persistentStorage: SettingsPersistentStorageRepository
     override fun onCreate() {
         super.onCreate()
-        persistentStorage = PersistentStorage(this.applicationContext)
+        persistentStorage = SettingsPersistentStorageRepository(this.applicationContext)
         switchTheme(persistentStorage.useDarkTheme)
     }
 
