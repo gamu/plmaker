@@ -55,10 +55,10 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("io.insert-koin:koin-android:3.2.0")
     implementation(project(":core"))
     implementation(project(":core"))
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:3.x")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

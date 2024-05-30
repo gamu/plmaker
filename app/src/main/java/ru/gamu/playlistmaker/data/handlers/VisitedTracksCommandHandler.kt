@@ -5,10 +5,9 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import ru.gamu.playlistmaker.R
-import ru.gamu.playlistmaker.data.handlers.ICommandHandler
 import ru.gamu.playlistmaker.domain.models.Track
 
-class VisitedTracksCommandHandler(context: Context): ICommandHandler<Set<Track>> {
+class VisitedTracksCommandHandler(val context: Context) {
     private val ViewHistory: String = context.getString(R.string.viewHistory)
     private val ViewHistoryItems: String = context.getString(R.string.viewHistoryItems)
     private val persistentStorage: SharedPreferences
@@ -16,7 +15,7 @@ class VisitedTracksCommandHandler(context: Context): ICommandHandler<Set<Track>>
         persistentStorage = context.getSharedPreferences(ViewHistory,
             AppCompatActivity.MODE_PRIVATE)
     }
-    override fun Execute(command: Set<Track>) {
+    fun Execute(command: Set<Track>) {
         if(command.isEmpty()){
             persistentStorage.edit().remove(ViewHistoryItems).apply()
         }else{

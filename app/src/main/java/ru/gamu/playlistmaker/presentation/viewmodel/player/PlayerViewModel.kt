@@ -1,30 +1,26 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.player
 
-import android.app.Application
-import android.media.MediaPlayer
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.AndroidViewModel
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import ru.gamu.playlistmaker.App
-import ru.gamu.playlistmaker.presentation.models.TrackInfo
+import androidx.lifecycle.ViewModel
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
+import ru.gamu.playlistmaker.presentation.models.TrackInfo
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class PlayerViewModel(val app: Application, val mediaPlayer: MediaPlayerManager,
-                      val track: TrackInfo): AndroidViewModel(app)
+class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
 {
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
+    var track: TrackInfo? = null
+
     val enablePlayback = MutableLiveData(true)
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
-    var handler: Handler? = null
+    var handler: Handler = Handler(Looper.getMainLooper())
 
-    init{
+    fun setTrackInfo(track: TrackInfo){
+        this.track = track;
         initializePlayer(track.trackPreview!!)
     }
     private fun initializePlayer(trackPreview: String) {
@@ -66,28 +62,5 @@ class PlayerViewModel(val app: Application, val mediaPlayer: MediaPlayerManager,
     companion object{
         private const val TIMER_INITIAL_VALUE = "0:00"
         private const val TIMER_FORMAT = "%02d:%02d"
-        fun getViewModelFactory(track: TrackInfo): ViewModelProvider.Factory = viewModelFactory {
-
-            initializer {
-                val appCtx = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as App)
-                val mediaPlayer = MediaPlayerManager(MediaPlayer())
-                PlayerViewModel(appCtx, mediaPlayer, track)
-            }
-        }
-
-        inline fun playerVm(activity: AppCompatActivity, track: TrackInfo,
-                            block: PlayerViewModel.Builder.() -> Unit) =
-            Builder(activity, track).apply(block).build()
-    }
-
-    class Builder(val activity: AppCompatActivity, val track: TrackInfo){
-        var dslHandler: Handler? = null
-        fun build(): PlayerViewModel {
-            var vm = ViewModelProvider(activity, PlayerViewModel.getViewModelFactory(track))
-                .get(PlayerViewModel::class.java)
-            return vm.apply {
-                handler = dslHandler
-            }
-        }
     }
 }

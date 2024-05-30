@@ -1,24 +1,22 @@
 package ru.gamu.playlistmaker.presentation.views
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.ActivityPlayerBinding
 import ru.gamu.playlistmaker.presentation.models.TrackInfo
 import ru.gamu.playlistmaker.presentation.viewmodel.player.PlayerViewModel
-import ru.gamu.playlistmaker.presentation.viewmodel.player.PlayerViewModel.Companion.playerVm
 import ru.gamu.playlistmaker.presentation.viewmodel.player.recycler.TrackInfoAdapter
 import ru.gamu.playlistmaker.utils.dsl.getDataBinding
 import ru.gamu.playlistmaker.utils.fromJson
 
 
 class PlayerActivity: AppCompatActivity(){
-    private lateinit var viewModel: PlayerViewModel
+    private val playerViewModel by viewModel<PlayerViewModel>()
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var adapter: TrackInfoAdapter
 
@@ -28,19 +26,17 @@ class PlayerActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
         var trackInfo = loadItemFromIntent()
-        viewModel = playerVm(this, trackInfo){
-            dslHandler = Handler(Looper.getMainLooper())
-        }
+        playerViewModel.setTrackInfo(trackInfo)
         adapter = TrackInfoAdapter(trackInfo.getProperies())
 
         binding = getDataBinding<ActivityPlayerBinding>(this, layoutId)
             .also {
-                it.vm = viewModel
+                it.vm = playerViewModel
                 it.trackListRecycler.layoutManager = LinearLayoutManager(this)
                 it.trackListRecycler.adapter = adapter
             }
 
-        viewModel.enablePlayback.observe(this){ paying ->
+        playerViewModel.enablePlayback.observe(this){ paying ->
             if(paying){
                 binding.btnPause.setBackgroundResource(R.drawable.play)
             }else {

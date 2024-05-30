@@ -1,31 +1,19 @@
 package ru.gamu.playlistmaker.data.handlers
 
 import android.content.Context
-import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
-import ru.gamu.playlistmaker.data.dto.IResponse
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.data.models.ResponseRoot
 import ru.gamu.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<Track>>, String> {
-    private val searchService: ISearchServiceAsync
-    init {
-        val gson = GsonBuilder().create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(context.getString(R.string.iTunesSearchUrl))
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-        searchService = retrofit.create(ISearchServiceAsync::class.java)
-    }
+class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServiceAsync) {
+    //TODO: Перемещаем ISearchServiceAsync в DI
+    //private val searchService: ISearchServiceAsync by inject()
 
     private fun formatYear(dateString: String): String{
         try {
@@ -38,7 +26,7 @@ class ItunesDataQueryAsync(val context: Context) : IQueryHandler<IResponse<List<
 
     }
 
-    override fun getData(spec: String) = runBlocking {
+    fun getData(spec: String) = runBlocking {
         val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
         val response = async(Dispatchers.IO) {
             try{
