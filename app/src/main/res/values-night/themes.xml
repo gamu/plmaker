@@ -4,10 +4,14 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:background">@color/ypBlack</item>
+        <!--  <item name="android:background">@color/ypBlack</item> -->
         <item name="android:textColor">@color/ypWhite</item>
         <item name="svgColor">@color/ypWhite</item>
         <item name="searchIconColor">@color/ypBlack</item>
+        <item name="tabIconTint">@color/ypWhite</item>
+        <item name="tabIndicatorColor">@color/ypWhite</item>
+        <item name="tabSelectedTextColor">@color/ypWhite</item>
+        <item name="tabTextColor">@color/ypWhite</item>
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypBlack</item>

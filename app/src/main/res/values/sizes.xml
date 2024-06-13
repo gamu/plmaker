@@ -20,6 +20,7 @@
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>
     <dimen name="size10">10dp</dimen>
+    <dimen name="size19">19dp</dimen>
     <dimen name="size20">20dp</dimen>
     <dimen name="size24">24dp</dimen>
     <dimen name="size26">26dp</dimen>

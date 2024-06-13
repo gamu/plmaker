@@ -1,6 +1,7 @@
 <resources>
     <string name="appName">Playlist Maker</string>
     <string name="searchLabel">Поиск</string>
+    <string name="mediaLibraryLabel">Медиатека</string>
     <string name="mediaLabel">Медиатека</string>
     <string name="settingsLabel">Настройки</string>
     <string name="appLabel">Playlist maker</string>
@@ -21,4 +22,9 @@
     <string name="searchedText">История поиска</string>
     <string name="clearSearchHistoryText">Очистить историю</string>
     <string name="mockTiming">0:00</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="MedialLibraryIsEmpty">Ваша медиатека пуста</string>
+    <string name="PlaylistsEmpty">Вы не создали ни одного плейлиста</string>
+    <string name="createNewPlaylistButton">Новый плейлист</string>
 </resources>
