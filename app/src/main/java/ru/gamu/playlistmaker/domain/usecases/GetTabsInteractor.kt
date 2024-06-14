@@ -1,11 +1,15 @@
 package ru.gamu.playlistmaker.domain.usecases
 
 import ru.gamu.playlistmaker.domain.models.MediaLibraryTab
-import ru.gamu.playlistmaker.domain.models.MediaLibraryTabFactory
 
-class GetTabsInteractor() {
+class GetTabsInteractor {
     fun invoke(): List<MediaLibraryTab>{
-        return listOf(MediaLibraryTabFactory("Избранные треки", MediaLibraryTab.TabKeys.Favorites),
-            MediaLibraryTabFactory("Плейлисты", MediaLibraryTab.TabKeys.Playlists))
+        return listOf(MediaLibraryTab(FAVORITE_TITLE, MediaLibraryTab.TabKeys.Favorites),
+            MediaLibraryTab(PLAYLISTS_TITLE, MediaLibraryTab.TabKeys.Playlists))
+    }
+
+    companion object {
+        val FAVORITE_TITLE = "Избранные треки"
+        val PLAYLISTS_TITLE = "Плейлисты"
     }
 }
