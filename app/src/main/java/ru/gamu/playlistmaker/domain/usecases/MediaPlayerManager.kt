@@ -1,10 +1,13 @@
 package ru.gamu.playlistmaker.domain.usecases
 
-import android.media.MediaPlayer
+import android.util.Log
+import org.koin.java.KoinJavaComponent.inject
+import ru.gamu.playlistmaker.data.repositories.MediaPlayerRepository
 import ru.gamu.playlistmaker.domain.IMediaPlayerManager
 import ru.gamu.playlistmaker.domain.PlaybackControl
 
-class MediaPlayerManager(private val mediaPlayer: MediaPlayer): Thread(), IMediaPlayerManager {
+class MediaPlayerManager: Thread(), IMediaPlayerManager {
+    private val mediaPlayer:MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
     private var mutex = Object()
 
     @get:Synchronized
@@ -28,29 +31,34 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayer): Thread(), IMedia
                     mutex.wait()
                 }
                 if(onCounterSignal != null) {
-                    onCounterSignal?.invoke(mediaPlayer.currentPosition.toLong())
+                    onCounterSignal?.invoke(mediaPlayer.position())
                 }
             }
         }
     }
 
     override fun PreparePlayer(trackSource: String) {
-        mediaPlayer.setDataSource(trackSource)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            PlayerState = PlayerStates.STATE_PREPERED
-            if(onPlayerPrepared != null){
-                onPlayerPrepared?.invoke()
-            }
-        }
-        mediaPlayer.setOnCompletionListener {
-            PlayerState = PlayerStates.STATE_FINISHED
-            synchronized(mutex){
-                if(onPlayerComplete != null && onCounterSignal != null){
-                    onCounterSignal?.invoke(0)
-                    onPlayerComplete?.invoke()
+        try{
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(trackSource)
+            mediaPlayer.setOnPreparedListener {
+                PlayerState = PlayerStates.STATE_PREPERED
+                if(onPlayerPrepared != null){
+                    onPlayerPrepared?.invoke()
                 }
             }
+            mediaPlayer.setOnCompletionListener {
+                PlayerState = PlayerStates.STATE_FINISHED
+                synchronized(mutex){
+                    if(onPlayerComplete != null && onCounterSignal != null){
+                        onCounterSignal?.invoke(0)
+                        onPlayerComplete?.invoke()
+                    }
+                }
+            }
+        }
+        catch(e: Exception){
+            Log.d("ERR", e.message!!)
         }
     }
 

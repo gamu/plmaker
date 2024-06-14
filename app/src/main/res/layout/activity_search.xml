@@ -54,25 +54,27 @@
                 android:textCursorDrawable="@color/ypBlue"
                 android:singleLine="true"
                 android:padding="@dimen/size10"
-                android:layout_marginTop="@dimen/size8"
                 android:drawablePadding="@dimen/size10"
                 android:background="@drawable/edit_with_roundedcorner"
                 android:lines="1"
                 app:cornerRadius="@dimen/radius50"
                 tools:ignore="Autofill,TextFields" />
-
-            <ImageView
-                android:id="@+id/clearIcon"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:paddingEnd="@dimen/size12"
-                android:layout_marginTop="@dimen/size20"
-                android:onClick="@{ () -> vm.clearSearchBox() }"
-                android:src="@drawable/clear"
-                android:backgroundTint="@color/ypGray"
-                android:visibility="@{ vm.cleanSearchAvailable ? View.VISIBLE : View.GONE }"
-                tools:ignore="ContentDescription,RtlSymmetry" />
+                android:gravity="center"
+                android:paddingEnd="@dimen/size12">
+                <ImageView
+                    android:id="@+id/clearIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:onClick="@{ () -> vm.clearSearchBox() }"
+                    android:src="@drawable/clear"
+                    android:backgroundTint="@color/ypGray"
+                    android:visibility="@{ vm.cleanSearchAvailable ? View.VISIBLE : View.GONE }"
+                    tools:ignore="ContentDescription,RtlSymmetry" />
+            </LinearLayout>
         </FrameLayout>
 
         <FrameLayout android:layout_width="match_parent"

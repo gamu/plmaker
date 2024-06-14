@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.gamu.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.gamu.playlistmaker.databinding.FragmentPlaylistBinding
+import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.PlaylistViewModel
 
 
 class PlaylistFragment : Fragment() {
+    private val vm by viewModel<PlaylistViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -16,8 +19,12 @@ class PlaylistFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_playlist, container, false)
+        return FragmentPlaylistBinding.inflate(inflater, container, false).let {
+            val view = it.root
+            it.placeholder.visibility =
+                if (vm.showPlaceholder.value!!) View.VISIBLE else View.GONE
+            view
+        }
     }
 
     companion object {

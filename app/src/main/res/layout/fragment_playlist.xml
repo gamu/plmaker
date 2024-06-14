@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/Base.Theme.PlaylistMaker">
     <LinearLayout
+        android:id="@+id/placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/size24"
@@ -19,6 +20,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size45"
             android:src="@drawable/emptydataset"
             android:scaleType="center"
             android:layout_gravity="bottom"
