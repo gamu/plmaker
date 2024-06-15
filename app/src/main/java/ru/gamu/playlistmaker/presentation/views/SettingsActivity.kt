@@ -3,6 +3,7 @@ package ru.gamu.playlistmaker.presentation.views
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
@@ -46,5 +47,9 @@ class SettingsActivity: AppCompatActivity() {
         viewModel.addThelmeChangeListener(this){
             viewModel.toggleTheme(it)
         }
+    }
+
+    fun backButtonClick(view: View){
+        finish()
     }
 }

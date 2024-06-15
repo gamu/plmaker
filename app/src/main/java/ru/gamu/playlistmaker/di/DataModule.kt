@@ -19,17 +19,8 @@ val dataModule = module {
             .create(ISearchServiceAsync::class.java)
     }
 
-    single<VisitedTracksCommandHandler> {
-        VisitedTracksCommandHandler(androidContext())
-    }
-
-    single<VisitedTracksQueryHandler> {
-        VisitedTracksQueryHandler(androidContext())
-    }
-
-    single<ItunesDataQueryAsync> {
-        ItunesDataQueryAsync(androidContext(), get())
-    }
-
+    single<VisitedTracksCommandHandler> {VisitedTracksCommandHandler(androidContext()) }
+    single<VisitedTracksQueryHandler> { VisitedTracksQueryHandler(androidContext()) }
+    single<ItunesDataQueryAsync> { ItunesDataQueryAsync(androidContext(), get()) }
     factory { Gson() }
 }

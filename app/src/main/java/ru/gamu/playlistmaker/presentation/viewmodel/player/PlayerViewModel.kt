@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.presentation.models.TrackInfo
+import ru.gamu.playlistmaker.presentation.providers.PlayerBundleDataProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -19,9 +20,11 @@ class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
     var handler: Handler = Handler(Looper.getMainLooper())
 
-    fun setTrackInfo(track: TrackInfo){
-        this.track = track;
-        initializePlayer(track.trackPreview!!)
+    fun setTrackInfo(trackDataProvider: PlayerBundleDataProvider){
+        this.track = trackDataProvider.getData(BUNDLE_TRACK_KEY).apply {
+            artworkUrl = artworkUrl?.replace("100x100bb", "512x512bb")
+        }
+        initializePlayer(track!!.trackPreview!!)
     }
     private fun initializePlayer(trackPreview: String) {
 
@@ -59,8 +62,15 @@ class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
             enablePlayback.value = false
         }
     }
+
+    fun stopPlayback() {
+        mediaPlayer.Stop()
+
+    }
+
     companion object{
         private const val TIMER_INITIAL_VALUE = "0:00"
         private const val TIMER_FORMAT = "%02d:%02d"
+        private const val BUNDLE_TRACK_KEY ="TRACK"
     }
 }

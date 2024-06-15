@@ -7,6 +7,10 @@
         <item name="android:fillColor">@color/ypBlack</item>
         <item name="svgColor">@color/ypBlack</item>
         <item name="searchIconColor">@color/labelGray</item>
+        <item name="tabBackground">@color/ypWhite</item>
+        <item name="tabIndicatorColor">@color/ypBlack</item>
+        <item name="tabSelectedTextColor">@color/ypBlack</item>
+        <item name="tabTextColor">@color/ypBlack</item>
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypBlue</item>

@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.ActivitySearchBinding
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.presentation.providers.TrackIntentProvider
 import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler.TrackListAdapter
 import ru.gamu.playlistmaker.utils.dsl.getDataBinding
@@ -46,11 +46,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun trackSelectHandler(track: Track){
-        val gson = Gson()
-        val intent = Intent(this, PlayerActivity::class.java)
         val bundle = Bundle()
-        val serializedTrack = gson.toJson(track)
-        bundle.putString("TRACK", serializedTrack)
+        val intent = Intent(this, PlayerActivity::class.java)
+        bundle.putString("TRACK", TrackIntentProvider(track).getData())
         intent.putExtras(bundle)
         startActivity(intent)
     }
