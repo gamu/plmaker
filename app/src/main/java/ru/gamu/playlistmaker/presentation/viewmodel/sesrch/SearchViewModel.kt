@@ -43,7 +43,7 @@ class SearchViewModel(): ViewModel()
     }
 
     fun initContent() {
-        val historyItems = trackListService.TracksHistory
+        val historyItems = trackListService.tracksFromHistory
         historyItems.let {
             trackListMediator.setLocalSource(historyItems.toList())
             if (it.isNotEmpty()) searchResultState.value = SearchState.HistoryLoadState()

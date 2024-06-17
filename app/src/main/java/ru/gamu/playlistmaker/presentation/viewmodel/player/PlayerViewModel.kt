@@ -10,6 +10,9 @@ import ru.gamu.playlistmaker.presentation.providers.PlayerBundleDataProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+private const val PORTION = 1000;
+private const val INTERVAL = 60;
+
 class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
 {
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
@@ -42,30 +45,29 @@ class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
 
         mediaPlayer.onCounterSignal = ::displayDuration
 
-        mediaPlayer.PreparePlayer(trackPreview)
+        mediaPlayer.preparePlayer(trackPreview)
     }
     private fun displayDuration(duration: Long) {
-        val seconds = duration / 1000 % 60
-        val minutes = duration / 1000 / 60
+        val seconds = duration / PORTION % INTERVAL
+        val minutes = duration / PORTION / INTERVAL
         val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
-        handler?.post{ timeLabel.value = formattedTime }
+        handler.post{ timeLabel.value = formattedTime }
     }
     fun playbackControlPress() {
-        if(!mediaPlayer.PlayerState.IsPlaying()){
+        if(!mediaPlayer.playerState.IsPlaying()){
             executorService.execute(mediaPlayer)
             enablePlayback.value = false
-        } else if(mediaPlayer.PlayerState == MediaPlayerManager.PlayerStates.STATE_PLAYING){
-            mediaPlayer.Pause()
+        } else if(mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING){
+            mediaPlayer.playbackPause()
             enablePlayback.value = true
         } else {
-            mediaPlayer.Resume()
+            mediaPlayer.playbackResume()
             enablePlayback.value = false
         }
     }
 
     fun stopPlayback() {
-        mediaPlayer.Stop()
-
+        mediaPlayer.playbackStop()
     }
 
     companion object{

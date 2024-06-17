@@ -9,7 +9,7 @@ class GetTabsInteractor {
     }
 
     companion object {
-        val FAVORITE_TITLE = "Избранные треки"
-        val PLAYLISTS_TITLE = "Плейлисты"
+        const val FAVORITE_TITLE = "Избранные треки"
+        const val PLAYLISTS_TITLE = "Плейлисты"
     }
 }

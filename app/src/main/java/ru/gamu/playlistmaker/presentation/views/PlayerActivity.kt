@@ -43,6 +43,7 @@ class PlayerActivity: AppCompatActivity(){
     }
     override fun onStop() {
         super.onStop()
+        playerViewModel.stopPlayback()
     }
     fun backButtonClick(view: View){
         finish()

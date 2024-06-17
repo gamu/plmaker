@@ -8,20 +8,18 @@ import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.domain.models.Track
 
 class VisitedTracksCommandHandler(val context: Context) {
-    private val ViewHistory: String = context.getString(R.string.viewHistory)
-    private val ViewHistoryItems: String = context.getString(R.string.viewHistoryItems)
-    private val persistentStorage: SharedPreferences
-    init{
-        persistentStorage = context.getSharedPreferences(ViewHistory,
-            AppCompatActivity.MODE_PRIVATE)
-    }
-    fun Execute(command: Set<Track>) {
+    private val viewHistory: String = context.getString(R.string.viewHistory)
+    private val viewHistoryItems: String = context.getString(R.string.viewHistoryItems)
+    private val persistentStorage: SharedPreferences = context.getSharedPreferences(viewHistory,
+        AppCompatActivity.MODE_PRIVATE)
+
+    fun execute(command: Set<Track>) {
         if(command.isEmpty()){
-            persistentStorage.edit().remove(ViewHistoryItems).apply()
+            persistentStorage.edit().remove(viewHistoryItems).apply()
         }else{
             val gson = Gson()
             val stringify = gson.toJson(command)
-            persistentStorage.edit().putString(ViewHistoryItems, stringify).apply()
+            persistentStorage.edit().putString(viewHistoryItems, stringify).apply()
         }
     }
 }

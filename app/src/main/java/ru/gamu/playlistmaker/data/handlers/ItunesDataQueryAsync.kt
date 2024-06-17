@@ -8,22 +8,23 @@ import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.data.models.ResponseRoot
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.utils.Logger
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServiceAsync) {
-    //TODO: Перемещаем ISearchServiceAsync в DI
-    //private val searchService: ISearchServiceAsync by inject()
-
+class ItunesDataQueryAsync(val context: Context, private val searchService: ISearchServiceAsync) {
     private fun formatYear(dateString: String): String{
+        var result = ""
         try {
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateString)
-            val formattedDatesString = SimpleDateFormat("yyyy", Locale.getDefault()).format(date!!)
-            return formattedDatesString
-        }catch(ex: Exception){
-            return ""
+            if(date != null){
+                result = SimpleDateFormat("yyyy", Locale.getDefault()).format(date)
+            }
+        } catch (ex: ParseException) {
+            Logger.writeError(ex)
         }
-
+        return result
     }
 
     fun getData(spec: String) = runBlocking {
@@ -32,6 +33,7 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
             try{
                 searchService.search(spec)
             }catch (ex: Exception){
+                Logger.writeError(ex)
                 ResponseRoot(0, listOf(), true)
             }
         }
@@ -59,6 +61,7 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
             }
             return@runBlocking Response.SUCCESS.apply { this.setResult(result) }
         }catch (ex: Exception){
+            Logger.writeError(ex)
             return@runBlocking Response.ERROR.apply { this.setError(ex) }
         }
     }
