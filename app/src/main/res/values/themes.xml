@@ -13,7 +13,7 @@
         <item name="tabTextColor">@color/ypBlack</item>
     </style>
     <style name="MainBackground">
-        <item name="android:background">@color/ypBlue</item>
+        <item name="android:background">@color/ypWhite</item>
     </style>
     <style name="SearchBoxStyle">
         <item name="android:textColor">@color/ypBlack</item>

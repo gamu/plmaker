@@ -2,11 +2,10 @@ package ru.gamu.playlistmaker.presentation.models
 
 import kotlin.reflect.full.declaredMemberProperties
 
-class TrackInfo(){
+class TrackInfo{
 
     val artistName: String? = null
     var artworkUrl: String? = null
-
     @DisplayName("Альбом")
     val collectionName: String? = null
 
@@ -15,19 +14,15 @@ class TrackInfo(){
 
     @DisplayName("Год релиза")
     val releaseDate: String? = null
-    val description: String? = null
 
     @DisplayName("Жанр")
     val primaryGenreName: String? = null
     val trackName: String? = null
-    val trackCensoredName: String? = null
 
     @DisplayName("Длительность")
     val trackTime: String? = null
 
-    val trackTimeMs: Long? = null
-
-    val trackPreview: String? = null
+    val trackPreview: String = ""
 
     fun getProperies(): List<Pair<String, String>> {
         val result = mutableListOf<Pair<String, String>>()

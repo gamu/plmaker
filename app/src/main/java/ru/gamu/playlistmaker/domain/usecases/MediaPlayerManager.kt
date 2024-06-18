@@ -7,12 +7,12 @@ import ru.gamu.playlistmaker.domain.IMediaPlayerManager
 import ru.gamu.playlistmaker.domain.PlaybackControl
 
 class MediaPlayerManager: Thread(), IMediaPlayerManager {
-    private val mediaPlayer:MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
+    private val mediaPlayer: MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
     private var mutex = Object()
 
     @get:Synchronized
     @set:Synchronized
-    var PlayerState = PlayerStates.STATE_DEFAULT
+    var playerState = PlayerStates.STATE_DEFAULT
 
     var onPlayerPrepared: (() -> Unit)? = null
     var onPlayerComplete: (() -> Unit)? = null
@@ -21,12 +21,12 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
 
     override fun run() {
         mediaPlayer.start()
-        PlayerState = PlayerStates.STATE_PLAYING
+        playerState = PlayerStates.STATE_PLAYING
         synchronized(mutex) {
             currentThread().name
-            while(PlayerState.IsPlaying()){
+            while(playerState.IsPlaying()){
                 sleep(PLAYBACK_SIGNAL_TIMEOUT_MS)
-                if(PlayerState == PlayerStates.STATE_PAUSED){
+                if(playerState == PlayerStates.STATE_PAUSED){
                     mediaPlayer.pause()
                     mutex.wait()
                 }
@@ -35,20 +35,21 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
                 }
             }
         }
+        mediaPlayer.stop()
     }
 
     override fun PreparePlayer(trackSource: String) {
         try{
-            mediaPlayer.reset();
+            mediaPlayer.reset()
             mediaPlayer.setDataSource(trackSource)
-            mediaPlayer.setOnPreparedListener {
-                PlayerState = PlayerStates.STATE_PREPERED
+            mediaPlayer.setOnPreparedListener = {
+                playerState = PlayerStates.STATE_PREPERED
                 if(onPlayerPrepared != null){
                     onPlayerPrepared?.invoke()
                 }
             }
-            mediaPlayer.setOnCompletionListener {
-                PlayerState = PlayerStates.STATE_FINISHED
+            mediaPlayer.setOnCompletionListener = {
+                playerState = PlayerStates.STATE_FINISHED
                 synchronized(mutex){
                     if(onPlayerComplete != null && onCounterSignal != null){
                         onCounterSignal?.invoke(0)
@@ -63,22 +64,21 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
     }
 
     override fun Pause() {
-        PlayerState = PlayerStates.STATE_PAUSED
+        playerState = PlayerStates.STATE_PAUSED
         if(onPlayerPause != null){
             onPlayerPause?.invoke()
         }
     }
 
     override fun Stop() {
-        mediaPlayer.stop()
-        PlayerState = PlayerStates.STATE_FINISHED
+        playerState = PlayerStates.STATE_FINISHED
     }
 
     override fun Resume() {
         synchronized(mutex) {
             mutex.notify()
             mediaPlayer.start()
-            PlayerState = PlayerStates.STATE_PLAYING
+            playerState = PlayerStates.STATE_PLAYING
         }
     }
 
