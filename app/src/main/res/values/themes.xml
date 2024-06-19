@@ -14,6 +14,10 @@
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypWhite</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemBackground">@android:color/transparent</item>
+        <item name="itemActiveIndicatorStyle">@android:color/transparent</item>
     </style>
     <style name="SearchBoxStyle">
         <item name="android:textColor">@color/ypBlack</item>
