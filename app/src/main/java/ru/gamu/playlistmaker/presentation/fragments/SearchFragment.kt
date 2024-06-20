@@ -18,6 +18,7 @@ private const val BUNDLE_TRACK_KEY ="TRACK"
 class SearchFragment : Fragment() {
     private val searchViewModel by viewModel<SearchViewModel>()
     private val adapter: TrackListAdapter by lazy { TrackListAdapter(searchViewModel) }
+    private var binding: FragmentSearchBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,12 +34,19 @@ class SearchFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return FragmentSearchBinding.inflate(inflater, container, false).let{
+            binding = it
             val view = it.root
             it.btnClearHistori.setOnClickListener{ searchViewModel.cleanHistory() }
             it.vm=searchViewModel
             it.trackListRecycler.layoutManager = LinearLayoutManager(view.context)
             it.trackListRecycler.adapter = adapter
             view
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        binding?.let{
+            it.lifecycleOwner = this
         }
     }
 

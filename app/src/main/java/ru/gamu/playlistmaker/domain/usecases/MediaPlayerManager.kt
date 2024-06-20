@@ -40,8 +40,6 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
 
     override fun PreparePlayer(trackSource: String) {
         try{
-            mediaPlayer.reset()
-            mediaPlayer.setDataSource(trackSource)
             mediaPlayer.setOnPreparedListener = {
                 playerState = PlayerStates.STATE_PREPERED
                 if(onPlayerPrepared != null){
@@ -57,6 +55,8 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
                     }
                 }
             }
+            mediaPlayer.reset()
+            mediaPlayer.initializePlayer(trackSource)
         }
         catch(e: Exception){
             Log.d("ERR", e.message!!)

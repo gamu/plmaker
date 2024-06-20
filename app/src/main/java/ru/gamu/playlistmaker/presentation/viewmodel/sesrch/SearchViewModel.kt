@@ -11,7 +11,7 @@ import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
 
-class SearchViewModel(): ViewModel()
+class SearchViewModel: ViewModel()
 {
     val trackListService: TrackListService by inject(TrackListService::class.java)
     val searchResultState = MutableLiveData<SearchState>(SearchState.InitialState())
@@ -29,7 +29,7 @@ class SearchViewModel(): ViewModel()
                 val searchToken = searchTokenField.get() ?: ""
                 if(searchToken.isNotEmpty()){
                     cleanSearchAvailable.value = true
-                    handler.postDelayed(Runnable {
+                    handler.postDelayed({
                         val newSearchToken = searchTokenField.get()
                         if(searchToken == newSearchToken){
                             search{ thread -> thread.start() }
@@ -37,6 +37,7 @@ class SearchViewModel(): ViewModel()
                     }, SEARCH_DEBOUNCE_TIMEOUT_MS)
                 }else{
                     cleanSearchAvailable.value = false
+                    initContent()
                 }
             }
         })
@@ -68,19 +69,19 @@ class SearchViewModel(): ViewModel()
                 handler.post{ searchResultState.value = SearchState.DataLoading() }
                 trackListService.searchItems(searchToken){
                     when(it){
-                        Response.EMPTY -> handler?.post{ searchResultState.value = SearchState.EmptyResult() }
-                        Response.ERROR -> handler?.post{ searchResultState.value = SearchState.NetworkFailedResult() }
-                        Response.SUCCESS -> handler?.post{
+                        Response.EMPTY -> handler.post{ searchResultState.value = SearchState.EmptyResult() }
+                        Response.ERROR -> handler.post{ searchResultState.value = SearchState.NetworkFailedResult() }
+                        Response.SUCCESS -> handler.post{
                                 searchResultState.value = SearchState.SuccessResult()
                                 trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
                         }
                     }
                 }
             }
-            block(thread);
+            block(thread)
         }
     }
     companion object {
-        private val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
+        private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
     }
 }

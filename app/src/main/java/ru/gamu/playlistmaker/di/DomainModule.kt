@@ -18,9 +18,9 @@ val domainModule = module {
     single<TrackListService> { TrackListService(get(), get(), get()) }
     single<DarkThemeInteractor> { DarkThemeInteractor( get() ) }
     single<CurrentThemeInteractor> { CurrentThemeInteractor( get() ) }
-    factory { MediaPlayerRepository() }
+    factory { MediaPlayerRepository(androidContext()) }
     factory<MediaPlayerManager> { MediaPlayerManager() }
-    factory { MediaPlayer(androidContext()) }
+    factory { MediaPlayer() }
     factory { GetTabsInteractor() }
     factory { SettingsPersistentStorageRepository(androidContext()) }
 }
