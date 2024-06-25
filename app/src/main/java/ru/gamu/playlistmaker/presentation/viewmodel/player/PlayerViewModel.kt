@@ -10,26 +10,34 @@ import ru.gamu.playlistmaker.presentation.providers.PlayerBundleDataProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
+private const val MPS = 1000
+private const val SPM = 60
+
+class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel()
 {
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
-    var track: TrackInfo? = null
+    var track: TrackInfo = TrackInfo()
 
     val enablePlayback = MutableLiveData(true)
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
     var handler: Handler = Handler(Looper.getMainLooper())
 
+    fun onPlayerReady(block: () -> Unit){
+        block()
+    }
+
     fun setTrackInfo(trackDataProvider: PlayerBundleDataProvider){
-        this.track = trackDataProvider.getData(BUNDLE_TRACK_KEY).apply {
+        track = trackDataProvider.getData(BUNDLE_TRACK_KEY).apply {
             artworkUrl = artworkUrl?.replace("100x100bb", "512x512bb")
         }
-        initializePlayer(track!!.trackPreview!!)
+        initializePlayer(track.trackPreview)
     }
     private fun initializePlayer(trackPreview: String) {
 
         mediaPlayer.onPlayerPrepared = {
             enablePlayback.value = true
+
         }
 
         mediaPlayer.onPlayerComplete = {
@@ -45,16 +53,16 @@ class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
         mediaPlayer.PreparePlayer(trackPreview)
     }
     private fun displayDuration(duration: Long) {
-        val seconds = duration / 1000 % 60
-        val minutes = duration / 1000 / 60
+        val seconds = duration / MPS % SPM
+        val minutes = duration / MPS / SPM
         val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
-        handler?.post{ timeLabel.value = formattedTime }
+        handler.post{ timeLabel.value = formattedTime }
     }
     fun playbackControlPress() {
-        if(!mediaPlayer.PlayerState.IsPlaying()){
+        if(!mediaPlayer.playerState.IsPlaying()){
             executorService.execute(mediaPlayer)
             enablePlayback.value = false
-        } else if(mediaPlayer.PlayerState == MediaPlayerManager.PlayerStates.STATE_PLAYING){
+        } else if(mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING){
             mediaPlayer.Pause()
             enablePlayback.value = true
         } else {
@@ -65,7 +73,6 @@ class PlayerViewModel(val mediaPlayer: MediaPlayerManager): ViewModel()
 
     fun stopPlayback() {
         mediaPlayer.Stop()
-
     }
 
     companion object{

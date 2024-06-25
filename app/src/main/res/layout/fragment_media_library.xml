@@ -13,15 +13,6 @@
             style="@style/LayoutHeaderFrameStyle"
             android:layout_marginBottom="8dp"
             tools:ignore="UseCompoundDrawables">
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/arrowleft"
-                android:onClick="backButtonClick"
-                android:paddingEnd="@dimen/indentBase"
-                tools:ignore="ContentDescription,RtlSymmetry" />
             <TextView style="@style/TextViewHeadStyle"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
