@@ -5,8 +5,11 @@ import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.repositories.MediaPlayerRepository
 import ru.gamu.playlistmaker.domain.IMediaPlayerManager
 import ru.gamu.playlistmaker.domain.PlaybackControl
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MediaPlayerManager: Thread(), IMediaPlayerManager {
+    private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
     private val mediaPlayer: MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
     private var mutex = Object()
 
@@ -60,6 +63,15 @@ class MediaPlayerManager: Thread(), IMediaPlayerManager {
         }
         catch(e: Exception){
             Log.d("ERR", e.message!!)
+        }
+    }
+
+    fun Play(){
+        executorService.execute(this)
+        synchronized(mutex) {
+            mutex.notify()
+            mediaPlayer.start()
+            playerState = PlayerStates.STATE_PLAYING
         }
     }
 

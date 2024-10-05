@@ -4,18 +4,17 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.presentation.models.TrackInfo
 import ru.gamu.playlistmaker.presentation.providers.PlayerBundleDataProvider
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 private const val MPS = 1000
 private const val SPM = 60
 
-class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel()
-{
-    private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel() {
 
     var track: TrackInfo = TrackInfo()
 
@@ -23,21 +22,20 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel()
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
     var handler: Handler = Handler(Looper.getMainLooper())
 
-    fun onPlayerReady(block: () -> Unit){
+    fun onPlayerReady(block: () -> Unit) {
         block()
     }
 
-    fun setTrackInfo(trackDataProvider: PlayerBundleDataProvider){
+    fun setTrackInfo(trackDataProvider: PlayerBundleDataProvider) {
         track = trackDataProvider.getData(BUNDLE_TRACK_KEY).apply {
             artworkUrl = artworkUrl?.replace("100x100bb", "512x512bb")
         }
         initializePlayer(track.trackPreview)
     }
-    private fun initializePlayer(trackPreview: String) {
 
+    private fun initializePlayer(trackPreview: String) {
         mediaPlayer.onPlayerPrepared = {
             enablePlayback.value = true
-
         }
 
         mediaPlayer.onPlayerComplete = {
@@ -52,32 +50,38 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel()
 
         mediaPlayer.PreparePlayer(trackPreview)
     }
+
     private fun displayDuration(duration: Long) {
         val seconds = duration / MPS % SPM
         val minutes = duration / MPS / SPM
         val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
-        handler.post{ timeLabel.value = formattedTime }
+        handler.post { timeLabel.value = formattedTime }
     }
+
     fun playbackControlPress() {
-        if(!mediaPlayer.playerState.IsPlaying()){
-            executorService.execute(mediaPlayer)
-            enablePlayback.value = false
-        } else if(mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING){
-            mediaPlayer.Pause()
-            enablePlayback.value = true
-        } else {
-            mediaPlayer.Resume()
-            enablePlayback.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            if (!mediaPlayer.playerState.IsPlaying()) {
+                mediaPlayer.Play()
+                enablePlayback.postValue(false)
+            } else if (mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING) {
+                mediaPlayer.Pause()
+                enablePlayback.postValue(true)
+            } else {
+                mediaPlayer.Resume()
+                enablePlayback.postValue(false)
+            }
         }
     }
 
     fun stopPlayback() {
-        mediaPlayer.Stop()
+        viewModelScope.launch(Dispatchers.IO) {
+            mediaPlayer.Stop()
+        }
     }
 
-    companion object{
+    companion object {
         private const val TIMER_INITIAL_VALUE = "0:00"
         private const val TIMER_FORMAT = "%02d:%02d"
-        private const val BUNDLE_TRACK_KEY ="TRACK"
+        private const val BUNDLE_TRACK_KEY = "TRACK"
     }
 }

@@ -6,6 +6,9 @@ import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
@@ -29,12 +32,13 @@ class SearchViewModel: ViewModel()
                 val searchToken = searchTokenField.get() ?: ""
                 if(searchToken.isNotEmpty()){
                     cleanSearchAvailable.value = true
-                    handler.postDelayed({
+                    viewModelScope.launch {
+                        delay(SEARCH_DEBOUNCE_TIMEOUT_MS)
                         val newSearchToken = searchTokenField.get()
                         if(searchToken == newSearchToken){
-                            search{ thread -> thread.start() }
+                            search()
                         }
-                    }, SEARCH_DEBOUNCE_TIMEOUT_MS)
+                    }
                 }else{
                     cleanSearchAvailable.value = false
                     initContent()
@@ -63,24 +67,31 @@ class SearchViewModel: ViewModel()
         trackListMediator.setLocalSource(listOf())
         searchResultState.value = SearchState.InitialState()
     }
-    private fun search(block: (searchThread: Thread) -> Unit){
+
+    private suspend fun search(){
         searchTokenField.get()?.let{ searchToken ->
-            val thread = Thread {
-                handler.post{ searchResultState.value = SearchState.DataLoading() }
-                trackListService.searchItems(searchToken){
-                    when(it){
-                        Response.EMPTY -> handler.post{ searchResultState.value = SearchState.EmptyResult() }
-                        Response.ERROR -> handler.post{ searchResultState.value = SearchState.NetworkFailedResult() }
-                        Response.SUCCESS -> handler.post{
-                                searchResultState.value = SearchState.SuccessResult()
-                                trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
-                        }
+            searchResultState.value = SearchState.DataLoading()
+            trackListService.searchItems(searchToken).collect { searchResult ->
+                when (searchResult) {
+                    Response.EMPTY -> {
+                        searchResultState.value = SearchState.EmptyResult()
                     }
+
+                    Response.ERROR -> {
+                        searchResultState.value = SearchState.NetworkFailedResult()
+                    }
+
+                    Response.SUCCESS -> {
+                        searchResultState.value = SearchState.SuccessResult()
+                        trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
+                    }
+
+                    else -> {}
                 }
             }
-            block(thread)
         }
     }
+
     companion object {
         private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
     }
