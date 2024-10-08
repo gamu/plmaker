@@ -29,6 +29,12 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:backgroundTint">@color/ypBlack</item>
     </style>
+    <style name="SearchResultLabel">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/size19</item>
+        <item name="android:fontWeight">500</item>">
+    </style>
     <style name="InformationPropertyStyle">
         <item name="android:textColor">@color/ypGray</item>
     </style>

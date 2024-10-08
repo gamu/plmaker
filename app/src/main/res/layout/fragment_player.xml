@@ -56,7 +56,8 @@
                 app:layout_constraintEnd_toStartOf="@id/right_guideline"
                 app:layout_constraintTop_toBottomOf="@id/btnBackToSearch"
                 app:imageUrl="@{ vm.track.artworkUrl }"
-                tools:ignore="ContentDescription,RtlSymmetry" />
+                tools:ignore="ContentDescription,RtlSymmetry"
+                app:roundedCornerRadius="@{8f}" />
 
             <TextView android:id="@+id/txtTrackName"
                 style="@style/TrackNameStyle"

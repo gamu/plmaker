@@ -14,10 +14,16 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:navGraph="@navigation/main_navigation"
         app:defaultNavHost="true" />
+    <View
+        android:id="@+id/bottomMainNavigationDelimiter"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/ypWhite" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         style="@style/MainBackground"
         android:id="@+id/bottomMainNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/size56"
+        app:itemPaddingBottom="@dimen/emptySize"
         app:menu="@menu/main_bottom_menu" />
 </LinearLayout>

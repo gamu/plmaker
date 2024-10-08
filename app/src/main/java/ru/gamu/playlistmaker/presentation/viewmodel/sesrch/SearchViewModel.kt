@@ -1,10 +1,6 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.sesrch
 
-import android.os.Handler
-import android.os.Looper
-import androidx.databinding.Observable
-import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -14,44 +10,45 @@ import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
 
-class SearchViewModel: ViewModel()
+class SearchViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
 {
+    val searchTokenField = savedStateHandle.getLiveData("searchToken", "")
+    val searchResultState = savedStateHandle.getLiveData<SearchState>("searchResultState", SearchState.InitialState())
+    val searchResultStateValue = savedStateHandle.getLiveData("searchResultStateValue", listOf<Track>())
+    val cleanSearchAvailable = savedStateHandle.getLiveData("cleanSearchAvailable", false)
+
     val trackListService: TrackListService by inject(TrackListService::class.java)
-    val searchResultState = MutableLiveData<SearchState>(SearchState.InitialState())
-    val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
-    val trackListMediator = TrackListMediator()
-    var searchTokenField = ObservableField<String>()
-    var cleanSearchAvailable = MutableLiveData(false)
+    val trackListMediator = TrackListMediator(searchResultStateValue)
 
     lateinit var onLoadInPlayer: (track: Track) -> Unit
 
     init {
-        searchTokenField.set("")
-        searchTokenField.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                val searchToken = searchTokenField.get() ?: ""
-                if(searchToken.isNotEmpty()){
-                    cleanSearchAvailable.value = true
-                    viewModelScope.launch {
-                        delay(SEARCH_DEBOUNCE_TIMEOUT_MS)
-                        val newSearchToken = searchTokenField.get()
-                        if(searchToken == newSearchToken){
-                            search()
-                        }
+        searchTokenField.observeForever { searchToken ->
+            if (searchToken.isNotEmpty()) {
+                cleanSearchAvailable.value = true
+                viewModelScope.launch {
+                    delay(SEARCH_DEBOUNCE_TIMEOUT_MS)
+                    val newSearchToken = searchTokenField.value
+                    if (searchToken == newSearchToken) {
+                        search()
                     }
-                }else{
-                    cleanSearchAvailable.value = false
-                    initContent()
                 }
+            } else {
+                cleanSearchAvailable.value = false
+                initContent()
             }
-        })
+        }
     }
 
     fun initContent() {
         val historyItems = trackListService.TracksHistory
         historyItems.let {
-            trackListMediator.setLocalSource(historyItems.toList())
-            if (it.isNotEmpty()) searchResultState.value = SearchState.HistoryLoadState()
+            trackListMediator.setLocalSource(it.toList())
+            if (it.isNotEmpty()) {
+                searchResultState.value = SearchState.HistoryLoadState()
+            } else if (searchResultStateValue.value!!.isNotEmpty()){
+                trackListMediator.setRemoteSource((searchResultStateValue.value!!))
+            }
         }
     }
 
@@ -61,7 +58,7 @@ class SearchViewModel: ViewModel()
         }
         onLoadInPlayer(track)
     }
-    fun clearSearchBox() = searchTokenField.set("")
+    fun clearSearchBox() = searchTokenField.postValue("")
     fun cleanHistory() {
         trackListService.clearHistory()
         trackListMediator.setLocalSource(listOf())
@@ -69,7 +66,7 @@ class SearchViewModel: ViewModel()
     }
 
     private suspend fun search(){
-        searchTokenField.get()?.let{ searchToken ->
+        searchTokenField.value?.let{ searchToken ->
             searchResultState.value = SearchState.DataLoading()
             trackListService.searchItems(searchToken).collect { searchResult ->
                 when (searchResult) {
@@ -94,5 +91,6 @@ class SearchViewModel: ViewModel()
 
     companion object {
         private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
+        private const val SEARCH_RESULTS_KEY = "SR"
     }
 }

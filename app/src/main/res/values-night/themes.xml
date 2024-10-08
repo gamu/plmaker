@@ -12,6 +12,7 @@
         <item name="tabIndicatorColor">@color/ypWhite</item>
         <item name="tabSelectedTextColor">@color/ypWhite</item>
         <item name="tabTextColor">@color/ypWhite</item>
+        <item name="android:background">@color/ypBlack</item>
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypBlack</item>

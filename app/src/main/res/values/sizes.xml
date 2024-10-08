@@ -25,7 +25,9 @@
     <dimen name="size24">24dp</dimen>
     <dimen name="size26">26dp</dimen>
     <dimen name="size30">30dp</dimen>
+    <dimen name="size52">52dp</dimen>
     <dimen name="size54">54dp</dimen>
+    <dimen name="size56">56dp</dimen>
     <dimen name="radius50">50dp</dimen>
     <dimen name="maxArtistWidth">200dp</dimen>
 </resources>

@@ -4,9 +4,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import ru.gamu.playlistmaker.domain.models.Track
 
-class TrackListMediator: MediatorLiveData<List<Track>>() {
+class TrackListMediator(private val remoteDataMediator: MutableLiveData<List<Track>>) : MediatorLiveData<List<Track>>() {
     private val localDataMediator = MutableLiveData<List<Track>>()
-    private val remoteDataMediator = MutableLiveData<List<Track>>()
 
     init{
         addSource(localDataMediator){

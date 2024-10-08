@@ -28,12 +28,14 @@ class MediaPlayerRepository(val context: Context) {
         player.stop()
         player.release()
     }
+
     fun position():Long {
         if(player.isPlaying){
             return player.currentPosition.toLong()
         }
         return Long.MIN_VALUE
     }
+
     fun reset() {
         player.reset()
     }

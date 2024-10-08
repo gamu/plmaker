@@ -17,6 +17,7 @@ private const val SPM = 60
 class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel() {
 
     var track: TrackInfo = TrackInfo()
+    var formattedTime: String = ""
 
     val enablePlayback = MutableLiveData(true)
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
@@ -42,9 +43,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel() 
             enablePlayback.value = true
         }
 
-        mediaPlayer.onPlayerPause = {
-            //buttonPlay.setBackgroundResource(R.drawable.play)
-        }
+        mediaPlayer.onPlayerPause = { }
 
         mediaPlayer.onCounterSignal = ::displayDuration
 
@@ -52,10 +51,12 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager): ViewModel() 
     }
 
     private fun displayDuration(duration: Long) {
-        val seconds = duration / MPS % SPM
-        val minutes = duration / MPS / SPM
-        val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
-        handler.post { timeLabel.value = formattedTime }
+        viewModelScope.launch(Dispatchers.Main) {
+            val seconds = duration / MPS % SPM
+            val minutes = duration / MPS / SPM
+            val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
+            timeLabel.value = formattedTime
+        }
     }
 
     fun playbackControlPress() {

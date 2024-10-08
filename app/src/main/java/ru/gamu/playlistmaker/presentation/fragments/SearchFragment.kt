@@ -16,7 +16,7 @@ import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler.TrackListAdapter
 private const val BUNDLE_TRACK_KEY ="TRACK"
 class SearchFragment : Fragment() {
-    private val searchViewModel by viewModel<SearchViewModel>()
+    private val searchViewModel:SearchViewModel by viewModel()
     private val adapter: TrackListAdapter by lazy { TrackListAdapter(searchViewModel) }
     private var binding: FragmentSearchBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
