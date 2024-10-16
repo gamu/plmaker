@@ -34,6 +34,7 @@
             android:layout_marginEnd="@dimen/marginBig"
             tools:context=".presentation.views.MainActivity">
             <EditText
+                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange(hasFocus) }"
                 style="@style/SearchBoxStyle"
                 android:id="@+id/tbSearch"
                 android:layout_width="match_parent"
@@ -42,15 +43,18 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/search"
                 android:imeOptions="actionDone"
-                android:textCursorDrawable="@color/ypBlue"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textColor="@color/Black"
                 android:singleLine="true"
                 android:padding="@dimen/size10"
                 android:drawablePadding="@dimen/size10"
                 android:background="@drawable/edit_with_roundedcorner"
                 android:lines="1"
                 app:cornerRadius="@dimen/radius50"
+                tools:text="Sample Text"
                 tools:ignore="Autofill,TextFields" />
             <LinearLayout
+                android:background="@drawable/edit_with_roundedcorner"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
@@ -140,7 +144,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/ButtonOnSearchView"
-                android:id="@+id/btnClearHistori"
+                android:id="@+id/btnClearHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size24"

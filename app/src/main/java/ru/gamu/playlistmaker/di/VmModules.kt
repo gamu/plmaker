@@ -14,7 +14,7 @@ import ru.gamu.playlistmaker.presentation.viewmodel.settings.SettingsViewModel
 
 val viewModelModule = module {
     viewModel<SearchViewModel> { (handle: SavedStateHandle) ->
-        SearchViewModel( handle )
+        SearchViewModel( handle, get() )
     }
 
     viewModel<SettingsViewModel>{

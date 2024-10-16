@@ -7,14 +7,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.repositories.MediaPlayerRepository
 import ru.gamu.playlistmaker.domain.IMediaPlayerManager
 import ru.gamu.playlistmaker.domain.PlaybackControl
 
 
-class MediaPlayerManager : IMediaPlayerManager {
-    private val mediaPlayer: MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
+class MediaPlayerManager(private val mediaPlayer: MediaPlayerRepository) : IMediaPlayerManager {
+    //private val mediaPlayer: MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
     private val scope = CoroutineScope(Dispatchers.IO + Job())
 
     @Volatile
@@ -31,10 +30,12 @@ class MediaPlayerManager : IMediaPlayerManager {
             playerState = PlayerStates.STATE_PLAYING
             while (playerState == PlayerStates.STATE_PLAYING) {
                 delay(PLAYBACK_SIGNAL_TIMEOUT_MS)
-                if(mediaPlayer.position() > 0)
-                    onCounterSignal?.invoke(mediaPlayer.position())
+                var position = mediaPlayer.position()
+                Log.i("MediaPlayerManager", "Current timing: $position")
+                if(position > 0)
+                    onCounterSignal?.invoke(position.toLong())
             }
-            mediaPlayer.stop()
+            //mediaPlayer.stop()
         }
     }
 
@@ -72,14 +73,14 @@ class MediaPlayerManager : IMediaPlayerManager {
 
     override fun Stop() {
         scope.launch {
+            mediaPlayer.stop()
             playerState = PlayerStates.STATE_FINISHED
         }
     }
 
     override fun Resume() {
         scope.launch {
-            mediaPlayer.start()
-            playerState = PlayerStates.STATE_PLAYING
+            play()
         }
     }
 

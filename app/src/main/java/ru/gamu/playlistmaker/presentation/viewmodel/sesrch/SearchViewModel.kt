@@ -5,19 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
 
-class SearchViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
+class SearchViewModel(private val savedStateHandle: SavedStateHandle,
+                      private val trackListService: TrackListService): ViewModel()
 {
     val searchTokenField = savedStateHandle.getLiveData("searchToken", "")
     val searchResultState = savedStateHandle.getLiveData<SearchState>("searchResultState", SearchState.InitialState())
     val searchResultStateValue = savedStateHandle.getLiveData("searchResultStateValue", listOf<Track>())
     val cleanSearchAvailable = savedStateHandle.getLiveData("cleanSearchAvailable", false)
 
-    val trackListService: TrackListService by inject(TrackListService::class.java)
     val trackListMediator = TrackListMediator(searchResultStateValue)
 
     lateinit var onLoadInPlayer: (track: Track) -> Unit
@@ -41,15 +40,25 @@ class SearchViewModel(private val savedStateHandle: SavedStateHandle): ViewModel
     }
 
     fun initContent() {
+        if (searchResultStateValue.value!!.isNotEmpty()){
+            trackListMediator.setRemoteSource((searchResultStateValue.value!!))
+        }
+    }
+
+    fun onSearchBoxFocusChange(hasFocus: Boolean) {
         val historyItems = trackListService.TracksHistory
         historyItems.let {
             trackListMediator.setLocalSource(it.toList())
             if (it.isNotEmpty()) {
                 searchResultState.value = SearchState.HistoryLoadState()
-            } else if (searchResultStateValue.value!!.isNotEmpty()){
-                trackListMediator.setRemoteSource((searchResultStateValue.value!!))
             }
         }
+
+    }
+
+    fun onHideHistory(){
+        trackListMediator.setLocalSource(listOf())
+        searchResultState.value = SearchState.InitialState()
     }
 
     fun trackSelected(track: Track){

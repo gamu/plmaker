@@ -19,7 +19,7 @@ val domainModule = module {
     single<DarkThemeInteractor> { DarkThemeInteractor( get() ) }
     single<CurrentThemeInteractor> { CurrentThemeInteractor( get() ) }
     factory { MediaPlayerRepository(androidContext()) }
-    factory<MediaPlayerManager> { MediaPlayerManager() }
+    factory<MediaPlayerManager> { MediaPlayerManager( get() ) }
     factory { MediaPlayer() }
     factory { GetTabsInteractor() }
     factory { SettingsPersistentStorageRepository(androidContext()) }
