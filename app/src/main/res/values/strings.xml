@@ -30,4 +30,5 @@
     <string name="settingMenuTitle">Настройки</string>
     <string name="libraryMenuTitle">Медиатека</string>
     <string name="searchMenuTitle">Поиск</string>
+    <string name="searchResultLabel">Вы искали</string>
 </resources>

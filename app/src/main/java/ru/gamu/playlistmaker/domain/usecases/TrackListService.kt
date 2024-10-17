@@ -1,5 +1,7 @@
 package ru.gamu.playlistmaker.domain.usecases
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.gamu.playlistmaker.data.dto.IResponse
 import ru.gamu.playlistmaker.data.handlers.ItunesDataQueryAsync
 import ru.gamu.playlistmaker.data.handlers.VisitedTracksCommandHandler
@@ -17,10 +19,11 @@ class TrackListService(private val searchQuery: ItunesDataQueryAsync,
     val HistoryIsNotEmpty: Boolean
         get() = tracksHistory.isNotEmpty()
 
+    fun searchItems(searchToken: String): Flow<IResponse<List<Track>>> = flow {
+        searchQuery.getData(searchToken).collect{
+            response -> emit(response)
+        }
 
-    fun searchItems(searchToken: String, block:(IResponse<List<Track>>) -> Unit) {
-        val result = searchQuery.getData(searchToken)
-        block(result)
     }
 
     fun addTrackToHistory(track: Track) {

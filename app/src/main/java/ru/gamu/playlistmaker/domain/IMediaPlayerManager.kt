@@ -1,7 +1,7 @@
 package ru.gamu.playlistmaker.domain
 
 interface IMediaPlayerManager {
-    fun run()
+    fun Play()
     fun PreparePlayer(trackSource: String)
     fun Pause()
     fun Stop()

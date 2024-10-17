@@ -1,54 +1,64 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.sesrch
 
-import android.os.Handler
-import android.os.Looper
-import androidx.databinding.Observable
-import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import org.koin.java.KoinJavaComponent.inject
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
 
-class SearchViewModel: ViewModel()
+class SearchViewModel(private val savedStateHandle: SavedStateHandle,
+                      private val trackListService: TrackListService): ViewModel()
 {
-    val trackListService: TrackListService by inject(TrackListService::class.java)
-    val searchResultState = MutableLiveData<SearchState>(SearchState.InitialState())
-    val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
-    val trackListMediator = TrackListMediator()
-    var searchTokenField = ObservableField<String>()
-    var cleanSearchAvailable = MutableLiveData(false)
+    val searchTokenField = savedStateHandle.getLiveData("searchToken", "")
+    val searchResultState = savedStateHandle.getLiveData<SearchState>("searchResultState", SearchState.InitialState())
+    val searchResultStateValue = savedStateHandle.getLiveData("searchResultStateValue", listOf<Track>())
+    val cleanSearchAvailable = savedStateHandle.getLiveData("cleanSearchAvailable", false)
+
+    val trackListMediator = TrackListMediator(searchResultStateValue)
 
     lateinit var onLoadInPlayer: (track: Track) -> Unit
 
     init {
-        searchTokenField.set("")
-        searchTokenField.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                val searchToken = searchTokenField.get() ?: ""
-                if(searchToken.isNotEmpty()){
-                    cleanSearchAvailable.value = true
-                    handler.postDelayed({
-                        val newSearchToken = searchTokenField.get()
-                        if(searchToken == newSearchToken){
-                            search{ thread -> thread.start() }
-                        }
-                    }, SEARCH_DEBOUNCE_TIMEOUT_MS)
-                }else{
-                    cleanSearchAvailable.value = false
-                    initContent()
+        searchTokenField.observeForever { searchToken ->
+            if (searchToken.isNotEmpty()) {
+                cleanSearchAvailable.value = true
+                viewModelScope.launch {
+                    delay(SEARCH_DEBOUNCE_TIMEOUT_MS)
+                    val newSearchToken = searchTokenField.value
+                    if (searchToken == newSearchToken) {
+                        search()
+                    }
                 }
+            } else {
+                cleanSearchAvailable.value = false
+                initContent()
             }
-        })
+        }
     }
 
     fun initContent() {
+        if (searchResultStateValue.value!!.isNotEmpty()){
+            trackListMediator.setRemoteSource((searchResultStateValue.value!!))
+        }
+    }
+
+    fun onSearchBoxFocusChange(hasFocus: Boolean) {
         val historyItems = trackListService.TracksHistory
         historyItems.let {
-            trackListMediator.setLocalSource(historyItems.toList())
-            if (it.isNotEmpty()) searchResultState.value = SearchState.HistoryLoadState()
+            trackListMediator.setLocalSource(it.toList())
+            if (it.isNotEmpty()) {
+                searchResultState.value = SearchState.HistoryLoadState()
+            }
         }
+
+    }
+
+    fun onHideHistory(){
+        trackListMediator.setLocalSource(listOf())
+        searchResultState.value = SearchState.InitialState()
     }
 
     fun trackSelected(track: Track){
@@ -57,31 +67,39 @@ class SearchViewModel: ViewModel()
         }
         onLoadInPlayer(track)
     }
-    fun clearSearchBox() = searchTokenField.set("")
+    fun clearSearchBox() = searchTokenField.postValue("")
     fun cleanHistory() {
         trackListService.clearHistory()
         trackListMediator.setLocalSource(listOf())
         searchResultState.value = SearchState.InitialState()
     }
-    private fun search(block: (searchThread: Thread) -> Unit){
-        searchTokenField.get()?.let{ searchToken ->
-            val thread = Thread {
-                handler.post{ searchResultState.value = SearchState.DataLoading() }
-                trackListService.searchItems(searchToken){
-                    when(it){
-                        Response.EMPTY -> handler.post{ searchResultState.value = SearchState.EmptyResult() }
-                        Response.ERROR -> handler.post{ searchResultState.value = SearchState.NetworkFailedResult() }
-                        Response.SUCCESS -> handler.post{
-                                searchResultState.value = SearchState.SuccessResult()
-                                trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
-                        }
+
+    private suspend fun search(){
+        searchTokenField.value?.let{ searchToken ->
+            searchResultState.value = SearchState.DataLoading()
+            trackListService.searchItems(searchToken).collect { searchResult ->
+                when (searchResult) {
+                    Response.EMPTY -> {
+                        searchResultState.value = SearchState.EmptyResult()
                     }
+
+                    Response.ERROR -> {
+                        searchResultState.value = SearchState.NetworkFailedResult()
+                    }
+
+                    Response.SUCCESS -> {
+                        searchResultState.value = SearchState.SuccessResult()
+                        trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
+                    }
+
+                    else -> {}
                 }
             }
-            block(thread)
         }
     }
+
     companion object {
         private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
+        private const val SEARCH_RESULTS_KEY = "SR"
     }
 }

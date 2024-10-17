@@ -14,9 +14,10 @@ import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.presentation.providers.TrackIntentProvider
 import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler.TrackListAdapter
+
 private const val BUNDLE_TRACK_KEY ="TRACK"
 class SearchFragment : Fragment() {
-    private val searchViewModel by viewModel<SearchViewModel>()
+    private val searchViewModel:SearchViewModel by viewModel()
     private val adapter: TrackListAdapter by lazy { TrackListAdapter(searchViewModel) }
     private var binding: FragmentSearchBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,12 +37,17 @@ class SearchFragment : Fragment() {
         return FragmentSearchBinding.inflate(inflater, container, false).let{
             binding = it
             val view = it.root
-            it.btnClearHistori.setOnClickListener{ searchViewModel.cleanHistory() }
+            it.btnClearHistory.setOnClickListener{ searchViewModel.cleanHistory() }
             it.vm=searchViewModel
             it.trackListRecycler.layoutManager = LinearLayoutManager(view.context)
             it.trackListRecycler.adapter = adapter
             view
         }
+    }
+
+    override fun onStart(){
+        super.onStart()
+        searchViewModel.onHideHistory()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){

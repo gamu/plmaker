@@ -1,12 +1,11 @@
 package ru.gamu.playlistmaker.data.handlers
 
 import android.content.Context
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
+import ru.gamu.playlistmaker.data.dto.IResponse
 import ru.gamu.playlistmaker.data.models.Response
-import ru.gamu.playlistmaker.data.models.ResponseRoot
 import ru.gamu.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -26,19 +25,15 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
 
     }
 
-    fun getData(spec: String) = runBlocking {
+    fun getData(spec: String): Flow<IResponse<List<Track>>> = flow {
         val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
-        val response = async(Dispatchers.IO) {
-            try{
-                searchService.search(spec)
-            }catch (ex: Exception){
-                ResponseRoot(0, listOf(), true)
-            }
-        }
         try {
-            if(response.await().isError)
-                return@runBlocking Response.ERROR
-            val result = response.await().results.map {
+            val response = searchService.search(spec)
+            if (response.isError) {
+                emit(Response.ERROR)
+                return@flow
+            }
+            val result = response.results.map {
                 Track(
                     artistName = it.artistName,
                     artworkUrl = it.artworkUrl100,
@@ -54,12 +49,13 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
                     trackTime = if (it.trackTimeMillis != null) formatter.format(it.trackTimeMillis) else ""
                 )
             }
-            if(result.isEmpty()){
-                return@runBlocking Response.EMPTY
+            if (result.isEmpty()) {
+                emit(Response.EMPTY)
+            } else {
+                emit(Response.SUCCESS.apply { this.setResult(result) })
             }
-            return@runBlocking Response.SUCCESS.apply { this.setResult(result) }
-        }catch (ex: Exception){
-            return@runBlocking Response.ERROR.apply { this.setError(ex) }
+        } catch (ex: Exception) {
+            emit(Response.ERROR.apply { this.setError(ex) })
         }
     }
 }

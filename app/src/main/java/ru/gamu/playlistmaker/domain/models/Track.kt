@@ -1,5 +1,7 @@
 package ru.gamu.playlistmaker.domain.models
 
+import java.io.Serializable
+
 data class Track(
     override val artistName: String?,
     override val artworkUrl: String?,
@@ -13,4 +15,4 @@ data class Track(
     override val trackTime: String?,
     override val trackPreview: String?,
     override val trackTimeMs: Long?
-) : ITrack
+) : ITrack, Serializable

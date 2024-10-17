@@ -24,7 +24,8 @@
             android:layout_width="@dimen/size45"
             android:layout_height="@dimen/size45"
             app:imageUrl="@{ trackItem.artworkUrl }"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            app:roundedCornerRadius="@{8f}" />
 
         <LinearLayout
             android:layout_width="match_parent"

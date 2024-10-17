@@ -15,14 +15,17 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
         val navController = navHostFragment.navController
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomMainNavigation)
+        val delimiter = findViewById<View>(R.id.bottomMainNavigationDelimiter)
         bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.playerFragment -> {
                     bottomNavigationView.visibility = View.GONE
+                    delimiter.visibility = View.GONE
                 }
                 else -> {
                     bottomNavigationView.visibility = View.VISIBLE
+                    delimiter.visibility = View.VISIBLE
                 }
             }
         }

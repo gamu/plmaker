@@ -12,6 +12,7 @@
         <item name="tabIndicatorColor">@color/ypWhite</item>
         <item name="tabSelectedTextColor">@color/ypWhite</item>
         <item name="tabTextColor">@color/ypWhite</item>
+        <item name="android:background">@color/ypBlack</item>
     </style>
     <style name="MainBackground">
         <item name="android:background">@color/ypBlack</item>
@@ -28,6 +29,10 @@
         <item name="android:textColor">@color/ypBlack</item>
     </style>
     <style name="SearchBoxStyle">
+        <item name="android:thumbTint">@color/ypBlue</item>
+        <item name="android:trackTint">@color/ypBlueGray</item>
+    </style>
+    <style name="CheckBoxStyle">
         <item name="android:textColor">@color/ypBlack</item>
         <item name="android:textColorHint">@color/ypBlack</item>
     </style>

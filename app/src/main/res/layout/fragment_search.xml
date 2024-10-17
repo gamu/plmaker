@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
         <variable
             name="vm"
             type="ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel" />
     </data>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:padding="@dimen/indentBase"
         android:orientation="vertical"
         android:theme="@style/Base.Theme.PlaylistMaker">
@@ -34,6 +34,7 @@
             android:layout_marginEnd="@dimen/marginBig"
             tools:context=".presentation.views.MainActivity">
             <EditText
+                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange(hasFocus) }"
                 style="@style/SearchBoxStyle"
                 android:id="@+id/tbSearch"
                 android:layout_width="match_parent"
@@ -42,15 +43,18 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/search"
                 android:imeOptions="actionDone"
-                android:textCursorDrawable="@color/ypBlue"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                android:textColor="@color/Black"
                 android:singleLine="true"
                 android:padding="@dimen/size10"
                 android:drawablePadding="@dimen/size10"
                 android:background="@drawable/edit_with_roundedcorner"
                 android:lines="1"
                 app:cornerRadius="@dimen/radius50"
+                tools:text="Sample Text"
                 tools:ignore="Autofill,TextFields" />
             <LinearLayout
+                android:background="@drawable/edit_with_roundedcorner"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
@@ -67,13 +71,25 @@
                     tools:ignore="ContentDescription,RtlSymmetry" />
             </LinearLayout>
         </FrameLayout>
+        
+        <TextView
+            style="@style/SearchResultLabel"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:id="@+id/searchResultLabel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size52"
+            android:visibility="@{ vm.searchResultState.historyData? View.VISIBLE : View.GONE }"
+            android:text="@string/searchResultLabel" />
 
-        <FrameLayout android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{ vm.searchResultState.showNetworErrorView? View.VISIBLE : View.GONE }">
+
             <include
                 android:id="@+id/noConnection"
-                layout="@layout/search_no_connection"/>
+                layout="@layout/search_no_connection" />
         </FrameLayout>
 
         <FrameLayout android:layout_width="match_parent"
@@ -128,7 +144,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/ButtonOnSearchView"
-                android:id="@+id/btnClearHistori"
+                android:id="@+id/btnClearHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size24"
