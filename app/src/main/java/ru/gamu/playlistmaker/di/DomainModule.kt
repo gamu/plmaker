@@ -9,6 +9,7 @@ import ru.gamu.playlistmaker.data.repositories.MediaPlayerRepository
 import ru.gamu.playlistmaker.data.repositories.SettingsPersistentStorageRepository
 import ru.gamu.playlistmaker.domain.usecases.CurrentThemeInteractor
 import ru.gamu.playlistmaker.domain.usecases.DarkThemeInteractor
+import ru.gamu.playlistmaker.domain.usecases.GetFavoriteTracksInteractor
 import ru.gamu.playlistmaker.domain.usecases.GetTabsInteractor
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
@@ -18,6 +19,7 @@ val domainModule = module {
     single<TrackListService> { TrackListService(get(), get(), get()) }
     single<DarkThemeInteractor> { DarkThemeInteractor( get() ) }
     single<CurrentThemeInteractor> { CurrentThemeInteractor( get() ) }
+    single<GetFavoriteTracksInteractor> { GetFavoriteTracksInteractor( get() ) }
     factory { MediaPlayerRepository(androidContext()) }
     factory<MediaPlayerManager> { MediaPlayerManager( get() ) }
     factory { MediaPlayer() }

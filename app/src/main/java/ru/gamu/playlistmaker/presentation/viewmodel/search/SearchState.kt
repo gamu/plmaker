@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation.viewmodel.sesrch
+package ru.gamu.playlistmaker.presentation.viewmodel.search
 
 sealed class SearchState {
     enum class SearchResultState{ SUCCESS, NETWORK_FAILURE, EMPTY_DATASET, NOT_EXECUTED }

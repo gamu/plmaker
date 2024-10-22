@@ -12,14 +12,15 @@ import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.FragmentSearchBinding
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.presentation.providers.TrackIntentProvider
-import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel
-import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler.TrackListAdapter
+import ru.gamu.playlistmaker.presentation.viewmodel.search.SearchViewModel
+import ru.gamu.playlistmaker.presentation.viewmodel.search.recycler.TrackListAdapter
 
-private const val BUNDLE_TRACK_KEY ="TRACK"
+internal const val BUNDLE_TRACK_KEY ="TRACK"
 class SearchFragment : Fragment() {
     private val searchViewModel:SearchViewModel by viewModel()
     private val adapter: TrackListAdapter by lazy { TrackListAdapter(searchViewModel) }
     private var binding: FragmentSearchBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

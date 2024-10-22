@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler
+package ru.gamu.playlistmaker.presentation.viewmodel.search.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.SearchTrackItemBinding
 import ru.gamu.playlistmaker.domain.models.Track
-import ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel
+import ru.gamu.playlistmaker.presentation.viewmodel.search.SearchViewModel
 
 class TrackListAdapter(val viewModel: SearchViewModel) : RecyclerView.Adapter<TrackListViewHolder> () {
 

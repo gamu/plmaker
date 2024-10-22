@@ -7,6 +7,7 @@ import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
 import ru.gamu.playlistmaker.data.dto.IResponse
 import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.utils.toTrack
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -34,20 +35,7 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
                 return@flow
             }
             val result = response.results.map {
-                Track(
-                    artistName = it.artistName,
-                    artworkUrl = it.artworkUrl100,
-                    collectionName = it.collectionName,
-                    country = it.country,
-                    description = it.description,
-                    primaryGenreName = it.primaryGenreName,
-                    releaseDate = formatYear(it.releaseDate),
-                    trackCensoredName = it.trackCensoredName,
-                    trackName = it.trackName,
-                    trackTimeMs = it.trackTimeMillis,
-                    trackPreview = it.previewUrl,
-                    trackTime = if (it.trackTimeMillis != null) formatter.format(it.trackTimeMillis) else ""
-                )
+                it.toTrack()
             }
             if (result.isEmpty()) {
                 emit(Response.EMPTY)

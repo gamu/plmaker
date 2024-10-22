@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation.viewmodel.sesrch.recycler
+package ru.gamu.playlistmaker.presentation.viewmodel.search.recycler
 
 import androidx.recyclerview.widget.RecyclerView
 import ru.gamu.playlistmaker.databinding.SearchTrackItemBinding

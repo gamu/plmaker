@@ -10,6 +10,7 @@ import ru.gamu.playlistmaker.domain.models.Track
 
 inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object: TypeToken<T>() {}.type)
+
 class VisitedTracksQueryHandler(context: Context) {
     private val ViewHistory: String = context.getString(R.string.viewHistory)
     private val ViewHistoryItems: String = context.getString(R.string.viewHistoryItems)
@@ -22,8 +23,8 @@ class VisitedTracksQueryHandler(context: Context) {
         val gson = Gson()
         val itemsString = persistentStorage.getString(ViewHistoryItems, "")
         if(itemsString!!.isNotEmpty()){
-            val tracks = gson.fromJson<Set<Track>>(itemsString)
-            return tracks
+            val tracks = gson.fromJson<List<Track>>(itemsString)
+            return tracks.toSet()
         }
         return mutableSetOf()
     }
