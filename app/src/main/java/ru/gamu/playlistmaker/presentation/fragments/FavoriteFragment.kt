@@ -11,18 +11,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.FragmentFavoriteBinding
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.presentation.events.TrackClickListener
 import ru.gamu.playlistmaker.presentation.providers.TrackIntentProvider
 import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.FavoritesViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.recycler.FavoritesAdapter
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), TrackClickListener {
     private val favoriteViewModel by viewModel<FavoritesViewModel>()
     private var binding: FragmentFavoriteBinding? = null
-    private val adapter: FavoritesAdapter by lazy { FavoritesAdapter(favoriteViewModel) }
+    private val adapter: FavoritesAdapter by lazy { FavoritesAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        favoriteViewModel.onLoadInPlayer = ::trackSelectHandler
+    }
+    override fun onStart() {
+        super.onStart()
         favoriteViewModel.tracksStateValue.observe(this){ items ->
             items?.let { adapter.setItems(it) }
         }
@@ -50,10 +54,14 @@ class FavoriteFragment : Fragment() {
     private fun trackSelectHandler(track: Track){
         val bundle = Bundle()
         bundle.putString(BUNDLE_TRACK_KEY, TrackIntentProvider(track).getData())
-        findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
+        findNavController().navigate(R.id.action_mediaLibraryFragment_to_playerFragment, bundle)
     }
 
     companion object {
         fun newInstance() = FavoriteFragment()
+    }
+
+    override fun onTrackClick(track: Track) {
+        favoriteViewModel.trackSelected(track)
     }
 }

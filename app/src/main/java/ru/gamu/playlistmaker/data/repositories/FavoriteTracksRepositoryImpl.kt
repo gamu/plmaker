@@ -6,12 +6,12 @@ import ru.gamu.playlistmaker.domain.repository.FavoriteTracksRepository
 import ru.gamu.playlistmaker.utils.mapToTrack
 import ru.gamu.playlistmaker.utils.toTrackEntity
 
-class FavoriteTracksRepositoryImpl(private val appDatabase: AppDatabase) : FavoriteTracksRepository {
+class FavoriteTracksRepositoryImpl(appDatabase: AppDatabase) : FavoriteTracksRepository {
 
     private val tracksFacade = appDatabase.tracksFacade()
 
     override suspend fun addTrackToFavorites(track: Track) {
-        if(tracksFacade.getTrackById(track.trackId) != null){
+        if(tracksFacade.getTrackById(track.trackId) == null){
             val trackEntity = track.toTrackEntity()
             tracksFacade.addTrackToFavorites(trackEntity)
         }

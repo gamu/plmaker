@@ -28,7 +28,7 @@ val viewModelModule = module {
     }
 
     viewModel<PlayerViewModel>{ (bundle: Bundle) ->
-        PlayerViewModel( get(),  bundle)
+        PlayerViewModel( get(), get(), bundle)
     }
 
     viewModel<MediaLibraryViewModel>{

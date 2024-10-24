@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.domain.usecases.FavoriteTrackService
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.presentation.models.DisplayName
 import ru.gamu.playlistmaker.utils.parseFromJson
@@ -18,6 +18,7 @@ private const val MPS = 1000
 private const val SPM = 60
 
 class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
+                      private val favoriteTrackService: FavoriteTrackService,
                       private val bundle: Bundle): ViewModel() {
 
     private val track: Track by lazy {
@@ -34,8 +35,8 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     val isFavorite = MutableLiveData(false)
 
-    fun setFavorite() = runBlocking {
-        isFavorite.value = track.isFavoriteAsync().await()
+    fun setFavorite() = viewModelScope.launch(Dispatchers.Main) {
+        isFavorite.value = favoriteTrackService.isFavorite(track)
     }
 
     //var isFavorite: Boolean = track.isFavoriteAsync().await()
@@ -49,7 +50,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     @DisplayName("Жанр")
     val primaryGenreName: String = track.primaryGenreName
     @DisplayName("Длительность")
-    val trackTime: String = track.trackTime
+    val trackTime: String = track.formatedTrackTime
 
     val playerArtworkUrl: String
         get() = artworkUrl.replace("100x100bb", "512x512bb")
@@ -57,10 +58,10 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     fun addToFavorite()  {
         viewModelScope.launch(Dispatchers.Main) {
             if(isFavorite.value!!){
-                track.removeFromFavorite()
+                favoriteTrackService.removeFromFavorite(track)
                 isFavorite.postValue(false)
-            }else {
-                track.addToFavorite()
+            } else {
+                favoriteTrackService.addToFavorite(track)
                 isFavorite.postValue(true)
             }
         }

@@ -1,17 +1,8 @@
 package ru.gamu.playlistmaker.domain.models
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import org.koin.java.KoinJavaComponent.inject
-import ru.gamu.playlistmaker.domain.repository.FavoriteTracksRepository
 import java.io.Serializable
 
 class Track: Serializable {
-    @delegate:Transient
-    private val favoriteTracksRepository: FavoriteTracksRepository
-        by inject(FavoriteTracksRepository::class.java)
-
     var trackId: Long = 0L
     var artistName: String = ""
     var artworkUrl: String = ""
@@ -23,16 +14,19 @@ class Track: Serializable {
     var trackPreview: String = ""
     var country: String = ""
 
-    suspend fun addToFavorite() {
-        favoriteTracksRepository.addTrackToFavorites(this)
-    }
+    val formatedTrackTime: String
+        get() = formatMilliseconds()
 
-    fun isFavoriteAsync(): Deferred<Boolean> = GlobalScope.async {
-        favoriteTracksRepository.getTrackById(trackId) != null
-    }
-
-    suspend fun removeFromFavorite() {
-        favoriteTracksRepository.removeTrackFromFavorites(this)
+    private fun formatMilliseconds(): String {
+        val millis = trackTime.toLong()
+        val hours = (millis / 1000) / 3600
+        val minutes = ((millis / 1000) % 3600) / 60
+        val seconds = (millis / 1000) % 60
+        return if (hours > 0) {
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
+        }
     }
 }
 

@@ -8,10 +8,12 @@ import kotlinx.coroutines.launch
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.GetFavoriteTracksInteractor
 
-class FavoritesViewModel(private val savedStateHandle: SavedStateHandle,
+class FavoritesViewModel(savedStateHandle: SavedStateHandle,
                          private val favoriteTracks: GetFavoriteTracksInteractor): ViewModel() {
 
     val tracksStateValue = savedStateHandle.getLiveData("tracksStateValue", listOf<Track>())
+
+    lateinit var onLoadInPlayer: (track: Track) -> Unit
 
     fun getFavoriteTracks() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -20,7 +22,7 @@ class FavoritesViewModel(private val savedStateHandle: SavedStateHandle,
         }
     }
 
-    fun trackSelected(track: Track) {
-
+    fun trackSelected(track: Track){
+        onLoadInPlayer(track)
     }
 }

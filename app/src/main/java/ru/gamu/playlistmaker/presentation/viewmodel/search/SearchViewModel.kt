@@ -9,7 +9,7 @@ import ru.gamu.playlistmaker.data.models.Response
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.TrackListService
 
-class SearchViewModel(private val savedStateHandle: SavedStateHandle,
+class SearchViewModel(savedStateHandle: SavedStateHandle,
                       private val trackListService: TrackListService): ViewModel()
 {
     val searchTokenField = savedStateHandle.getLiveData("searchToken", "")
@@ -45,7 +45,7 @@ class SearchViewModel(private val savedStateHandle: SavedStateHandle,
         }
     }
 
-    fun onSearchBoxFocusChange(hasFocus: Boolean) {
+    fun onSearchBoxFocusChange() {
         val historyItems = trackListService.TracksHistory
         historyItems.let {
             trackListMediator.setLocalSource(it.toList())
@@ -74,7 +74,7 @@ class SearchViewModel(private val savedStateHandle: SavedStateHandle,
         searchResultState.value = SearchState.InitialState()
     }
 
-    private suspend fun search(){
+    suspend fun search(){
         searchTokenField.value?.let{ searchToken ->
             searchResultState.value = SearchState.DataLoading()
             trackListService.searchItems(searchToken).collect { searchResult ->
@@ -100,6 +100,5 @@ class SearchViewModel(private val savedStateHandle: SavedStateHandle,
 
     companion object {
         private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
-        private const val SEARCH_RESULTS_KEY = "SR"
     }
 }

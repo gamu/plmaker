@@ -24,7 +24,7 @@ class VisitedTracksQueryHandler(context: Context) {
         val itemsString = persistentStorage.getString(ViewHistoryItems, "")
         if(itemsString!!.isNotEmpty()){
             val tracks = gson.fromJson<List<Track>>(itemsString)
-            return tracks.toSet()
+            return tracks.toMutableSet()
         }
         return mutableSetOf()
     }

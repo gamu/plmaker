@@ -7,19 +7,26 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.FragmentSearchBinding
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.presentation.events.TrackClickListener
 import ru.gamu.playlistmaker.presentation.providers.TrackIntentProvider
 import ru.gamu.playlistmaker.presentation.viewmodel.search.SearchViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.search.recycler.TrackListAdapter
 
 internal const val BUNDLE_TRACK_KEY ="TRACK"
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), TrackClickListener {
     private val searchViewModel:SearchViewModel by viewModel()
-    private val adapter: TrackListAdapter by lazy { TrackListAdapter(searchViewModel) }
+    private val adapter: TrackListAdapter by lazy { TrackListAdapter(this) }
     private var binding: FragmentSearchBinding? = null
+
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +44,7 @@ class SearchFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         return FragmentSearchBinding.inflate(inflater, container, false).let{
             binding = it
+            it.noConnection.btnRefresh.setOnClickListener{ scope.launch { searchViewModel.search() }}
             val view = it.root
             it.btnClearHistory.setOnClickListener{ searchViewModel.cleanHistory() }
             it.vm=searchViewModel
@@ -61,5 +69,9 @@ class SearchFragment : Fragment() {
         val bundle = Bundle()
         bundle.putString(BUNDLE_TRACK_KEY, TrackIntentProvider(track).getData())
         findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
+    }
+
+    override fun onTrackClick(track: Track) {
+        searchViewModel.trackSelected(track)
     }
 }

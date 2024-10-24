@@ -15,7 +15,7 @@ interface TracksFacade {
     @Delete
     suspend fun removeTrackFromFavorites(track: TrackEntity)
 
-    @Query("SELECT * FROM tracks")
+    @Query("SELECT * FROM tracks ORDER BY timestamp DESC")
     suspend fun getAllFavoriteTracks(): List<TrackEntity>
 
     @Query("SELECT trackId FROM tracks")

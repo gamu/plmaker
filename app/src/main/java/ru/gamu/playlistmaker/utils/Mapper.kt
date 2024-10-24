@@ -7,6 +7,7 @@ import ru.gamu.playlistmaker.domain.models.track
 
 fun TrackEntity.mapToTrack(): Track {
     return track {
+        trackId(trackId)
         artistName(artistName)
         artworkUrl(coverUrl)
         collectionName(albumName)
@@ -41,11 +42,11 @@ fun SearchItem.toTrack(): Track {
         artistName(artistName ?: "")
         artworkUrl(artworkUrl100)
         collectionName(collectionName ?: "")
-        country(country)
-        releaseDate(releaseDate)
+        country(country ?: "")
+        releaseDate(releaseDate ?: "")
         primaryGenreName(primaryGenreName ?: "")
         trackName(trackName ?: "")
-        trackTime(trackTimeMillis?.toString() ?: "")
+        trackTime(trackTimeMillis?.toString() ?: "0")
         trackPreview(previewUrl ?: "")
     }
 }

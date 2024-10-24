@@ -34,7 +34,7 @@
             android:layout_marginEnd="@dimen/marginBig"
             tools:context=".presentation.views.MainActivity">
             <EditText
-                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange(hasFocus) }"
+                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange() }"
                 style="@style/SearchBoxStyle"
                 android:id="@+id/tbSearch"
                 android:layout_width="match_parent"

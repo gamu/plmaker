@@ -34,7 +34,7 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
                 emit(Response.ERROR)
                 return@flow
             }
-            val result = response.results.map {
+            val result = response.results.filter{ it.trackTimeMillis != null }.map {
                 it.toTrack()
             }
             if (result.isEmpty()) {
