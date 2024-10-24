@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="vm"
-            type="ru.gamu.playlistmaker.presentation.viewmodel.sesrch.SearchViewModel" />
+            type="ru.gamu.playlistmaker.presentation.viewmodel.search.SearchViewModel" />
     </data>
     <LinearLayout
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
             android:layout_marginEnd="@dimen/marginBig"
             tools:context=".presentation.views.MainActivity">
             <EditText
-                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange(hasFocus) }"
+                android:onFocusChange="@{ (v, hasFocus) -> vm.onSearchBoxFocusChange() }"
                 style="@style/SearchBoxStyle"
                 android:id="@+id/tbSearch"
                 android:layout_width="match_parent"

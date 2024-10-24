@@ -7,7 +7,8 @@ fun <T> T.stringify(): String {
     return gson.toJson(this);
 }
 
-inline fun <reified T> parseFromJson(value: String): T{
+inline fun <reified T> parseFromJson(value: String?): T{
+    checkNotNull(value) { "Parameter cannot be null" }
     val gson = Gson()
     return gson.fromJson<T>(value)
 }

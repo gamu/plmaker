@@ -8,21 +8,26 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.databinding.FragmentPlayerBinding
-import ru.gamu.playlistmaker.presentation.providers.PlayerBundleDataProvider
 import ru.gamu.playlistmaker.presentation.viewmodel.player.PlayerViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.player.recycler.TrackInfoAdapter
 
 class PlayerFragment : Fragment() {
-    private val playerViewModel by viewModel<PlayerViewModel>()
+    private val playerViewModel by viewModel<PlayerViewModel> {
+        parametersOf(arguments ?: Bundle())
+    }
+
     private lateinit var adapter: TrackInfoAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val boundle = getArguments()
         if(boundle != null){
-            playerViewModel.setTrackInfo(PlayerBundleDataProvider(boundle))
-            adapter = TrackInfoAdapter(playerViewModel.track.getProperies())
+            playerViewModel.setFavorite()
+            playerViewModel.initializePlayer()
+            adapter = TrackInfoAdapter(playerViewModel.getProperies())
         }
     }
 
@@ -35,11 +40,21 @@ class PlayerFragment : Fragment() {
             it.vm = playerViewModel
             it.trackListRecycler.layoutManager = LinearLayoutManager(view.context)
             it.trackListRecycler.adapter = adapter
+            it.btnFavorite.setOnClickListener {
+                playerViewModel.addToFavorite()
+            }
             playerViewModel.enablePlayback.observe(viewLifecycleOwner){ paying ->
                 if(paying){
                     it.btnPause.setBackgroundResource(R.drawable.play)
                 }else {
                     it.btnPause.setBackgroundResource(R.drawable.pause)
+                }
+            }
+            playerViewModel.isFavorite.observe(viewLifecycleOwner){ favorite ->
+                if(favorite){
+                    it.btnFavorite.setBackgroundResource(R.drawable.favorite)
+                }else {
+                    it.btnFavorite.setBackgroundResource(R.drawable.not_favorite)
                 }
             }
             playerViewModel.timeLabel.observe(viewLifecycleOwner){ timer ->
