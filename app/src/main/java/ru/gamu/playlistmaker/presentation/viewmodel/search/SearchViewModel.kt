@@ -12,10 +12,10 @@ import ru.gamu.playlistmaker.domain.usecases.TrackListService
 class SearchViewModel(savedStateHandle: SavedStateHandle,
                       private val trackListService: TrackListService): ViewModel()
 {
-    val searchTokenField = savedStateHandle.getLiveData("searchToken", "")
-    val searchResultState = savedStateHandle.getLiveData<SearchState>("searchResultState", SearchState.InitialState())
-    val searchResultStateValue = savedStateHandle.getLiveData("searchResultStateValue", listOf<Track>())
-    val cleanSearchAvailable = savedStateHandle.getLiveData("cleanSearchAvailable", false)
+    val searchTokenField = savedStateHandle.getLiveData(Constants.SEARCH_TOKEN_KEY, "")
+    val searchResultState = savedStateHandle.getLiveData<SearchState>(Constants.SEARCH_RESULT_STATE_KEY, SearchState.InitialState())
+    val searchResultStateValue = savedStateHandle.getLiveData(Constants.SEARCH_RESULT_STATE_VALUE_KEY, listOf<Track>())
+    val cleanSearchAvailable = savedStateHandle.getLiveData(Constants.CLEAN_SEARCH_AVAILABLE_KEY, false)
 
     val trackListMediator = TrackListMediator(searchResultStateValue)
 
@@ -26,7 +26,7 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
             if (searchToken.isNotEmpty()) {
                 cleanSearchAvailable.value = true
                 viewModelScope.launch {
-                    delay(SEARCH_DEBOUNCE_TIMEOUT_MS)
+                    delay(Constants.SEARCH_DEBOUNCE_TIMEOUT_MS)
                     val newSearchToken = searchTokenField.value
                     if (searchToken == newSearchToken) {
                         search()
@@ -98,7 +98,11 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
         }
     }
 
-    companion object {
-        private const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
+    object Constants {
+        const val SEARCH_DEBOUNCE_TIMEOUT_MS = 2000L
+        const val SEARCH_TOKEN_KEY = "searchToken"
+        const val SEARCH_RESULT_STATE_KEY = "searchResultState"
+        const val SEARCH_RESULT_STATE_VALUE_KEY = "searchResultStateValue"
+        const val CLEAN_SEARCH_AVAILABLE_KEY = "cleanSearchAvailable"
     }
 }
