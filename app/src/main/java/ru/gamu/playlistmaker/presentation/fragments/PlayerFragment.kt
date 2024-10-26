@@ -27,7 +27,6 @@ class PlayerFragment : Fragment() {
         if(boundle != null){
             playerViewModel.setFavorite()
             playerViewModel.initializePlayer()
-            adapter = TrackInfoAdapter(playerViewModel.properties.value!!)
         }
     }
 
@@ -38,11 +37,17 @@ class PlayerFragment : Fragment() {
         return FragmentPlayerBinding.inflate(inflater, container, false).let{
             val view = it.root
             it.vm = playerViewModel
+            adapter = TrackInfoAdapter(emptyList())
             it.trackListRecycler.layoutManager = LinearLayoutManager(view.context)
             it.trackListRecycler.adapter = adapter
             it.btnFavorite.setOnClickListener {
                 playerViewModel.addToFavorite()
             }
+
+            playerViewModel.properties.observe(viewLifecycleOwner) { properties ->
+                adapter.updateItems(properties)
+            }
+
             playerViewModel.enablePlayback.observe(viewLifecycleOwner){ paying ->
                 if(paying){
                     it.btnPause.setBackgroundResource(R.drawable.play)

@@ -30,7 +30,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     val enablePlayback = MutableLiveData(true)
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
-    val properties = MutableLiveData(getProperies())
+    val properties = MutableLiveData<List<Pair<String, String>>>()
 
     var artistName: String = track.artistName
     var artworkUrl: String = track.artworkUrl
@@ -61,6 +61,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     init {
         GlobalContext.get().declare(viewModelScope)
+        properties.postValue(getProperies())
     }
 
     fun addToFavorite()  {
