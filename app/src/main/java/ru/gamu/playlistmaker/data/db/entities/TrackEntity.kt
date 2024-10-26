@@ -13,7 +13,7 @@ data class TrackEntity(
     val trackName: String,
     val artistName: String,
     val albumName: String,
-    val releaseYear: Int,
+    val releaseYear: String,
     val genre: String,
     val country: String,
     val duration: String,

@@ -26,7 +26,7 @@ fun Track.toTrackEntity(): TrackEntity {
         artistName = this.artistName,
         coverUrl = this.artworkUrl,
         albumName = this.collectionName,
-        releaseYear = this.releaseDate.toIntOrNull() ?: 0,
+        releaseYear = this.releaseDate,
         genre = this.primaryGenreName,
         trackName = this.trackName,
         duration = this.trackTime,

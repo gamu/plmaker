@@ -8,6 +8,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
 import ru.gamu.playlistmaker.data.db.AppDatabase
+import ru.gamu.playlistmaker.data.db.migrations.MIGRATION_1_2
+import ru.gamu.playlistmaker.data.db.migrations.MIGRATION_2_3
 import ru.gamu.playlistmaker.data.handlers.ItunesDataQueryAsync
 import ru.gamu.playlistmaker.data.handlers.VisitedTracksCommandHandler
 import ru.gamu.playlistmaker.data.handlers.VisitedTracksQueryHandler
@@ -24,6 +26,7 @@ val dataModule = module {
     }
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     }
     single<FavoriteTracksRepository> { FavoriteTracksRepositoryImpl( get() ) }

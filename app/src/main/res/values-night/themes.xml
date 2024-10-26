@@ -7,6 +7,7 @@
         <!--  <item name="android:background">@color/ypBlack</item> -->
         <item name="android:textColor">@color/ypWhite</item>
         <item name="svgColor">@color/ypWhite</item>
+        <item name="svgFavoriteColor">#c6c6c8</item>
         <item name="searchIconColor">@color/ypBlack</item>
         <item name="tabIconTint">@color/ypWhite</item>
         <item name="tabIndicatorColor">@color/ypWhite</item>

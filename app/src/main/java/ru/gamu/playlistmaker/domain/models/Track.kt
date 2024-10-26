@@ -18,15 +18,18 @@ class Track: Serializable {
         get() = formatMilliseconds()
 
     private fun formatMilliseconds(): String {
-        val millis = trackTime.toLong()
-        val hours = (millis / 1000) / 3600
-        val minutes = ((millis / 1000) % 3600) / 60
-        val seconds = (millis / 1000) % 60
-        return if (hours > 0) {
-            String.format("%02d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            String.format("%02d:%02d", minutes, seconds)
+        val millis = trackTime.toLongOrNull()
+        if(millis != null) {
+            val hours = (millis / 1000) / 3600
+            val minutes = ((millis / 1000) % 3600) / 60
+            val seconds = (millis / 1000) % 60
+            return if (hours > 0) {
+                String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            } else {
+                String.format("%02d:%02d", minutes, seconds)
+            }
         }
+        return trackTime
     }
 }
 

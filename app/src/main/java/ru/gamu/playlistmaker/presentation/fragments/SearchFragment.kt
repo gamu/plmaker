@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.gamu.playlistmaker.R
@@ -25,8 +23,6 @@ class SearchFragment : Fragment(), TrackClickListener {
     private val searchViewModel:SearchViewModel by viewModel()
     private val adapter: TrackListAdapter by lazy { TrackListAdapter(this) }
     private var binding: FragmentSearchBinding? = null
-
-    private val scope = CoroutineScope(Dispatchers.Main + Job())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,7 @@ class SearchFragment : Fragment(), TrackClickListener {
                               savedInstanceState: Bundle?): View {
         return FragmentSearchBinding.inflate(inflater, container, false).let{
             binding = it
-            it.noConnection.btnRefresh.setOnClickListener{ scope.launch { searchViewModel.search() }}
+            it.noConnection.btnRefresh.setOnClickListener{ lifecycleScope.launch { searchViewModel.search() }}
             val view = it.root
             it.btnClearHistory.setOnClickListener{ searchViewModel.cleanHistory() }
             it.vm=searchViewModel

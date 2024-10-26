@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.usecases.FavoriteTrackService
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.presentation.models.DisplayName
 import ru.gamu.playlistmaker.utils.parseFromJson
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.jvmErasure
 
@@ -46,7 +49,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     @DisplayName("Страна")
     val country: String = track.country
     @DisplayName("Год релиза")
-    val releaseDate: String = track.releaseDate
+    val releaseDate: String = extractYear(track.releaseDate)
     @DisplayName("Жанр")
     val primaryGenreName: String = track.primaryGenreName
     @DisplayName("Длительность")
@@ -54,6 +57,10 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     val playerArtworkUrl: String
         get() = artworkUrl.replace("100x100bb", "512x512bb")
+
+    init {
+        GlobalContext.get().declare(viewModelScope)
+    }
 
     fun addToFavorite()  {
         viewModelScope.launch(Dispatchers.Main) {
@@ -73,6 +80,13 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     fun initializePlayer() {
         initializePlayer(track.trackPreview)
+    }
+
+    fun extractYear(dateTimeString: String): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        val date = dateFormat.parse(dateTimeString)
+        val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+        return yearFormat.format(date)
     }
 
     private fun initializePlayer(trackPreview: String) {
@@ -101,24 +115,20 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     }
 
     fun playbackControlPress() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (!mediaPlayer.playerState.IsPlaying()) {
-                mediaPlayer.Play()
-                enablePlayback.postValue(false)
-            } else if (mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING) {
-                mediaPlayer.Pause()
-                enablePlayback.postValue(true)
-            } else {
-                mediaPlayer.Resume()
-                enablePlayback.postValue(false)
-            }
+        if (!mediaPlayer.playerState.IsPlaying()) {
+            mediaPlayer.Play()
+            enablePlayback.postValue(false)
+        } else if (mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING) {
+            mediaPlayer.Pause()
+            enablePlayback.postValue(true)
+        } else {
+            mediaPlayer.Resume()
+            enablePlayback.postValue(false)
         }
     }
 
     fun stopPlayback() {
-        viewModelScope.launch(Dispatchers.IO) {
-            mediaPlayer.Stop()
-        }
+        mediaPlayer.Stop()
     }
 
     fun getProperies(): List<Pair<String, String>> {
