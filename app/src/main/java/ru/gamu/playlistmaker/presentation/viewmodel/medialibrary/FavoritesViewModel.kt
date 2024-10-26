@@ -20,10 +20,6 @@ class FavoritesViewModel(savedStateHandle: SavedStateHandle,
         }
     }
 
-    fun trackSelected(track: Track){
-        onLoadInPlayer(track)
-    }
-
     object Constants {
         const val TRACK_STATE_VALUE = "tracksStateValue"
     }

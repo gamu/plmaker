@@ -23,7 +23,6 @@ class FavoriteFragment : Fragment(), TrackClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        favoriteViewModel.onLoadInPlayer = ::trackSelectHandler
     }
     override fun onStart() {
         super.onStart()
@@ -51,17 +50,14 @@ class FavoriteFragment : Fragment(), TrackClickListener {
         binding?.let{ it.lifecycleOwner = this }
     }
 
-    private fun trackSelectHandler(track: Track){
-        val bundle = Bundle()
-        bundle.putString(BUNDLE_TRACK_KEY, TrackIntentProvider(track).getData())
-        findNavController().navigate(R.id.action_mediaLibraryFragment_to_playerFragment, bundle)
-    }
 
     companion object {
         fun newInstance() = FavoriteFragment()
     }
 
     override fun onTrackClick(track: Track) {
-        favoriteViewModel.trackSelected(track)
+        val bundle = Bundle()
+        bundle.putString(BUNDLE_TRACK_KEY, TrackIntentProvider(track).getData())
+        findNavController().navigate(R.id.action_mediaLibraryFragment_to_playerFragment, bundle)
     }
 }

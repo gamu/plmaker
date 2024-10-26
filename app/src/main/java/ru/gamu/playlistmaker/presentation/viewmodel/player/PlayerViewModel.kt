@@ -1,6 +1,7 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.player
 
 import android.os.Bundle
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,13 +29,17 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
         parseFromJson<Track>(bundle.getString(BUNDLE_TRACK_KEY))
     }
 
-    val enablePlayback = MutableLiveData(true)
-    val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
-    val properties = MutableLiveData<List<Pair<String, String>>>()
+    private val _enablePlayback = MutableLiveData(true)
+    private val _timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
+    private val _properties = MutableLiveData<List<Pair<String, String>>>()
+
+    val enablePlayback: LiveData<Boolean> get() = _enablePlayback
+    val timeLabel: LiveData<String> get() = _timeLabel
+    val properties: LiveData<List<Pair<String, String>>> get() = _properties
+
 
     var artistName: String = track.artistName
     var artworkUrl: String = track.artworkUrl
-    val trackPreview: String = track.trackPreview
     val trackName: String = track.trackName
 
     val isFavorite = MutableLiveData(false)
@@ -61,7 +66,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     init {
         GlobalContext.get().declare(viewModelScope)
-        properties.postValue(getProperies())
+        _properties.postValue(getProperies())
     }
 
     fun addToFavorite()  {
@@ -93,11 +98,11 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     private fun initializePlayer(trackPreview: String) {
         mediaPlayer.onPlayerPrepared = {
-            enablePlayback.value = true
+            _enablePlayback.value = true
         }
 
         mediaPlayer.onPlayerComplete = {
-            enablePlayback.value = true
+            _enablePlayback.value = true
         }
 
         mediaPlayer.onPlayerPause = { }
@@ -112,20 +117,20 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
             val seconds = duration / MPS % SPM
             val minutes = duration / MPS / SPM
             val formattedTime = String.format(TIMER_FORMAT, minutes, seconds)
-            timeLabel.value = formattedTime
+            _timeLabel.value = formattedTime
         }
     }
 
     fun playbackControlPress() {
         if (!mediaPlayer.playerState.IsPlaying()) {
             mediaPlayer.Play()
-            enablePlayback.postValue(false)
+            _enablePlayback.postValue(false)
         } else if (mediaPlayer.playerState == MediaPlayerManager.PlayerStates.STATE_PLAYING) {
             mediaPlayer.Pause()
-            enablePlayback.postValue(true)
+            _enablePlayback.postValue(true)
         } else {
             mediaPlayer.Resume()
-            enablePlayback.postValue(false)
+            _enablePlayback.postValue(false)
         }
     }
 
