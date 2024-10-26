@@ -30,6 +30,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
 
     val enablePlayback = MutableLiveData(true)
     val timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
+    val properties = MutableLiveData(getProperies())
 
     var artistName: String = track.artistName
     var artworkUrl: String = track.artworkUrl
@@ -131,7 +132,7 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
         mediaPlayer.Stop()
     }
 
-    fun getProperies(): List<Pair<String, String>> {
+    private fun getProperies(): List<Pair<String, String>> {
         val result = mutableListOf<Pair<String, String>>()
         val properties = this::class.declaredMemberProperties
         properties.filter { it.returnType.jvmErasure == String::class }.forEach {

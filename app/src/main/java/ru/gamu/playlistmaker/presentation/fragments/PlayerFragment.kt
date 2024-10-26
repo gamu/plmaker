@@ -27,7 +27,7 @@ class PlayerFragment : Fragment() {
         if(boundle != null){
             playerViewModel.setFavorite()
             playerViewModel.initializePlayer()
-            adapter = TrackInfoAdapter(playerViewModel.getProperies())
+            adapter = TrackInfoAdapter(playerViewModel.properties.value!!)
         }
     }
 
