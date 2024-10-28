@@ -32,20 +32,21 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     private val _enablePlayback = MutableLiveData(true)
     private val _timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
     private val _properties = MutableLiveData<List<Pair<String, String>>>()
+    private val _isFavorite = MutableLiveData(false)
 
     val enablePlayback: LiveData<Boolean> get() = _enablePlayback
     val timeLabel: LiveData<String> get() = _timeLabel
     val properties: LiveData<List<Pair<String, String>>> get() = _properties
+    val isFavorite: LiveData<Boolean> get() = _isFavorite
 
 
     var artistName: String = track.artistName
     var artworkUrl: String = track.artworkUrl
     val trackName: String = track.trackName
 
-    val isFavorite = MutableLiveData(false)
 
     fun setFavorite() = viewModelScope.launch(Dispatchers.Main) {
-        isFavorite.value = favoriteTrackService.isFavorite(track)
+        _isFavorite.value = favoriteTrackService.isFavorite(track)
     }
 
     //var isFavorite: Boolean = track.isFavoriteAsync().await()
@@ -73,10 +74,10 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
         viewModelScope.launch(Dispatchers.Main) {
             if(isFavorite.value!!){
                 favoriteTrackService.removeFromFavorite(track)
-                isFavorite.postValue(false)
+                _isFavorite.postValue(false)
             } else {
                 favoriteTrackService.addToFavorite(track)
-                isFavorite.postValue(true)
+                _isFavorite.postValue(true)
             }
         }
     }
@@ -90,10 +91,15 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     }
 
     fun extractYear(dateTimeString: String): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        val date = dateFormat.parse(dateTimeString)
-        val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
-        return yearFormat.format(date)
+        val regex = Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z""")
+        if(regex.matches(dateTimeString))
+        {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            val date = dateFormat.parse(dateTimeString)
+            val yearFormat = SimpleDateFormat("yyyy", Locale.getDefault())
+            return yearFormat.format(date)
+        }
+        return dateTimeString
     }
 
     private fun initializePlayer(trackPreview: String) {

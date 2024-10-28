@@ -9,14 +9,14 @@ import ru.gamu.playlistmaker.domain.usecases.GetFavoriteTracksInteractor
 
 class FavoritesViewModel(savedStateHandle: SavedStateHandle,
                          private val favoriteTracks: GetFavoriteTracksInteractor): ViewModel() {
-    val tracksStateValue = savedStateHandle.getLiveData(Constants.TRACK_STATE_VALUE, listOf<Track>())
+    private val _tracksStateValue = savedStateHandle.getLiveData(Constants.TRACK_STATE_VALUE, listOf<Track>())
 
-    lateinit var onLoadInPlayer: (track: Track) -> Unit
+    val tracksStateValue get() = _tracksStateValue
 
     fun getFavoriteTracks() {
         viewModelScope.launch {
             val tracks = favoriteTracks.invoke()
-            tracksStateValue.postValue(tracks)
+            _tracksStateValue.postValue(tracks)
         }
     }
 

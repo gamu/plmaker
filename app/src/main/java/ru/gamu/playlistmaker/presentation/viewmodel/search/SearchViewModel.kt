@@ -1,5 +1,6 @@
 package ru.gamu.playlistmaker.presentation.viewmodel.search
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,36 +13,42 @@ import ru.gamu.playlistmaker.domain.usecases.TrackListService
 class SearchViewModel(savedStateHandle: SavedStateHandle,
                       private val trackListService: TrackListService): ViewModel()
 {
-    val searchTokenField = savedStateHandle.getLiveData(Constants.SEARCH_TOKEN_KEY, "")
-    val searchResultState = savedStateHandle.getLiveData<SearchState>(Constants.SEARCH_RESULT_STATE_KEY, SearchState.InitialState())
-    val searchResultStateValue = savedStateHandle.getLiveData(Constants.SEARCH_RESULT_STATE_VALUE_KEY, listOf<Track>())
-    val cleanSearchAvailable = savedStateHandle.getLiveData(Constants.CLEAN_SEARCH_AVAILABLE_KEY, false)
+    private val _searchTokenField = savedStateHandle.getLiveData(Constants.SEARCH_TOKEN_KEY, "")
+    private val _searchResultState = savedStateHandle.getLiveData<SearchState>(Constants.SEARCH_RESULT_STATE_KEY, SearchState.InitialState())
+    private val _searchResultStateValue = savedStateHandle.getLiveData(Constants.SEARCH_RESULT_STATE_VALUE_KEY, listOf<Track>())
+    private val _cleanSearchAvailable = savedStateHandle.getLiveData(Constants.CLEAN_SEARCH_AVAILABLE_KEY, false)
 
-    val trackListMediator = TrackListMediator(searchResultStateValue)
+    var searchTokenField: String get() = _searchTokenField.value ?: ""
+        set(text: String) = _searchTokenField.postValue(text)
+
+    val searchResultState: LiveData<SearchState> get() = _searchResultState
+    val cleanSearchAvailable: LiveData<Boolean> get() = _cleanSearchAvailable
+
+    val trackListMediator = TrackListMediator(_searchResultStateValue)
 
     lateinit var onLoadInPlayer: (track: Track) -> Unit
 
     init {
-        searchTokenField.observeForever { searchToken ->
+        _searchTokenField.observeForever { searchToken ->
             if (searchToken.isNotEmpty()) {
-                cleanSearchAvailable.value = true
+                _cleanSearchAvailable.value = true
                 viewModelScope.launch {
                     delay(Constants.SEARCH_DEBOUNCE_TIMEOUT_MS)
-                    val newSearchToken = searchTokenField.value
+                    val newSearchToken = _searchTokenField.value
                     if (searchToken == newSearchToken) {
                         search()
                     }
                 }
             } else {
-                cleanSearchAvailable.value = false
+                _cleanSearchAvailable.value = false
                 initContent()
             }
         }
     }
 
     fun initContent() {
-        if (searchResultStateValue.value!!.isNotEmpty()){
-            trackListMediator.setRemoteSource((searchResultStateValue.value!!))
+        if (_searchResultStateValue.value!!.isNotEmpty()){
+            trackListMediator.setRemoteSource((_searchResultStateValue.value!!))
         }
     }
 
@@ -50,7 +57,7 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
         historyItems.let {
             trackListMediator.setLocalSource(it.toList())
             if (it.isNotEmpty()) {
-                searchResultState.value = SearchState.HistoryLoadState()
+                _searchResultState.value = SearchState.HistoryLoadState()
             }
         }
 
@@ -58,37 +65,37 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
 
     fun onHideHistory(){
         trackListMediator.setLocalSource(listOf())
-        searchResultState.value = SearchState.InitialState()
+        _searchResultState.value = SearchState.InitialState()
     }
 
     fun trackSelected(track: Track){
-        if(!searchResultState.value!!.isHistoryData){
+        if(!_searchResultState.value!!.isHistoryData){
             trackListService.addTrackToHistory(track)
         }
         onLoadInPlayer(track)
     }
-    fun clearSearchBox() = searchTokenField.postValue("")
+    fun clearSearchBox() = _searchTokenField.postValue("")
     fun cleanHistory() {
         trackListService.clearHistory()
         trackListMediator.setLocalSource(listOf())
-        searchResultState.value = SearchState.InitialState()
+        _searchResultState.value = SearchState.InitialState()
     }
 
     suspend fun search(){
-        searchTokenField.value?.let{ searchToken ->
-            searchResultState.value = SearchState.DataLoading()
+        _searchTokenField.value?.let{ searchToken ->
+            _searchResultState.value = SearchState.DataLoading()
             trackListService.searchItems(searchToken).collect { searchResult ->
                 when (searchResult) {
                     Response.EMPTY -> {
-                        searchResultState.value = SearchState.EmptyResult()
+                        _searchResultState.value = SearchState.EmptyResult()
                     }
 
                     Response.ERROR -> {
-                        searchResultState.value = SearchState.NetworkFailedResult()
+                        _searchResultState.value = SearchState.NetworkFailedResult()
                     }
 
                     Response.SUCCESS -> {
-                        searchResultState.value = SearchState.SuccessResult()
+                        _searchResultState.value = SearchState.SuccessResult()
                         trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
                     }
 
