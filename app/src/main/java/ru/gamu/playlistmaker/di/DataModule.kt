@@ -10,11 +10,14 @@ import ru.gamu.playlistmaker.data.api.ISearchServiceAsync
 import ru.gamu.playlistmaker.data.db.AppDatabase
 import ru.gamu.playlistmaker.data.db.migrations.MIGRATION_1_2
 import ru.gamu.playlistmaker.data.db.migrations.MIGRATION_2_3
+import ru.gamu.playlistmaker.data.db.migrations.MIGRATION_3_4
 import ru.gamu.playlistmaker.data.handlers.ItunesDataQueryAsync
 import ru.gamu.playlistmaker.data.handlers.VisitedTracksCommandHandler
 import ru.gamu.playlistmaker.data.handlers.VisitedTracksQueryHandler
 import ru.gamu.playlistmaker.data.repositories.FavoriteTracksRepositoryImpl
+import ru.gamu.playlistmaker.data.repositories.PlaylistRepositoryImpl
 import ru.gamu.playlistmaker.domain.repository.FavoriteTracksRepository
+import ru.gamu.playlistmaker.domain.repository.PlaylistRepository
 
 val dataModule = module {
     single<ISearchServiceAsync> {
@@ -26,10 +29,11 @@ val dataModule = module {
     }
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
     }
     single<FavoriteTracksRepository> { FavoriteTracksRepositoryImpl( get() ) }
+    single<PlaylistRepository> { PlaylistRepositoryImpl( get() ) }
     single<VisitedTracksCommandHandler> {VisitedTracksCommandHandler(androidContext()) }
     single<VisitedTracksQueryHandler> { VisitedTracksQueryHandler(androidContext()) }
     single<ItunesDataQueryAsync> { ItunesDataQueryAsync(androidContext(), get()) }

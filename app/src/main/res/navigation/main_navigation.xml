@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_mediaLibraryFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_newPlayListScreen"
+            app:destination="@id/newPlayListScreen" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -34,9 +37,15 @@
         android:name="ru.gamu.playlistmaker.presentation.fragments.PlayerFragment"
         android:label="PlayerFragment"
         tools:layout="@layout/fragment_player" />
+        <action
+            android:id="@+id/action_mediaPlayerFragment_to_newPlayListScreen"
+            app:destination="@id/newPlayListScreen" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="ru.gamu.playlistmaker.presentation.fragments.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
+    <composable
+        android:id="@+id/newPlayListScreen"
+        android:name="ru.gamu.playlistmaker.presentation.composed.NewPlaylistKt\$NewPlaylist" />
 </navigation>

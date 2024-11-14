@@ -20,7 +20,9 @@
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>
     <dimen name="size13">13dp</dimen>
+    <dimen name="size14">14dp</dimen>
     <dimen name="size10">10dp</dimen>
+    <dimen name="size16">16dp</dimen>
     <dimen name="size18">18dp</dimen>
     <dimen name="size19">19dp</dimen>
     <dimen name="size20">20dp</dimen>
@@ -31,5 +33,6 @@
     <dimen name="size54">54dp</dimen>
     <dimen name="size56">56dp</dimen>
     <dimen name="radius50">50dp</dimen>
+    <dimen name="size120">120dp</dimen>
     <dimen name="maxArtistWidth">200dp</dimen>
 </resources>

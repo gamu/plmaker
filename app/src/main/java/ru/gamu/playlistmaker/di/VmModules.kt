@@ -11,12 +11,17 @@ import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.FavoritesViewMo
 import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.MediaLibraryViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.PlaylistViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.player.PlayerViewModel
+import ru.gamu.playlistmaker.presentation.viewmodel.playlist.NewPlaylistViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.search.SearchViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.settings.SettingsViewModel
 
 val viewModelModule = module {
     factory { (fragment: Fragment) ->
         fragment.arguments ?: Bundle()
+    }
+
+    viewModel<NewPlaylistViewModel> { (handle: SavedStateHandle) ->
+        NewPlaylistViewModel( handle )
     }
 
     viewModel<SearchViewModel> { (handle: SavedStateHandle) ->
@@ -28,7 +33,7 @@ val viewModelModule = module {
     }
 
     viewModel<PlayerViewModel>{ (bundle: Bundle) ->
-        PlayerViewModel( get(), get(), bundle)
+        PlayerViewModel( get(), get(), get(), get(), bundle)
     }
 
     viewModel<MediaLibraryViewModel>{

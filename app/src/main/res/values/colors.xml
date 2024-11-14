@@ -9,4 +9,6 @@
     <color name="shevronGray">#AEAFB4</color>
     <color name="labelGray">#AEAFB4</color>
     <color name="ypBlueGray">#9FBBF3</color>
+    <color name="newPlayListButton">#afafb3</color>
+    <color name="overlay">#99000000</color>
 </resources>

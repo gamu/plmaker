@@ -25,5 +25,7 @@ fun setArtworkUrl(view: ImageView, url: String?, cornerRadius: Float?) {
             .apply(requestOptions)
             .placeholder(R.drawable.placeholder_big)
             .into(view)
+    } else {
+        view.setImageResource(R.drawable.placeholder_big)
     }
 }

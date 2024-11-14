@@ -48,13 +48,13 @@
                 android:singleLine="true"
                 android:padding="@dimen/size10"
                 android:drawablePadding="@dimen/size10"
-                android:background="@drawable/edit_with_roundedcorner"
+                android:background="@drawable/edit_with_rounded_corner"
                 android:lines="1"
                 app:cornerRadius="@dimen/radius50"
                 tools:text="Sample Text"
                 tools:ignore="Autofill,TextFields" />
             <LinearLayout
-                android:background="@drawable/edit_with_roundedcorner"
+                android:background="@drawable/edit_with_rounded_corner"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"

@@ -4,33 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.gamu.playlistmaker.presentation.composed.Playlist
-import ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.PlaylistViewModel
+import ru.gamu.playlistmaker.presentation.composed.NewPlaylist
 
-
-class PlaylistFragment : Fragment() {
-    private val vm by viewModel<PlaylistViewModel>()
+class NewPlaylistFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Playlist()
+                NewPlaylist()
             }
         }
     }
+}
 
-    companion object {
-        fun newInstance() = PlaylistFragment()
-    }
+@Preview
+@Composable
+fun PlaylistPreview() {
+    NewPlaylist()
 }

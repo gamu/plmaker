@@ -1,7 +1,10 @@
 package ru.gamu.playlistmaker.utils
 
+import ru.gamu.playlistmaker.data.db.dto.TracksDto
+import ru.gamu.playlistmaker.data.db.entities.PlaylistItem
 import ru.gamu.playlistmaker.data.db.entities.TrackEntity
 import ru.gamu.playlistmaker.data.dto.SearchItem
+import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.models.track
 
@@ -49,4 +52,44 @@ fun SearchItem.toTrack(): Track {
         trackTime(trackTimeMillis?.toString() ?: "0")
         trackPreview(previewUrl ?: "")
     }
+}
+
+fun Track.toTrackDto(): TracksDto {
+    return TracksDto(
+        artistName = this.artistName,
+        coverUrl = this.artworkUrl,
+        albumName = this.collectionName,
+        releaseYear = this.releaseDate,
+        genre = this.primaryGenreName,
+        trackName = this.trackName,
+        duration = this.trackTime,
+        fileUrl = this.trackPreview,
+        country = this.country,
+        trackId = this.trackId
+    )
+}
+
+fun TracksDto.toTrack(): Track {
+    return track {
+        trackId(trackId)
+        artistName(artistName)
+        artworkUrl(coverUrl)
+        collectionName(albumName)
+        country(country)
+        releaseDate(releaseYear)
+        primaryGenreName(genre)
+        trackName(trackName)
+        trackTime(duration)
+        trackPreview(fileUrl)
+    }
+}
+
+fun Playlist.toPlaylistItem(playlistId: Long): PlaylistItem {
+    return PlaylistItem(
+        playlistId = playlistId,
+        title = title,
+        coverUri = cover,
+        description = description,
+        tracks = tracks.map { it.toTrackDto() }
+    )
 }
