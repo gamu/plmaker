@@ -30,7 +30,9 @@ class MediaPlayerRepository(val context: Context) {
     }
 
     fun position():Int {
-        return player.currentPosition
+        if(player.isPlaying)
+            return player.currentPosition
+        return 0
     }
 
     fun reset() {

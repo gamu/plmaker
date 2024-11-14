@@ -2,11 +2,9 @@ package ru.gamu.playlistmaker.domain.usecases
 
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.data.repositories.MediaPlayerRepository
 import ru.gamu.playlistmaker.domain.IMediaPlayerManager
 import ru.gamu.playlistmaker.domain.PlaybackControl
@@ -14,7 +12,8 @@ import ru.gamu.playlistmaker.domain.PlaybackControl
 
 class MediaPlayerManager(private val mediaPlayer: MediaPlayerRepository) : IMediaPlayerManager {
     //private val mediaPlayer: MediaPlayerRepository by inject(MediaPlayerRepository::class.java)
-    private val scope = CoroutineScope(Dispatchers.IO + Job())
+    //private val scope = CoroutineScope(Dispatchers.IO + Job())
+    private val scope: CoroutineScope by inject(CoroutineScope::class.java)
 
     @Volatile
     var playerState = PlayerStates.STATE_DEFAULT
@@ -25,7 +24,7 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayerRepository) : IMedi
     var onPlayerPause: (() -> Unit)? = null
 
     suspend fun play() {
-        withContext(Dispatchers.Main) {
+        scope.launch {
             mediaPlayer.start()
             playerState = PlayerStates.STATE_PLAYING
             while (playerState == PlayerStates.STATE_PLAYING) {
@@ -35,7 +34,6 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayerRepository) : IMedi
                 if(position > 0)
                     onCounterSignal?.invoke(position.toLong())
             }
-            //mediaPlayer.stop()
         }
     }
 
@@ -72,10 +70,9 @@ class MediaPlayerManager(private val mediaPlayer: MediaPlayerRepository) : IMedi
     }
 
     override fun Stop() {
-        scope.launch {
-            mediaPlayer.stop()
-            playerState = PlayerStates.STATE_FINISHED
-        }
+        mediaPlayer.stop()
+        playerState = PlayerStates.STATE_FINISHED
+        //scope1.cancel()
     }
 
     override fun Resume() {

@@ -1,6 +1,7 @@
 package ru.gamu.playlistmaker.data.dto
 
 data class SearchItem(
+    val trackId: Long,
     val artistName: String?,
     val artworkUrl100: String,
     val collectionName: String?,

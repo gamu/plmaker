@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="PlMaker">
         <attr name="svgColor" format="color" />
+        <attr name="svgFavoriteColor" format="color" />
         <attr name="searchIconColor" format="color" />
         <attr name="mainBackground" format="color" />
     </declare-styleable>

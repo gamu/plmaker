@@ -1,4 +1,4 @@
-package ru.gamu.playlistmaker.presentation.viewmodel.sesrch
+package ru.gamu.playlistmaker.presentation.viewmodel.search
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
