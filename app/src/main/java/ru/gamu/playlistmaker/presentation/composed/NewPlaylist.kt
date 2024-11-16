@@ -1,6 +1,7 @@
 package ru.gamu.playlistmaker.presentation.composed
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,22 +18,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
@@ -57,8 +61,13 @@ fun NewPlaylist(){
     val viewModel = viewModel<NewPlaylistViewModel>()
     val state by viewModel.titleState.collectAsState()
     val ctx = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
 
     val contentColor = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack)
+
+    BackHandler(enabled = state.isComplete) {
+        showDialog = true
+    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -66,6 +75,31 @@ fun NewPlaylist(){
         uri?.let {
             viewModel.setCover(uri)
         }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Завершить создание плейлиста?") },
+            text = { Text("Все несохраненные данные будут потеряны") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        navController.popBackStack()
+                    }
+                ) {
+                    Text("Завершить")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("Отмена")
+                }
+            }
+        )
     }
 
     Column(verticalArrangement = Arrangement.SpaceBetween,
@@ -77,9 +111,17 @@ fun NewPlaylist(){
                 horizontalArrangement = Arrangement.Start) {
                     Image(painter = painterResource(if(darkTheme) R.drawable.arrow_back_dark else R.drawable.arrow_back_light),
                         contentDescription = null,
+                        contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { navController.popBackStack() })
+                            .clickable {
+                                if(state.isComplete){
+                                    showDialog = true
+                                }else {
+                                    navController.popBackStack()
+                                }
+
+                            })
                 Text(stringResource(R.string.createPlaylistHeader),
                     color = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack),
                     modifier = Modifier.padding(start = 24.dp),
@@ -89,8 +131,6 @@ fun NewPlaylist(){
                         textAlign = TextAlign.Start))
             }
             Box(modifier = Modifier
-                .height(310.dp)
-                .width(310.dp)
                 .clickable {
                     photoPickerLauncher.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -98,9 +138,10 @@ fun NewPlaylist(){
                 },
                 contentAlignment = Alignment.Center,
             ) {
-                PaintedImage(painterResource(R.drawable.add_playlist_bg),
+                PaintedImage(painterResource(R.drawable.new_playlist),
                     state.cover,
                     Modifier
+                        .height(312.dp)
                         .fillMaxSize()
                         .clip(RoundedCornerShape(8.dp)))
             }

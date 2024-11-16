@@ -7,6 +7,7 @@ import ru.gamu.playlistmaker.data.dto.SearchItem
 import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.models.track
+import ru.gamu.playlistmaker.presentation.viewmodel.playlist.models.ViewmodelPlaylistDto
 
 fun TrackEntity.mapToTrack(): Track {
     return track {
@@ -70,7 +71,7 @@ fun Track.toTrackDto(): TracksDto {
 }
 
 fun TracksDto.toTrack(): Track {
-    return track {
+    val result =  track {
         trackId(trackId)
         artistName(artistName)
         artworkUrl(coverUrl)
@@ -82,6 +83,8 @@ fun TracksDto.toTrack(): Track {
         trackTime(duration)
         trackPreview(fileUrl)
     }
+
+    return result
 }
 
 fun Playlist.toPlaylistItem(playlistId: Long): PlaylistItem {
@@ -91,5 +94,14 @@ fun Playlist.toPlaylistItem(playlistId: Long): PlaylistItem {
         coverUri = cover,
         description = description,
         tracks = tracks.map { it.toTrackDto() }
+    )
+}
+
+fun ViewmodelPlaylistDto.toPlaylist(): Playlist {
+    return Playlist(
+        title = title,
+        cover = cover,
+        description = description,
+        tracks = 1.rangeTo(tracksCount).map { Track() }
     )
 }

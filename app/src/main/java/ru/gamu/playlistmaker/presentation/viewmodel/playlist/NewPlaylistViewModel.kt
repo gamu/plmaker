@@ -72,7 +72,6 @@ class NewPlaylistViewModel(private val savedStateHandler: SavedStateHandle): Vie
         savedStateHandler[STATE_KEY] = titleState.value.copy(description = description, isComplete = true)
     }
 
-
     companion object {
         const val STATE_KEY  = "state"
     }

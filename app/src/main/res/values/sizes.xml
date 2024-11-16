@@ -16,6 +16,7 @@
     <dimen name="topMargin">24dp</dimen>
     <dimen name="size45">45dp</dimen>
     <dimen name="size61">61dp</dimen>
+    <dimen name="size2">2dp</dimen>
     <dimen name="size4">4dp</dimen>
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>

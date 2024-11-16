@@ -14,7 +14,7 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
                       private val trackListService: TrackListService): ViewModel()
 {
     private val _searchTokenField = savedStateHandle.getLiveData(Constants.SEARCH_TOKEN_KEY, "")
-    private val _searchResultState = savedStateHandle.getLiveData<SearchState>(Constants.SEARCH_RESULT_STATE_KEY, SearchState.InitialState())
+    private val _searchResultState = savedStateHandle.getLiveData(Constants.SEARCH_RESULT_STATE_KEY, SearchState())
     private val _searchResultStateValue = savedStateHandle.getLiveData(Constants.SEARCH_RESULT_STATE_VALUE_KEY, listOf<Track>())
     private val _cleanSearchAvailable = savedStateHandle.getLiveData(Constants.CLEAN_SEARCH_AVAILABLE_KEY, false)
 
@@ -57,7 +57,7 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
         historyItems.let {
             trackListMediator.setLocalSource(it.toList())
             if (it.isNotEmpty()) {
-                _searchResultState.value = SearchState.HistoryLoadState()
+                _searchResultState.value = SearchState().copy(isHistoryData = true)
             }
         }
 
@@ -65,7 +65,7 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
 
     fun onHideHistory(){
         trackListMediator.setLocalSource(listOf())
-        _searchResultState.value = SearchState.InitialState()
+        _searchResultState.value = SearchState()
     }
 
     fun trackSelected(track: Track){
@@ -78,24 +78,27 @@ class SearchViewModel(savedStateHandle: SavedStateHandle,
     fun cleanHistory() {
         trackListService.clearHistory()
         trackListMediator.setLocalSource(listOf())
-        _searchResultState.value = SearchState.InitialState()
+        _searchResultState.value = SearchState()
     }
 
     suspend fun search(){
         _searchTokenField.value?.let{ searchToken ->
-            _searchResultState.value = SearchState.DataLoading()
+            _searchResultState.value = SearchState().copy(showDataLoader = true)
             trackListService.searchItems(searchToken).collect { searchResult ->
                 when (searchResult) {
                     Response.EMPTY -> {
-                        _searchResultState.value = SearchState.EmptyResult()
+                        _searchResultState.value = SearchState()
+                            .copy(searchState = SearchState.SearchResultState.EMPTY_DATASET)
                     }
 
                     Response.ERROR -> {
-                        _searchResultState.value = SearchState.NetworkFailedResult()
+                        _searchResultState.value = SearchState()
+                            .copy(searchState = SearchState.SearchResultState.NETWORK_FAILURE)
                     }
 
                     Response.SUCCESS -> {
-                        _searchResultState.value = SearchState.SuccessResult()
+                        _searchResultState.value = SearchState()
+                            .copy(searchState = SearchState.SearchResultState.SUCCESS)
                         trackListMediator.setRemoteSource(Response.SUCCESS.getResult())
                     }
 

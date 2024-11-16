@@ -54,6 +54,8 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     var artworkUrl: String = track.artworkUrl
     val trackName: String = track.trackName
 
+    lateinit var onTrackAdded: (playlistName: String, trackAded: Boolean)-> Unit
+
 
     fun setFavorite() = viewModelScope.launch(Dispatchers.Main) {
         _isFavorite.value = favoriteTrackService.isFavorite(track)
@@ -174,17 +176,20 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
         return result
     }
 
+    override fun onClick(playlist: Playlist) {
+        viewModelScope.launch {
+            var addResult = addTrackToPlaylistInteractor.invoke(playlist, track)
+            if(addResult){
+                val playlists = getPlaylistInteractor.invoke()
+                _playliust.value = playlists
+            }
+            onTrackAdded.invoke(playlist.title, addResult)
+        }
+    }
+
     companion object {
         private const val TIMER_INITIAL_VALUE = "0:00"
         private const val TIMER_FORMAT = "%02d:%02d"
         private const val BUNDLE_TRACK_KEY = "TRACK"
-    }
-
-    override fun onClick(playlist: Playlist) {
-        viewModelScope.launch {
-            addTrackToPlaylistInteractor.invoke(playlist, track)
-            val playlists = getPlaylistInteractor.invoke()
-            _playliust.value = playlists
-        }
     }
 }

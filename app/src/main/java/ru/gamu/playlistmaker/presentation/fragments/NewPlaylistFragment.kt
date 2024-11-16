@@ -12,20 +12,31 @@ import ru.gamu.playlistmaker.presentation.composed.NewPlaylist
 
 class NewPlaylistFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        /*requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showExitConfirmationDialog()
+                }
+            }
+        )*/
+
         return ComposeView(requireContext()).apply {
             setContent {
                 NewPlaylist()
             }
         }
     }
+
+
+    /*private fun showExitConfirmationDialog() {
+
+    }*/
 }
 
 @Preview

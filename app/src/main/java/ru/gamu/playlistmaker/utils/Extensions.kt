@@ -1,6 +1,8 @@
 package ru.gamu.playlistmaker.utils
 
+import android.graphics.BitmapFactory
 import android.widget.ImageView
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -8,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.gamu.playlistmaker.R
+
 
 inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object: TypeToken<T>() {}.type)
@@ -26,6 +29,10 @@ fun setArtworkUrl(view: ImageView, url: String?, cornerRadius: Float?) {
             .placeholder(R.drawable.placeholder_big)
             .into(view)
     } else {
-        view.setImageResource(R.drawable.placeholder_big)
+        val bitmap = BitmapFactory.decodeResource(view.context.resources, R.drawable.placeholder_big)
+        val drawable = RoundedBitmapDrawableFactory.create(view.context.resources, bitmap)
+        if(cornerRadius != null)
+            drawable.cornerRadius = cornerRadius
+        view.setImageDrawable(drawable);
     }
 }

@@ -25,8 +25,10 @@ class MediaPlayerRepository(val context: Context) {
     }
 
     fun stop() {
-        player.stop()
-        player.release()
+        if(player.isPlaying){
+            player.stop()
+            player.release()
+        }
     }
 
     fun position():Int {

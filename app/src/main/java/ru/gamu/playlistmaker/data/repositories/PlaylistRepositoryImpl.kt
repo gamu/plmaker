@@ -34,7 +34,18 @@ class PlaylistRepositoryImpl(appDatabase: AppDatabase): PlaylistRepository {
                 cover = it.coverUri ?: ""
 
                 it.tracks.map { t ->
-                    track { t.toTrack() }
+                    track {
+                        trackId(t.trackId)
+                        artistName(t.artistName)
+                        artworkUrl(t.coverUrl)
+                        collectionName(t.albumName)
+                        country(t.country)
+                        releaseDate(t.releaseYear)
+                        primaryGenreName(t.genre)
+                        trackName(t.trackName)
+                        trackTime(t.duration)
+                        trackPreview(t.fileUrl)
+                    }
                 }
             }
         }

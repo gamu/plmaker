@@ -44,8 +44,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import ru.gamu.playlistmaker.R
+import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.PlaylistViewModel
-import ru.gamu.playlistmaker.presentation.viewmodel.playlist.models.ViewmodelPlaylistDto
+import ru.gamu.playlistmaker.utils.toPlaylist
 
 @Composable
 fun Playlist() {
@@ -68,10 +69,10 @@ fun Playlist() {
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack),
                     contentColor = colorResource(if(darkTheme) R.color.ypBlack else R.color.ypWhite)
-                )) { Text(text="Создать плэйлист",
+                )) { Text(text="Новый плэйлист",
                 style = androidx.compose.ui.text.TextStyle(
                     fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.ys_display_regular)),
+                    fontFamily = FontFamily(Font(R.font.ys_display_medium)),
                     textAlign = TextAlign.Center
                 )) }
         }
@@ -83,7 +84,7 @@ fun Playlist() {
             }
             ConditionalEffect(state.items.isNotEmpty()){
                 PlaylistItemsRenderer(colorResource(if(darkTheme) R.color.ypBlack else R.color.ypWhite),
-                    colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack), state.items)
+                    colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack), state.items.map { it.toPlaylist() })
             }
         }
 
@@ -98,7 +99,7 @@ fun ConditionalEffect(condition: Boolean, effect: @Composable () -> Unit) {
 }
 
 @Composable
-fun PlaylistItemsRenderer(bgColor: Color, textColor: Color,items: List<ViewmodelPlaylistDto>){
+fun PlaylistItemsRenderer(bgColor: Color, textColor: Color,items: List<Playlist>){
     items.forEach {
         Box(modifier = Modifier.width(160.dp).padding(bottom = 16.dp)
             .background(color = bgColor)) {
@@ -111,7 +112,7 @@ fun PlaylistItemsRenderer(bgColor: Color, textColor: Color,items: List<Viewmodel
                         .fillMaxWidth().clip(
                         RoundedCornerShape(16.dp)))
                 PlaylistLabel(textColor, title = it.title)
-                PlaylistLabel(textColor, title = "${it.tracksCount.toString()} треков")
+                PlaylistLabel(textColor, title = "${it.tracks.count()} ${it.getTrackDeclension()}")
             }
         }
     }
@@ -146,7 +147,7 @@ fun EmptyPlaylistsHolder(){
         modifier = Modifier.fillMaxWidth(),
         style = androidx.compose.ui.text.TextStyle(
             fontSize = 19.sp,
-            fontFamily = FontFamily(Font(R.font.ys_display_bold)),
+            fontFamily = FontFamily(Font(R.font.ys_display_medium)),
             textAlign = TextAlign.Center
         ),
         maxLines = 2

@@ -5,7 +5,17 @@ data class Playlist(
     val description: String,
     val cover: String,
     val tracks: List<Track> = listOf()
-)
+) {
+    fun getTrackDeclension(): String {
+        val count = tracks.count()
+        return when {
+            count % 100 in 11..19 -> "треков"
+            count % 10 == 1 -> "трек"
+            count % 10 in 2..4 -> "трека"
+            else -> "треков"
+        }
+    }
+}
 
 class PlaylistBuilder {
     var title: String = ""

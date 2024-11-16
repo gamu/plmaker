@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,10 +29,25 @@ class PlayerFragment : Fragment() {
     private lateinit var playlistAdapter: PlaylistAdapter
     private lateinit var adapter: TrackInfoAdapter
     private lateinit var binding: FragmentPlayerBinding
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    private fun trackAddadHandler(playlist: String, trackAdded: Boolean){
+        if(trackAdded){
+            Toast.makeText(context, "Добавлено в плейлист ${playlist}", Toast.LENGTH_SHORT).show()
+        }
+        binding.apply {
+            hideView(overlay)
+            playlistBottomSheet.isVisible = false
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val boundle = getArguments()
+
+        playerViewModel.onTrackAdded = ::trackAddadHandler
 
         if(boundle != null){
             playerViewModel.setFavorite()
@@ -73,7 +90,7 @@ class PlayerFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return FragmentPlayerBinding.inflate(inflater, container, false).let {
-            val bottomSheetBehavior = BottomSheetBehavior.from(it.playlistBottomSheet)
+            bottomSheetBehavior = BottomSheetBehavior.from(it.playlistBottomSheet)
             binding = it
             val view = it.root
             it.vm = playerViewModel

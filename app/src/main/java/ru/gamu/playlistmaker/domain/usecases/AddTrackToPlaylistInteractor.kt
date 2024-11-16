@@ -5,7 +5,7 @@ import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.repository.PlaylistRepository
 
 class AddTrackToPlaylistInteractor(private val playlistRepository: PlaylistRepository) {
-    suspend fun invoke(playlist: Playlist, track: Track){
+    suspend fun invoke(playlist: Playlist, track: Track): Boolean {
         var playlistEntity = playlistRepository.getAllPlaylists()
             .filter { it.title == playlist.title }
             .first()
@@ -15,6 +15,8 @@ class AddTrackToPlaylistInteractor(private val playlistRepository: PlaylistRepos
         if(!hasTrack){
             tracks.add(track)
             playlistRepository.updatePlaylist(playlist.copy(tracks = tracks))
+            return true
         }
+        return false
     }
 }
