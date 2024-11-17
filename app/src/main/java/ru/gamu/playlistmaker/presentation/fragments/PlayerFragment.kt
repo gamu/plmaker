@@ -34,13 +34,14 @@ class PlayerFragment : Fragment() {
     private fun trackAddadHandler(playlist: String, trackAdded: Boolean){
         if(trackAdded){
             Toast.makeText(context, "Добавлено в плейлист ${playlist}", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                hideView(overlay)
+                playlistBottomSheet.isVisible = false
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        } else {
+            Toast.makeText(context, "Трек уже добавлен в плейлист ${playlist}", Toast.LENGTH_SHORT).show()
         }
-        binding.apply {
-            hideView(overlay)
-            playlistBottomSheet.isVisible = false
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

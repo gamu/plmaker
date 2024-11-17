@@ -48,6 +48,7 @@ import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.PlaylistViewModel
 import ru.gamu.playlistmaker.utils.toPlaylist
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Playlist() {
     val darkTheme = isSystemInDarkTheme()
@@ -69,7 +70,7 @@ fun Playlist() {
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack),
                     contentColor = colorResource(if(darkTheme) R.color.ypBlack else R.color.ypWhite)
-                )) { Text(text="Новый плэйлист",
+                )) { Text(text="Новый плейлист",
                 style = androidx.compose.ui.text.TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.ys_display_medium)),

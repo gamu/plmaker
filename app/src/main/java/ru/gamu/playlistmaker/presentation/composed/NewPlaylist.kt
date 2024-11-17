@@ -159,7 +159,7 @@ fun NewPlaylist(){
         Button(onClick = {
             viewModel.SavePlaylis(ctx)
             navController.popBackStack()
-            Toast.makeText(appContext, "Плэйлист создан", Toast.LENGTH_SHORT).show() },
+            Toast.makeText(appContext, "Плейлист создан", Toast.LENGTH_SHORT).show() },
             shape = RoundedCornerShape(8.dp),
             elevation = ButtonDefaults.elevation(defaultElevation = 0.dp),
             enabled = state.isComplete,

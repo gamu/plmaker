@@ -1,8 +1,6 @@
 package ru.gamu.playlistmaker.utils
 
-import android.graphics.BitmapFactory
 import android.widget.ImageView
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -29,10 +27,6 @@ fun setArtworkUrl(view: ImageView, url: String?, cornerRadius: Float?) {
             .placeholder(R.drawable.placeholder_big)
             .into(view)
     } else {
-        val bitmap = BitmapFactory.decodeResource(view.context.resources, R.drawable.placeholder_big)
-        val drawable = RoundedBitmapDrawableFactory.create(view.context.resources, bitmap)
-        if(cornerRadius != null)
-            drawable.cornerRadius = cornerRadius
-        view.setImageDrawable(drawable);
+        view.setImageResource(R.drawable.placeholder)
     }
 }

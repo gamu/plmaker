@@ -22,6 +22,7 @@
             android:id="@+id/imgThumb"
             android:layout_width="@dimen/size45"
             android:layout_height="@dimen/size45"
+            android:scaleType="centerCrop"
             app:imageUrl="@{ trackItem.artworkUrl }"
             android:importantForAccessibility="no"
             app:roundedCornerRadius="@{8f}" />
