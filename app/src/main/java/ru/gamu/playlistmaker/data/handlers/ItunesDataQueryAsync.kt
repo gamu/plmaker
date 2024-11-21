@@ -27,7 +27,6 @@ class ItunesDataQueryAsync(val context: Context, val searchService: ISearchServi
     }
 
     fun getData(spec: String): Flow<IResponse<List<Track>>> = flow {
-        val formatter = SimpleDateFormat("mm:ss", Locale.getDefault())
         try {
             val response = searchService.search(spec)
             if (response.isError) {

@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.gamu.playlistmaker.R
 
+
 inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object: TypeToken<T>() {}.type)
 
@@ -25,5 +26,7 @@ fun setArtworkUrl(view: ImageView, url: String?, cornerRadius: Float?) {
             .apply(requestOptions)
             .placeholder(R.drawable.placeholder_big)
             .into(view)
+    } else {
+        view.setImageResource(R.drawable.placeholder)
     }
 }

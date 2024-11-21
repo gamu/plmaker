@@ -8,10 +8,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
+import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.domain.models.Track
+import ru.gamu.playlistmaker.domain.usecases.AddTrackToPlaylistInteractor
 import ru.gamu.playlistmaker.domain.usecases.FavoriteTrackService
+import ru.gamu.playlistmaker.domain.usecases.GetPlaylistsInteractor
 import ru.gamu.playlistmaker.domain.usecases.MediaPlayerManager
 import ru.gamu.playlistmaker.presentation.models.DisplayName
+import ru.gamu.playlistmaker.presentation.viewmodel.playlist.recycler.PlaylistClickListener
 import ru.gamu.playlistmaker.utils.parseFromJson
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -23,7 +27,11 @@ private const val SPM = 60
 
 class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
                       private val favoriteTrackService: FavoriteTrackService,
-                      private val bundle: Bundle): ViewModel() {
+                      private val getPlaylistInteractor: GetPlaylistsInteractor,
+                      private val addTrackToPlaylistInteractor: AddTrackToPlaylistInteractor,
+                      private val bundle: Bundle): ViewModel(), PlaylistClickListener {
+
+
 
     private val track: Track by lazy {
         parseFromJson<Track>(bundle.getString(BUNDLE_TRACK_KEY))
@@ -33,16 +41,20 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
     private val _timeLabel = MutableLiveData(TIMER_INITIAL_VALUE)
     private val _properties = MutableLiveData<List<Pair<String, String>>>()
     private val _isFavorite = MutableLiveData(false)
+    private val _playliust = MutableLiveData<List<Playlist>>(listOf())
 
     val enablePlayback: LiveData<Boolean> get() = _enablePlayback
     val timeLabel: LiveData<String> get() = _timeLabel
     val properties: LiveData<List<Pair<String, String>>> get() = _properties
     val isFavorite: LiveData<Boolean> get() = _isFavorite
+    val playlist: LiveData<List<Playlist>> get() = _playliust
 
 
     var artistName: String = track.artistName
     var artworkUrl: String = track.artworkUrl
     val trackName: String = track.trackName
+
+    lateinit var onTrackAdded: (playlistName: String, trackAded: Boolean)-> Unit
 
 
     fun setFavorite() = viewModelScope.launch(Dispatchers.Main) {
@@ -102,6 +114,13 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
         return dateTimeString
     }
 
+    fun getPlaylists() {
+        viewModelScope.launch {
+            val playlists = getPlaylistInteractor.invoke()
+            _playliust.value = playlists
+        }
+    }
+
     private fun initializePlayer(trackPreview: String) {
         mediaPlayer.onPlayerPrepared = {
             _enablePlayback.value = true
@@ -155,6 +174,17 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayerManager,
             }
         }
         return result
+    }
+
+    override fun onClick(playlist: Playlist) {
+        viewModelScope.launch {
+            var addResult = addTrackToPlaylistInteractor.invoke(playlist, track)
+            if(addResult){
+                val playlists = getPlaylistInteractor.invoke()
+                _playliust.value = playlists
+            }
+            onTrackAdded.invoke(playlist.title, addResult)
+        }
     }
 
     companion object {

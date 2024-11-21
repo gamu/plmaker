@@ -31,4 +31,11 @@
     <string name="libraryMenuTitle">Медиатека</string>
     <string name="searchMenuTitle">Поиск</string>
     <string name="searchResultLabel">Вы искали</string>
+    <string name="add_photo_string">Добавить фотографию плейлиста</string>
+    <string name="playlisNamePlaceholder">Название*</string>
+    <string name="playlistDescriptionPlaceholder">Описание</string>
+    <string name="createPlaylistLabel">Создать</string>
+    <string name="createPlaylistHeader">Новый плейлист</string>
+    <string name="toPlaylist">Добавить в плейлист</string>
+    <string name="newPlaylist">Новый плейлист</string>
 </resources>
