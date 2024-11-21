@@ -7,7 +7,6 @@ import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.domain.models.playlist
 import ru.gamu.playlistmaker.domain.repository.PlaylistRepository
 import ru.gamu.playlistmaker.utils.toPlaylistItem
-import ru.gamu.playlistmaker.utils.toTrack
 import ru.gamu.playlistmaker.utils.toTrackDto
 
 class PlaylistRepositoryImpl(appDatabase: AppDatabase): PlaylistRepository {
@@ -29,6 +28,7 @@ class PlaylistRepositoryImpl(appDatabase: AppDatabase): PlaylistRepository {
         var playlists = playlistFacade.getAllPlaylists()
         val result = playlists.map {
             playlist {
+                playlistId = it.playlistId
                 title = it.title
                 description = it.description
                 cover = it.coverUri ?: ""
@@ -52,23 +52,43 @@ class PlaylistRepositoryImpl(appDatabase: AppDatabase): PlaylistRepository {
         return result
     }
 
-    override suspend fun getPlaylistById(id: Int): Playlist {
-        playlistFacade.getPlaylistById(id).let {
+    override suspend fun getPlaylistById(id: Long): Playlist? {
+        playlistFacade.getPlaylistById(id)?.let {
             return playlist {
+                playlistId = it.playlistId
                 title = it.title
                 description = it.description
                 cover = it.coverUri ?: ""
 
-                it.tracks.map { track ->
-                    track.toTrack()
+                it.tracks.map { t ->
+                    track {
+                        trackId(t.trackId)
+                        artistName(t.artistName)
+                        artworkUrl(t.coverUrl)
+                        collectionName(t.albumName)
+                        country(t.country)
+                        releaseDate(t.releaseYear)
+                        primaryGenreName(t.genre)
+                        trackName(t.trackName)
+                        trackTime(t.duration)
+                        trackPreview(t.fileUrl)
+                    }
                 }
             }
         }
+        return null
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
-        val playlistId = playlistFacade.getAllPlaylists().filter { it.title == playlist.title }.first().playlistId
+        val playlistId = playlistFacade.getPlaylistById(playlist.playlistId)?.playlistId
+            ?: throw IllegalArgumentException("Playlist not found")
         val playlistItem = playlist.toPlaylistItem(playlistId)
         playlistFacade.updateTrackslaylist(playlistItem)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Long) {
+        playlistFacade.getPlaylistById(playlistId)?.let { playlist ->
+            playlistFacade.removePlaylist(playlist)
+        }
     }
 }

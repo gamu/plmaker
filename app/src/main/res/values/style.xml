@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="PlayListDialogStyle" parent="MaterialAlertDialog.Material3">
+        <item name="android:textFontWeight">400</item>
+        <item name="android:backgroundTint">@color/ypWhite</item>
+        <item name="android:dialogCornerRadius">@dimen/size4</item>
+        <item name="colorOnSurface">@color/ypBlueGray</item>
+        <item name="colorOnSurfaceVariant">@color/ypBlueGray</item>
+        <item name="colorPrimary">@color/ypBlue</item>
+    </style>
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_margin">@dimen/marginBig</item>
         <item name="android:layout_width">match_parent</item>
@@ -83,5 +91,10 @@
     <style name="TabStyle">
         <item name="android:textSize">@dimen/ypMedium14</item>
         <item name="android:fontFamily" >@font/ys_display_medium</item>
+    </style>
+    <style name="PlaylistInfoStyle">
+        <item name="android:textSize">@dimen/ypMedium18</item>
+        <item name="android:fontFamily" >@font/ys_display_regular</item>
+        <item name="android:textColor">@color/ypBlack</item>
     </style>
 </resources>

@@ -5,6 +5,7 @@ package ru.gamu.playlistmaker.presentation.composed
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,12 +42,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import ru.gamu.playlistmaker.R
 import ru.gamu.playlistmaker.domain.models.Playlist
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.PlaylistViewModel
-import ru.gamu.playlistmaker.utils.toPlaylist
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -55,6 +56,7 @@ fun Playlist() {
     val navController = LocalView.current.findNavController()
     val viewModel = viewModel(PlaylistViewModel::class.java)
     val state by viewModel.playlistsState.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.loadPlaylists()
@@ -85,7 +87,7 @@ fun Playlist() {
             }
             ConditionalEffect(state.items.isNotEmpty()){
                 PlaylistItemsRenderer(colorResource(if(darkTheme) R.color.ypBlack else R.color.ypWhite),
-                    colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack), state.items.map { it.toPlaylist() })
+                    colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack), state.items)
             }
         }
 
@@ -101,9 +103,14 @@ fun ConditionalEffect(condition: Boolean, effect: @Composable () -> Unit) {
 
 @Composable
 fun PlaylistItemsRenderer(bgColor: Color, textColor: Color,items: List<Playlist>){
+    val navController = LocalView.current.findNavController()
     items.forEach {
-        Box(modifier = Modifier.width(160.dp).padding(bottom = 16.dp)
-            .background(color = bgColor)) {
+        Box(modifier = Modifier.width(160.dp)
+            .padding(bottom = 16.dp)
+            .background(color = bgColor)
+            .clickable {
+                navController.navigate(R.id.action_mediaLibraryFragment_to_playlistEditorFragment, bundleOf("playlist" to it.playlistId))
+            }) {
             Column(modifier = Modifier.padding(1.dp)
                 .fillMaxWidth(), horizontalAlignment = Alignment.Start){
                 PaintedImage(placeholder = painterResource(id = R.drawable.placeholder_big),
