@@ -1,5 +1,7 @@
 package ru.gamu.playlistmaker.presentation.fragments
 
+import android.content.res.Resources
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,6 +23,26 @@ import ru.gamu.playlistmaker.domain.models.Track
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.PlaylistEditorViewModel
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.recycler.PlaylistEditorAdapter
 import ru.gamu.playlistmaker.utils.stringify
+
+fun Fragment.getBottomNavHeight(): Int {
+    val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottomMainNavigation)
+    return bottomNav?.height ?: 0
+}
+
+fun View.getDistanceToBottomScreen(fragment: Fragment, marginTop: Int): Int {
+    val density = resources.displayMetrics.density
+    val marginTopPixels = (marginTop * density).toInt()
+
+    val rect = Rect()
+    this.getGlobalVisibleRect(rect)
+
+    val windowMetrics = Resources.getSystem().displayMetrics
+    val windowHeight = windowMetrics.heightPixels
+
+    val navigationHeight = fragment.getBottomNavHeight()
+
+    return windowHeight - rect.bottom - navigationHeight - marginTopPixels
+}
 
 class PlaylistEditorFragment: Fragment() {
 
@@ -32,9 +55,9 @@ class PlaylistEditorFragment: Fragment() {
             MaterialAlertDialogBuilder(requireContext(), R.style.PlayListDialogStyle)
                 .setTitle(getString(R.string.delete_track))
                 .setMessage(getString(R.string.do_you_want_to_delete_track))
-                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
                     //
-                }.setPositiveButton(getString(R.string.delete)) { _, _ ->
+                }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     viewModel.deleteSelectedTrackFromPlaylist(track)
                 }.show()
         }
@@ -49,14 +72,11 @@ class PlaylistEditorFragment: Fragment() {
 
     private val playlistId: Long by lazy { requireArguments().getLong(ARG_PLAYLIST) }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         _binding = FragmentPlaylistInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,6 +108,11 @@ class PlaylistEditorFragment: Fragment() {
             }
         })
 
+        binding.buttonShare.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            val mainBottomSheetBehavior = BottomSheetBehavior.from(binding.tracksBottomSheet)
+            mainBottomSheetBehavior.peekHeight = v.getDistanceToBottomScreen(this, 25)
+        }
+
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -103,7 +128,7 @@ class PlaylistEditorFragment: Fragment() {
             MaterialAlertDialogBuilder(
                 requireContext(),
                 R.style.PlayListDialogStyle
-            ).setMessage(getString(R.string.do_you_wont_to_delete_playlist))
+            ).setMessage("${getString(R.string.do_you_wont_to_delete_playlist)} \u00AB${viewModel.playlistTitle}\u00BB?")
                 .setNegativeButton(getString(R.string.no)) { _, _ ->
                     //
                 }.setPositiveButton(getString(R.string.yes)) { _, _ ->
@@ -204,12 +229,6 @@ class PlaylistEditorFragment: Fragment() {
             namePlaylistLinear.text = playlist.title
             titleTrackLinear.text = getString(R.string.tracks_count, playlist.tracksCount, playlist.getTrackDeclension())
         }
-    }
-
-    private fun getYPosition(elem: View): Int {
-        val xy = intArrayOf(0, 0)
-        elem.getLocationOnScreen(xy)
-        return xy[1]
     }
 
     companion object {

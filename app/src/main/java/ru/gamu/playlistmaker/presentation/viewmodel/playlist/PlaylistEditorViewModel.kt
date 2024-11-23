@@ -31,6 +31,8 @@ class PlaylistEditorViewModel(private val savedStateHandler: SavedStateHandle,
     fun getListTracks(): LiveData<List<Track>> = listTracksState
     fun getPlaylistState(): LiveData<Playlist> = playlistState
 
+    val playlistTitle get() = playlistState.value?.title ?: ""
+
     private var stateDeleteLiveData = MutableLiveData<DeleteState>()
     fun getStateDelete(): LiveData<DeleteState> = stateDeleteLiveData
 
@@ -38,7 +40,7 @@ class PlaylistEditorViewModel(private val savedStateHandler: SavedStateHandle,
         viewModelScope.launch {
             playlistService.getPlaylist(playlistId).let { playlist ->
                 playlistState.value = playlist
-                listTracksState.postValue(playlist?.tracks)
+                listTracksState.postValue(playlist?.tracks?.reversed())
             }
         }
     }
@@ -59,7 +61,8 @@ class PlaylistEditorViewModel(private val savedStateHandler: SavedStateHandle,
         viewModelScope.launch {
             playlistState.value?.let {
                 playlistService.deleteTrackAndUpdatePlaylist(it.playlistId, track.trackId)?.let {
-                    playlistState.value = it
+                    playlistState.postValue(it)
+                    listTracksState.postValue(it.tracks.reversed())
                 }
             }
         }

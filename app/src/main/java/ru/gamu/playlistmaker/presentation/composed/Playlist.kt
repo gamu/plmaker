@@ -141,6 +141,9 @@ fun PlaylistLabel(textColor: Color, title: String){
 
 @Composable
 fun EmptyPlaylistsHolder(){
+    val darkTheme = isSystemInDarkTheme()
+    val textColor = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack)
+    val painterRes = painterResource(id = if(darkTheme) R.drawable.outofftracks else R.drawable.outoftracks_black)
     Row(horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()){
         Image(
@@ -151,8 +154,8 @@ fun EmptyPlaylistsHolder(){
     }
     Spacer(modifier = Modifier.height(16.dp))
     Text(text = "Вы не создали\nни одного плейлиста",
-        color = colorResource(R.color.ypBlack),
-        modifier = Modifier.fillMaxWidth(),
+        color = textColor,
+        modifier = Modifier.padding( 0.dp,16.dp,0.dp,0.dp).fillMaxWidth(),
         style = androidx.compose.ui.text.TextStyle(
             fontSize = 19.sp,
             fontFamily = FontFamily(Font(R.font.ys_display_medium)),
