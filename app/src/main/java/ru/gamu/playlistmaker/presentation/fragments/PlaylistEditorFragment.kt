@@ -175,6 +175,7 @@ class PlaylistEditorFragment: Fragment() {
 
                 binding.textShare.setOnClickListener {
                     messageEmptyPlaylist()
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 }
             }
         }

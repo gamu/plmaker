@@ -146,7 +146,7 @@ fun NewPlaylist(){
                 },
                 contentAlignment = Alignment.Center,
             ) {
-                PaintedImage(painterResource(R.drawable.placeholder_big),
+                PaintedImage(painterResource(R.drawable.new_playlist),
                     state.cover,
                     Modifier
                         .height(312.dp)
