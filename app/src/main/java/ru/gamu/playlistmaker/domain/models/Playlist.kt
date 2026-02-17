@@ -1,11 +1,16 @@
 package ru.gamu.playlistmaker.domain.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Playlist(
+    val playlistId: Long = -1,
     val title: String,
     val description: String,
     val cover: String,
     val tracks: List<Track> = listOf()
-) {
+): Parcelable {
     fun getTrackDeclension(): String {
         val count = tracks.count()
         return when {
@@ -15,9 +20,30 @@ data class Playlist(
             else -> "треков"
         }
     }
+
+    fun getMinuteDeclension(): String {
+        val minutes: Int = totalDuration
+        return when {
+            minutes % 100 in 11..19 -> "минут"
+            minutes % 10 == 1 -> "минута"
+            minutes % 10 in 2..4 -> "минуты"
+            else -> "минут"
+        }
+    }
+
+    val tracksCount: Int
+        get() = tracks.size
+
+    val totalDuration: Int
+        get() = tracks.sumOf { it.trackTime.toInt() } / 60
+
+    companion object {
+        val GetEmptyPlaylist = Playlist(-1, "", "", "", listOf())
+    }
 }
 
 class PlaylistBuilder {
+    var playlistId: Long = -1
     var title: String = ""
     var description: String = ""
     var cover: String = ""
@@ -30,7 +56,7 @@ class PlaylistBuilder {
     }
 
     fun build(): Playlist {
-        return Playlist(title, description, cover, tracks)
+        return Playlist(playlistId, title, description, cover, tracks)
     }
 }
 

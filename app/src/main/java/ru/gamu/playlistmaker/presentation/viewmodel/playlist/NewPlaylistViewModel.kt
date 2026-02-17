@@ -11,13 +11,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
 import ru.gamu.playlistmaker.domain.usecases.CreatePlaylistInteractor
+import ru.gamu.playlistmaker.domain.usecases.PlaylistService
 import java.io.File
 import java.io.FileOutputStream
 
 @Parcelize
 data class PlaylistInfoState(
+    val playlistId: Long = -1,
     val title: String = "",
     val description: String = "",
     val cover: Uri = Uri.EMPTY,
@@ -27,6 +30,7 @@ data class PlaylistInfoState(
 
 class NewPlaylistViewModel(private val savedStateHandler: SavedStateHandle): ViewModel() {
     private val createPlaylistInteractor: CreatePlaylistInteractor by inject(CreatePlaylistInteractor::class.java)
+    private val playlistService: PlaylistService by inject(PlaylistService::class.java)
 
     val titleState = savedStateHandler.getStateFlow(STATE_KEY, PlaylistInfoState())
 
@@ -48,6 +52,21 @@ class NewPlaylistViewModel(private val savedStateHandler: SavedStateHandle): Vie
         return uriImgStorage
     }
 
+    fun loadPlaylist(playlistId: Long) {
+        viewModelScope.launch {
+            val playlist = playlistService.getPlaylist(playlistId)
+            if(playlist != null){
+                savedStateHandler[STATE_KEY] = titleState.value.copy(
+                    playlistId = playlistId,
+                    title = playlist.title,
+                    description = playlist.description,
+                    cover = Uri.parse(playlist.cover),
+                    hasCover = true
+                )
+            }
+        }
+    }
+
     fun SavePlaylis(ctx: Context) {
         viewModelScope.launch {
             var cover = titleState.value.cover.toString()
@@ -56,6 +75,20 @@ class NewPlaylistViewModel(private val savedStateHandler: SavedStateHandle): Vie
             }
             createPlaylistInteractor.invoke(titleState.value.title,
                 titleState.value.description, cover, null)
+        }
+    }
+
+    fun UpdatePlaylist() {
+        runBlocking {
+            var cover = titleState.value.cover.toString()
+            playlistService.getPlaylist(titleState.value.playlistId)?.let { playlist ->
+                val newPlayList = playlist.copy(
+                    title = titleState.value.title,
+                    description = titleState.value.description,
+                    cover = cover
+                )
+                playlistService.updatePlaylist(newPlayList)
+            }
         }
     }
 

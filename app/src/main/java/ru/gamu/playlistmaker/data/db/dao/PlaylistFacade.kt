@@ -21,5 +21,5 @@ interface PlaylistFacade {
     @Query("DELETE FROM playlist")
     suspend fun clean()
     @Query("SELECT * FROM playlist WHERE playlistId = :id")
-    suspend fun getPlaylistById(id: Int): PlaylistItem
+    suspend fun getPlaylistById(id: Long): PlaylistItem?
 }

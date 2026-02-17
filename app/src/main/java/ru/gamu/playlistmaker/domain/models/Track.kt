@@ -1,6 +1,7 @@
 package ru.gamu.playlistmaker.domain.models
 
 import java.io.Serializable
+import java.util.Locale
 
 class Track: Serializable {
     var trackId: Long = 0L
@@ -21,13 +22,9 @@ class Track: Serializable {
         val millis = trackTime.toLongOrNull()
         if(millis != null) {
             val hours = (millis / 1000) / 3600
-            val minutes = ((millis / 1000) % 3600) / 60
+            val minutes = (millis / 1000) / 60
             val seconds = (millis / 1000) % 60
-            return if (hours > 0) {
-                String.format("%02d:%02d:%02d", hours, minutes, seconds)
-            } else {
-                String.format("%02d:%02d", minutes, seconds)
-            }
+            return String.format(Locale.US, "%02d:%02d", minutes + (hours * 60), seconds)
         }
         return trackTime
     }

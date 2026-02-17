@@ -27,6 +27,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import ru.gamu.playlistmaker.R
+import ru.gamu.playlistmaker.presentation.fragments.PlaylistEditorFragment
 import ru.gamu.playlistmaker.presentation.viewmodel.playlist.NewPlaylistViewModel
 
 
@@ -62,8 +64,14 @@ fun NewPlaylist(){
     val state by viewModel.titleState.collectAsState()
     val ctx = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
+    val playlistId = navController.currentBackStackEntry?.arguments?.getLong(
+        PlaylistEditorFragment.ARG_PLAYLIST)
 
     val contentColor = colorResource(if(darkTheme) R.color.ypWhite else R.color.ypBlack)
+
+    LaunchedEffect(Unit) {
+        if(playlistId != null) viewModel.loadPlaylist(playlistId)
+    }
 
     BackHandler(enabled = state.isComplete) {
         showDialog = true
@@ -80,8 +88,8 @@ fun NewPlaylist(){
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("Завершить создание плейлиста?") },
-            text = { Text("Все несохраненные данные будут потеряны") },
+            title = { Text(stringResource(R.string.complete_palylist_creation)) },
+            text = { Text(stringResource(R.string.unsaved_datalost_message)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -115,9 +123,9 @@ fun NewPlaylist(){
                         modifier = Modifier
                             .size(24.dp)
                             .clickable {
-                                if(state.isComplete){
+                                if (state.isComplete) {
                                     showDialog = true
-                                }else {
+                                } else {
                                     navController.popBackStack()
                                 }
 
@@ -157,9 +165,13 @@ fun NewPlaylist(){
         Spacer(modifier = Modifier.size(32.dp))
         val appContext = LocalContext.current.applicationContext
         Button(onClick = {
-            viewModel.SavePlaylis(ctx)
+            if(playlistId != null)
+                viewModel.UpdatePlaylist()
+            else
+                viewModel.SavePlaylis(ctx)
             navController.popBackStack()
-            Toast.makeText(appContext, "Плейлист создан", Toast.LENGTH_SHORT).show() },
+            Toast.makeText(appContext,
+                appContext.getString(R.string.playlist_created), Toast.LENGTH_SHORT).show() },
             shape = RoundedCornerShape(8.dp),
             elevation = ButtonDefaults.elevation(defaultElevation = 0.dp),
             enabled = state.isComplete,
@@ -169,7 +181,7 @@ fun NewPlaylist(){
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = if (state.isComplete) colorResource(R.color.ypBlue) else colorResource(R.color.newPlayListButton)
             )){
-            Text(stringResource(R.string.createPlaylistLabel), color = colorResource(R.color.ypWhite))
+            Text(if(playlistId != null) stringResource(R.string.update_playlist) else stringResource(R.string.createPlaylistLabel), color = colorResource(R.color.ypWhite))
         }
     }
 }

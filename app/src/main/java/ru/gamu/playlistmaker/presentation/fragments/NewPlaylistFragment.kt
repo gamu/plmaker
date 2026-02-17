@@ -17,15 +17,6 @@ class NewPlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        /*requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    showExitConfirmationDialog()
-                }
-            }
-        )*/
-
         return ComposeView(requireContext()).apply {
             setContent {
                 NewPlaylist()

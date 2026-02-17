@@ -6,9 +6,13 @@
     <dimen name="cornerRadius">16dp</dimen>
     <dimen name="trackTitleSize">16sp</dimen>
     <dimen name="trackInfoSize">13sp</dimen>
+    <dimen name="ypMedium18">18sp</dimen>
+    <dimen name="ypMedium20">20sp</dimen>
     <dimen name="ypMedium22">22sp</dimen>
+    <dimen name="ypMedium24">24sp</dimen>
     <dimen name="ypMedium26">26sp</dimen>
     <dimen name="ypMedium14">14sp</dimen>
+    <dimen name="ypRegular12">12sp</dimen>
     <dimen name="ypRegular16">16sp</dimen>
     <dimen name="ypRegular19">19sp</dimen>
     <dimen name="settingsRowSize">61dp</dimen>
@@ -18,6 +22,7 @@
     <dimen name="size61">61dp</dimen>
     <dimen name="size2">2dp</dimen>
     <dimen name="size4">4dp</dimen>
+    <dimen name="size6">6dp</dimen>
     <dimen name="size8">8dp</dimen>
     <dimen name="size12">12dp</dimen>
     <dimen name="size13">13dp</dimen>
@@ -30,6 +35,8 @@
     <dimen name="size24">24dp</dimen>
     <dimen name="size26">26dp</dimen>
     <dimen name="size30">30dp</dimen>
+    <dimen name="size32">32dp</dimen>
+    <dimen name="size50">50dp</dimen>
     <dimen name="size52">52dp</dimen>
     <dimen name="size54">54dp</dimen>
     <dimen name="size56">56dp</dimen>
