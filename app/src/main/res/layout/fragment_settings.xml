@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+    <data>
+        <variable
+            name="vm"
+            type="ru.gamu.playlistmaker.presentation.viewmodel.settings.SettingsViewModel" />
+    </data>
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="@dimen/indentBase"
+        android:orientation="vertical"
+        android:theme="@style/Base.Theme.PlaylistMaker">
+        <LinearLayout
+            style="@style/LayoutHeaderFrameStyle"
+            android:layout_marginBottom="24dp">
+            <TextView style="@style/TextViewHeadStyle"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/settingsLabel" />
+        </LinearLayout>
+        <Switch
+            style="@style/SearchBoxStyle"
+            android:id="@+id/swtTheme"
+            android:layout_width="match_parent"
+            android:paddingStart="@dimen/marginBig"
+            android:layout_height="@dimen/settingsRowSize"
+            android:textSize="@dimen/ypRegular16"
+            android:text="@string/themeLabel"
+            android:checked="@={ vm.theme }"
+            android:layout_marginTop="@dimen/indentBase"
+            tools:ignore="RtlSymmetry,UseSwitchCompatOrMaterialXml" />
+        <LinearLayout style="@style/SettingsRowStyle"
+            tools:ignore="UseCompoundDrawables">
+            <TextView style="@style/SettingsTextViewStyle"
+                android:text="@string/shareLabel" />
+            <ImageView style="@style/SettingsImageViewStyle"
+                android:id="@+id/btnShare"
+                android:src="@drawable/share"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+        <LinearLayout style="@style/SettingsRowStyle"
+            tools:ignore="UseCompoundDrawables">
+            <TextView style="@style/SettingsTextViewStyle"
+                android:text="@string/supportLabel" />
+            <ImageView style="@style/SettingsImageViewStyle"
+                android:id="@+id/btnSupport"
+                android:src="@drawable/support"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+        <LinearLayout style="@style/SettingsRowStyle"
+            tools:ignore="UseCompoundDrawables">
+            <TextView style="@style/SettingsTextViewStyle"
+                android:text="@string/agreementLabel"  />
+            <ImageView style="@style/SettingsImageViewStyle"
+                android:id="@+id/btnBrowser"
+                android:src="@drawable/agreement"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

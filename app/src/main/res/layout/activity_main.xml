@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/MainBackground"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:padding="@dimen/indentBase"
     android:orientation="vertical"
     android:theme="@style/Base.Theme.PlaylistMaker">
-    <LinearLayout
-        style="@style/LayoutHeaderFrameStyle"
-        android:layout_marginBottom="24dp">
-        <TextView style="@style/TextViewHeadStyle"
-            android:gravity="start"
-            android:text="@string/appLabel"
-            android:textColor="@color/ypWhite"/>
-    </LinearLayout>
-    <Button style="@style/ButtonStyle"
-        android:id="@+id/btnSearch"
-        android:text="@string/searchLabel"
-        app:icon="@drawable/search" />
-    <Button style="@style/ButtonStyle"
-        android:id="@+id/btnMedia"
-        android:text="@string/mediaLabel"
-        app:icon="@drawable/media" />
-    <Button style="@style/ButtonStyle"
-        android:id="@+id/btnSettings"
-        android:text="@string/settingsLabel"
-        app:icon="@drawable/settings" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:name="androidx.navigation.fragment.compose.ComposableNavHostFragment"
+        app:navGraph="@navigation/main_navigation"
+        app:defaultNavHost="true" />
+    <View
+        android:id="@+id/bottomMainNavigationDelimiter"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/ypWhite" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        style="@style/MainBackground"
+        android:id="@+id/bottomMainNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size56"
+        app:itemPaddingBottom="@dimen/emptySize"
+        app:menu="@menu/main_bottom_menu" />
 </LinearLayout>

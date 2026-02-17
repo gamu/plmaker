@@ -1,6 +1,7 @@
 <resources>
     <string name="appName">Playlist Maker</string>
     <string name="searchLabel">Поиск</string>
+    <string name="mediaLibraryLabel">Медиатека</string>
     <string name="mediaLabel">Медиатека</string>
     <string name="settingsLabel">Настройки</string>
     <string name="appLabel">Playlist maker</string>
@@ -8,7 +9,7 @@
     <string name="shareLabel">Поделиться приложением</string>
     <string name="supportLabel">Написать в поддержку</string>
     <string name="agreementLabel">Пользовательское соглашение</string>
-    <string name="praktikumUrl">https://practicum.yandex.ru/learn/android-developer</string>
+    <string name="praktikumUrl">https://practicum.yandex.ru/android-developer/</string>
     <string name="optionsMessage">Отправить сообщение через:</string>
     <string name="mailTo">gamu@bk.ru</string>
     <string name="mailTheme">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
@@ -20,4 +21,42 @@
     <string name="refreshText">Обновить</string>
     <string name="searchedText">История поиска</string>
     <string name="clearSearchHistoryText">Очистить историю</string>
+    <string name="mockTiming">0:00</string>
+    <string name="cancel">Отмена</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="MedialLibraryIsEmpty">Ваша медиатека пуста</string>
+    <string name="PlaylistsEmpty">Вы не создали ни одного плейлиста</string>
+    <string name="createNewPlaylistButton">Новый плейлист</string>
+    <string name="settingMenuTitle">Настройки</string>
+    <string name="libraryMenuTitle">Медиатека</string>
+    <string name="searchMenuTitle">Поиск</string>
+    <string name="searchResultLabel">Вы искали</string>
+    <string name="add_photo_string">Добавить фотографию плейлиста</string>
+    <string name="playlisNamePlaceholder">Название*</string>
+    <string name="playlistDescriptionPlaceholder">Описание</string>
+    <string name="createPlaylistLabel">Создать</string>
+    <string name="createPlaylistHeader">Новый плейлист</string>
+    <string name="toPlaylist">Добавить в плейлист</string>
+    <string name="newPlaylist">Новый плейлист</string>
+    <string name="empty_playlist">В этом плейлисте нет треков</string>
+    <string name="share">Поделиться</string>
+    <string name="delete">Удалить плейлист</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="delete_track">Удалить трек</string>
+    <string name="do_you_want_to_delete_track">Вы уверены, что хотите удалить трек?</string>
+    <string name="do_you_wont_to_delete_playlist">Хотите удалить плейлист</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
+    <string name="playlist_not_have_tracks">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="link_message">"https://practicum.yandex.ru/android-developer/"</string>
+    <string name="email_message">"Godmordor@gmail.com"</string>
+    <string name="dev_message">"Спасибо разработчикам и разработчицам за крутое приложение"</string>
+    <string name="uri_message">"https://yandex.ru/legal/practicum_offer/"</string>
+    <string name="subject_message">"Сообщение разработчикам и разработчицам приложения Playlist Maker"</string>
+    <string name="tracks_count">"%d %s</string>
+    <string name="complete_palylist_creation">Завершить создание плейлиста?</string>
+    <string name="unsaved_datalost_message">Все несохраненные данные будут потеряны</string>
+    <string name="playlist_created">Плейлист создан</string>
+    <string name="update_playlist">Изменить</string>
 </resources>

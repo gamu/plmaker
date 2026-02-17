@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="ru.gamu.playlistmaker.presentation.viewmodel.medialibrary.FavoritesViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Base.Theme.PlaylistMaker">
+        <LinearLayout
+            android:id="@+id/placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/size24"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/emptydataset"
+                android:visibility="@{ vm.tracksStateValue.isEmpty() ? View.VISIBLE : View.GONE }"
+                android:scaleType="center"
+                android:layout_gravity="bottom"
+                android:contentDescription="@string/SearchDatasetEmpty" />
+            <TextView
+                style="@style/SearchPlaceholderStyle"
+                android:visibility="@{ vm.tracksStateValue.isEmpty() ? View.VISIBLE : View.GONE }"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font19"
+                android:text="@string/MedialLibraryIsEmpty" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trackListRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

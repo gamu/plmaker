@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Base.Theme.PlaylistMaker"
-    tools:context=".StubActivity">
+    tools:context=".presentation.views.StubActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

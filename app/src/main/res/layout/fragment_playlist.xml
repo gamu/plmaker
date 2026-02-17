@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Base.Theme.PlaylistMaker">
+    <LinearLayout
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/size24"
+        android:orientation="vertical">
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonOnSearchView"
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="@dimen/cornerRadius"
+            android:text="@string/createNewPlaylistButton" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size45"
+            android:src="@drawable/emptydataset"
+            android:scaleType="center"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/SearchDatasetEmpty" />
+        <TextView
+            style="@style/SearchPlaceholderStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PlaylistsEmpty" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

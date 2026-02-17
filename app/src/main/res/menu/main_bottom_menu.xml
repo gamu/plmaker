@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/searchMenuTitle" />
+
+    <item
+        android:id="@+id/mediaLibraryFragment"
+        android:icon="@drawable/baseline_library_music_24"
+        android:title="@string/libraryMenuTitle" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settingMenuTitle" />
+</menu>
